@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sources xmlns="http://www.thunisoft.com/sync" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mytestin="http://www.thunisoft.com/test"
+	xsi:schemaLocation="http://www.thunisoft.com/sync
+	http://www.thunisoft.com/sync/dataSync.xsd
+	http://www.thunisoft.com/test
+	http://www.thunisoft.com/test/testInsid.xsd">
+
+	<mytestin:TestDataSync>
+	<mytestin:inTest></mytestin:inTest>
+	</mytestin:TestDataSync>
+
+	<!-- 办案中发现线索 -->
+	<source
+		class="com.thunisoft.np.datamodel.cases.jcy.ywgy.bazfxxs.TYwgyBazfxxsXs">
+		<mytestin:TestDataSync></mytestin:TestDataSync>
+		<target class="com.thunisoft.np.datamodel.cases.jcy.ywgy.hztj.TYwgyHztjAj"
+			auto-convert="true">
+			<!--受理日期-->
+			<property name="DSarq" sourse="DDjrq" />
+			<property name="CBhSar" sourse="CBhDjr" />
+		</target>
+	</source>
+
+	<!-- 办案中发现线索.处理情况 -->
+	<source
+		class="com.thunisoft.np.datamodel.cases.jcy.ywgy.bazfxxs.TYwgyBazfxxsClqk">
+		<target class="com.thunisoft.np.datamodel.cases.jcy.ywgy.hztj.TYwgyHztjAj"
+			auto-convert="false">
+			<property name="CBh" sourse="CBhAj" />
+			<property name="NBjjl" sourse="NJl" />
+			<property name="DBjrq" sourse="DRq" />
+		</target>
+	</source>
+
+	<!-- 请示批复案件 -->
+	<source class="com.thunisoft.np.datamodel.cases.jcy.ywgy.qspf.TYwgyQspfAj">
+		<target class="com.thunisoft.np.datamodel.cases.jcy.ywgy.hztj.TYwgyHztjAj"
+			auto-convert="true">
+		</target>
+	</source>
+
+	<!-- 交督办案件标记 -->
+	<source class="com.thunisoft.np.datamodel.cases.jcy.ywgy.TYwgyJdbaj">
+		<target class="com.thunisoft.np.datamodel.cases.jcy.ywgy.hztj.TYwgyHztjAj"
+			auto-convert="false">
+			<property name="CBh" sourse="CBhAj" />
+			<property name="NJdbBjlx" sourse="NBjlx" />
+			<property name="CJdbAh" sourse="CJdbah" />
+		</target>
+	</source>
+
+	<!--文书-->
+	<source class="com.thunisoft.np.writ.datamodel.TYwgyWsqdWs">
+		<target class="com.thunisoft.np.datamodel.cases.jcy.ywgy.hztj.TYwgyHztjAj"
+			auto-convert="false">
+			<property name="CBh" sourse="CBhAj" />
+			<property name="NYxwstj" converter-name="wsCount" sourse="CBhAj" />
+		</target>
+	</source>
+
+</sources>
