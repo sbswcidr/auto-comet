@@ -1,3 +1,0 @@
-[http://www.ibm.com/developerworks/cn/java/j-lo-comet|Servlet 3.0 实战：异步 Servlet 与 Comet 风格应用程序]
-
-[http://www.google.com|这会连到 Google]
