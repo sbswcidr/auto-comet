@@ -1,0 +1,137 @@
+body {
+	background-color: #fcfcfc;
+}
+
+#layout {
+	margin: 0 auto;
+}
+
+#header {
+	margin: 0 auto;
+	height: 100px;
+	background: #2c5b9c url("../images/header.jpg") repeat-x;
+	border-bottom: solid 1px #1f4b8c;
+}
+
+#header_inner {
+	position: relative;
+	margin: 0 auto;
+	width: 1000px;
+	height: 100px;
+}
+
+#header_inner h1 {
+	font-size: 30px;
+	color: #f5f8fc;
+	font-family: verdana;
+	padding: 45px 10px 0px 30px;
+	float: left;
+}
+
+#header_inner h1 span {
+	font-weight: normal;
+	font-size: 20px;
+}
+
+#header_inner h2 {
+	float: left;
+	padding: 64px 10px 0 10px;
+	font-size: 12px;
+	color: #98c5f7;
+}
+
+#logo {
+	
+}
+
+#header_inner #menu {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	margin-right: 10px;
+	margin-bottom: -1px;
+}
+
+#header_inner #menu ul {
+	list-style: none;
+}
+
+#header_inner #menu li {
+	float: left;
+}
+
+#header_inner #menu li a {
+	margin-left: 0.5em;
+	display: block;
+	padding: 13px 20px 10px 20px !important;
+	padding: 14px 20px 8px 20px;
+	background: #b7cbe5 url('../images/menu_2.gif') repeat-x;
+	border: solid 1px #b2c6e0;
+	border-bottom-color: #a6bfe0;
+	color: #576b85;
+	font-weight: bold;
+	font-size: 12px;
+	text-transform: lowercase;
+	text-decoration: none;
+}
+
+#header_inner #menu li a:hover {
+	background: #fff url('../images/menu_1.gif') repeat-x;
+	color: #616161;
+	border: solid 1px #fff;
+}
+
+#header_inner #menu li a.active {
+	background: #fff url('../images/menu_1.gif') repeat-x;
+	color: #616161;
+	border: solid 1px #fff;
+}
+
+#content {
+	border-top: solid 1px #fff;
+	border-bottom: solid 1px #E1E1E1;
+}
+
+#content_inner {
+	width: 1000px;
+	margin: 0 auto;
+	padding: 20px 30px 20px 30px;
+}
+
+#footer {
+	
+}
+
+#footer_inner {
+	margin: 0 auto;
+	width: 1000px;
+	padding: 10px 30px 10px 30px;
+}
+
+#footer_inner .left {
+	float: left;
+	color: #666666;
+	font-family: verdana;
+	font-size: 11px;
+}
+
+#footer_inner .left a {
+	padding: 0 5px;
+	color: #3b6ebf;
+	text-decoration: none;
+}
+
+#footer_inner .left a:hover {
+	color: #666666;
+}
+
+#footer_inner .right {
+	float: right;
+	color: #666666;
+	font-family: verdana;
+	font-size: 11px;
+}
+
+#footer_inner .right .green {
+	color: #789030;
+}
