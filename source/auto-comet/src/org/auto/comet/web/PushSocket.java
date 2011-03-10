@@ -155,7 +155,7 @@ public class PushSocket implements Socket {
 	}
 
 	public synchronized void sendMessage(String message)
-			throws PushRuntimeException{
+			throws PushRuntimeException {
 		if (isClosed()) {
 			throw new PushRuntimeException("链接已经关闭！");
 		}
