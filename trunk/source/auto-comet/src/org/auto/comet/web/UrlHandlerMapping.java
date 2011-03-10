@@ -13,9 +13,11 @@ import org.springframework.context.support.ApplicationObjectSupport;
  * */
 public class UrlHandlerMapping extends ApplicationObjectSupport {
 	private final Map<Object, Object> urlMap = new HashMap<Object, Object>();
+	Properties mappings = null;
 
 	public void setMappings(Properties mappings) {
-		registerHandler(mappings);
+		this.mappings = mappings;
+
 	}
 
 	public void setUrlMap(Map<Object, Object> urlMap) {
@@ -32,6 +34,11 @@ public class UrlHandlerMapping extends ApplicationObjectSupport {
 	 */
 	public Map<Object, Object> getUrlMap() {
 		return this.urlMap;
+	}
+
+	public void init() {
+		registerHandler(mappings);
+		this.mappings = null;
 	}
 
 	public void registerHandler(Properties mappings) {
