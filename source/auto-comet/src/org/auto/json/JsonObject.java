@@ -42,9 +42,17 @@ public class JsonObject extends HashMap<Object, Object> {
 		buffer.append(key);
 		buffer.append("\"");
 		buffer.append(":");
-		buffer.append("\"");
-		buffer.append(value);
-		buffer.append("\"");
+		appendValue(buffer,value);
+	}
+
+	private void appendValue(StringBuffer buffer, Object value) {
+		if (value instanceof String) {
+			buffer.append("\"");
+			buffer.append(value);
+			buffer.append("\"");
+		} else {
+			buffer.append(value);
+		}
 	}
 
 }
