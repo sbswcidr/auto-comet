@@ -6,7 +6,7 @@ Un.Editor = {
 			return this.editArea.getInnerHtml();
 		},
 		clear : function() {
-			this.editArea.setInnerHtml(null);
+			this.editArea.setInnerHtml("");
 		}
 	},
 	constructor : function() {
