@@ -1,7 +1,5 @@
 package org.auto.comet.example.chat.web.controller;
 
-import java.util.Date;
-
 import org.auto.comet.example.chat.service.IChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,11 +20,9 @@ public class ChatController {
 	@RequestMapping(params = "method=sendMessage")
 	public ModelAndView sendMessage(String userId, String targetUserId,
 			String message) {
-		this.chatService.sendMessage(targetUserId, message);
-		Date date = new Date();
-		message = "<p>" + userId + "  " + date + "</p>" + message;
+		this.chatService.sendMessage(userId, targetUserId, message);
 		ModelMap modelMap = new ModelMap();
-		modelMap.addAttribute("sucess", "true");
+		modelMap.addAttribute("success", "true");
 		return new ModelAndView("jsonView", modelMap);
 	}
 

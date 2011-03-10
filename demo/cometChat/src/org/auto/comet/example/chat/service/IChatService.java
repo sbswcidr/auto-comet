@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public interface IChatService {
 
-	public void sendMessage(Serializable userId, String message);
+	public void sendMessage(String userId, String targetUserId, String message);
 
 	public void sendMessage(Serializable[] userIds, String message);
 
