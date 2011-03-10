@@ -25,7 +25,6 @@
 						param : userParam,
 						caller : this,
 						success : function(result) {
-							alert(result);
 							var data = eval("(" + result + ")");
 							cid = data[Un.Comet.CONNECTIONID_KEY];
 							this.polling(cid);

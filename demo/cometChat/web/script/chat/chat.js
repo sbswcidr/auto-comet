@@ -23,7 +23,7 @@ var ChatWindow = {
 					message : text
 				},
 				caller : this,
-				success : function() {
+				success : function(result) {
 					var data = eval("(" + result + ")");
 					if (data.success == "true") {
 						this.editor.clear();
@@ -99,14 +99,14 @@ var MenuWindow = {
 				this.body.removeChild(btn);
 			}
 		},
-		receiveMessage : function(friend, text) {
+		receiveMessage : function(friend, content) {
 			var obj = this.users[friend];
 			if (!obj) {
 				return;
 			}
 			var win = obj.window;
 			if (win) {
-				win.receive(text);
+				win.receive(content);
 			}
 		}
 	},

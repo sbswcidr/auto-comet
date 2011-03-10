@@ -1131,7 +1131,8 @@ Un.Ajax = {
 						o.failure.call(this, req.responseText, s);
 					} else {
 						throw new Error("ajax http status [ " + s + " : "
-								+ req.statusText + " ].\r\n" + req.responseText);
+								+ req.statusText + " ].\r\n" + "url [ " + o.url
+								+ " ] " + req.responseText);
 					}
 				}
 			}
