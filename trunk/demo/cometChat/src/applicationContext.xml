@@ -18,7 +18,7 @@
 		</property>
 	</bean>
 
-	<bean id="cometUrlHandlerMapping" class="org.auto.comet.web.UrlHandlerMapping">
+	<bean id="cometUrlHandlerMapping" class="org.auto.comet.web.UrlHandlerMapping" init-method="init">
 		<property name="mappings">
 			<props>
 				<prop key="/chat.comet">chatService</prop>
