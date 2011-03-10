@@ -25,7 +25,6 @@
 
 		var userId = null;
 
-
 		//loginWindow.show();
 
 		var sender = {
@@ -58,17 +57,25 @@
 
 		var comet = new Un.Comet({
 			url : "http://localhost:8080/cometChat/chat.comet",
-			accept : function(result) {
-				alert(result);
-				var data = eval("(" + result + ")");
+			accept : function(data) {
 				var command = data[COMMAND_KEY];
 				if (command == COMMAND_LOGIN) {
 					var friend = data.userId;
 					menuWindow.addUser(friend);
 				} else if (command == COMMAND_RECEIVE) {
+					var time = data.time;
+					for ( var i in time) {
+						alert(i);
+					}
 					var text = data.text;
 					var friend = data.userId;
-					menuWindow.receiveMessage(friend,text);
+					var content = new Un.Element();
+					content.appendChild(new Un.Element("div", null, friend
+							+ ": " + time));
+					content.appendChild(new Un.Element("div", null, "&emsp;"
+							+ text));
+
+					menuWindow.receiveMessage(friend, content);
 				}
 			}
 		});
@@ -101,7 +108,7 @@
 		}
 		loginWindow.hideWindow = function() {
 			loginWindow.hideShadow();
-			loginWindow.fadeOut(1500, function() {
+			loginWindow.fadeOut(500, function() {
 				this.close();
 			});
 		}
@@ -114,7 +121,7 @@
 				this.hideErrorMessage();
 			}
 			userId = email;
-			menuWindow.	userId = userId;
+			menuWindow.userId = userId;
 			this.hideWindow();
 			comet.connection({
 				userId : email
