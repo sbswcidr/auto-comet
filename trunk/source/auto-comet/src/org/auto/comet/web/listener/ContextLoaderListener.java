@@ -6,7 +6,8 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auto.comet.web.SocketManager;
+import org.auto.comet.LocalSocketStore;
+import org.auto.comet.web.ServletContextKey;
 
 /**
  * comet容器加载
@@ -19,11 +20,10 @@ public class ContextLoaderListener implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent contextEvent) {
 		ServletContext servletContext = contextEvent.getServletContext();
-		SocketManager cometContext = new SocketManager();
-		servletContext.setAttribute("cometContext", cometContext);
-		System.out.println(logger.isWarnEnabled());
+		LocalSocketStore cometContext = new LocalSocketStore();
+		servletContext.setAttribute(ServletContextKey.SOCKET_STORE_KEY,
+				cometContext);
 		logger.warn("comet init context");
-		System.out.println("comet init context");
 	}
 
 	public void contextDestroyed(ServletContextEvent contextEvent) {

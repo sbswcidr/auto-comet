@@ -1,6 +1,5 @@
-package org.auto.comet.web;
+package org.auto.comet;
 
-import org.auto.comet.PushRuntimeException;
 
 /**
  * PushSocket：单向推送消息

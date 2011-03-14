@@ -1,4 +1,4 @@
-package org.auto.comet.web;
+package org.auto.comet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,10 +12,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.auto.comet.PushRuntimeException;
+import org.auto.comet.listener.SocketEvent;
+import org.auto.comet.listener.SocketListener;
 import org.auto.comet.web.listener.AsyncAdapter;
-import org.auto.comet.web.listener.SocketEvent;
-import org.auto.comet.web.listener.SocketListener;
 import org.auto.json.JsonArray;
 import org.auto.json.JsonObject;
 
@@ -37,8 +36,7 @@ public class PushSocket implements Socket {
 
 	static {
 		JsonObject commend = new JsonObject();
-		commend.put(SocketDispatcherServlet.SYNCHRONIZE_KEY,
-				SocketDispatcherServlet.DISCONNECT_VALUE);
+		commend.put(Protocol.SYNCHRONIZE_KEY, Protocol.DISCONNECT_VALUE);
 		CLOSE_MESSAGE = commend.toString();
 	}
 	{
@@ -49,7 +47,7 @@ public class PushSocket implements Socket {
 		this.id = id;
 	}
 
-	Serializable getId() {
+	public Serializable getId() {
 		return id;
 	}
 
@@ -141,7 +139,7 @@ public class PushSocket implements Socket {
 	 *
 	 * @throws IOException
 	 * */
-	synchronized void receiveRequest(HttpServletRequest request,
+	public synchronized void receiveRequest(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		if (this.hasMessage()) {
 			// 如果有消息则直接将消息发送

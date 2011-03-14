@@ -1,6 +1,6 @@
 package org.auto.comet.service;
 
-import org.auto.comet.web.Socket;
+import org.auto.comet.Socket;
 import org.auto.comet.web.RequestParameter;
 
 /**

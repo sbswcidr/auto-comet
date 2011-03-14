@@ -1,6 +1,6 @@
-package org.auto.comet.web.listener;
+package org.auto.comet.listener;
 
-import org.auto.comet.web.PushSocket;
+import org.auto.comet.PushSocket;
 
 /**
  *

@@ -1,4 +1,4 @@
-package org.auto.comet.web.listener;
+package org.auto.comet.listener;
 
 import java.util.EventListener;
 
