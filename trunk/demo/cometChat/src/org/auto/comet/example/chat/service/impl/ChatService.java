@@ -8,9 +8,9 @@ import java.util.Map.Entry;
 
 import net.sf.json.JSONObject;
 
+import org.auto.comet.Socket;
 import org.auto.comet.example.chat.service.IChatService;
 import org.auto.comet.service.CometService;
-import org.auto.comet.web.Socket;
 import org.auto.comet.web.RequestParameter;
 import org.springframework.stereotype.Service;
 
