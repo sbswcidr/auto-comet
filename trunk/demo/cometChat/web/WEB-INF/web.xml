@@ -15,9 +15,9 @@
 	</listener>
 
 	<!--comet -->
-	<listener>
+	<!-- <listener>
 		<listener-class>org.auto.comet.web.listener.ContextLoaderListener</listener-class>
-	</listener>
+	</listener> -->
 	<servlet>
 		<servlet-name>cometDispatcher</servlet-name>
 		<servlet-class>org.auto.comet.web.SocketDispatcherServlet</servlet-class>
