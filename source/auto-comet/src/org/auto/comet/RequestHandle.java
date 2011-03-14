@@ -1,38 +1,41 @@
-package org.auto.comet.web;
+package org.auto.comet;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.auto.comet.PushRuntimeException;
-import org.auto.comet.web.listener.SocketEvent;
-import org.auto.comet.web.listener.SocketListener;
+import org.auto.comet.listener.SocketEvent;
+import org.auto.comet.listener.SocketListener;
+import org.auto.comet.service.CometService;
+import org.auto.comet.web.DispatchRuntimeException;
 
 /**
+ * 该类用于处理各种通信请求
+ *
  * @author XiaohangHu
  * */
-public class SocketManager {
-
-	private Map<Serializable, PushSocket> sockets;
+public class RequestHandle {
 
 	private static final String RANDOM_ALGORITHM = "SHA1PRNG";
 
-	private SecureRandom random;
+	private SocketStore socketStore;
 
+	private SecureRandom random;
 	{
-		sockets = new HashMap<Serializable, PushSocket>();
 		try {
 			random = SecureRandom.getInstance(RANDOM_ALGORITHM);
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("创建随机数生成器出错,没有找到[" + RANDOM_ALGORITHM
 					+ "]算法", e);
 		}
+	}
+
+	public RequestHandle(SocketStore socketStore) {
+		this.socketStore = socketStore;
 	}
 
 	private String getRandom() {
@@ -52,21 +55,20 @@ public class SocketManager {
 		return id;
 	}
 
-	PushSocket getSocket(Serializable id) {
-		return this.sockets.get(id);
+	public PushSocket getSocket(Serializable id) {
+		return socketStore.getSocket(id);
 	}
 
 	private PushSocket removeSocket(Serializable id) {
-		return this.sockets.remove(id);
+		return socketStore.removeSocket(id);
 	}
 
 	private void addSocket(PushSocket socket) {
-		this.sockets.put(socket.getId(), socket);
+		socketStore.addSocket(socket);
 	};
 
 	private boolean hasSocket(Serializable id) {
-		Socket socket = this.getSocket(id);
-		return null != socket;
+		return socketStore.hasSocket(id);
 	}
 
 	private PushSocket createSocket() {
@@ -78,7 +80,7 @@ public class SocketManager {
 	/**
 	 * 接收消息
 	 * */
-	void receiveMessage(String connectionId, HttpServletRequest request,
+	public void receiveMessage(String connectionId, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		PushSocket socket = this.getSocket(connectionId);
 		if (null == socket) {
@@ -90,7 +92,7 @@ public class SocketManager {
 	/**
 	 * 创建新链接
 	 * */
-	PushSocket creatConnection() {
+	public PushSocket creatConnection() {
 		PushSocket socket = createSocket();
 		socket.addListener(new SocketListener() {
 			@Override
@@ -107,9 +109,12 @@ public class SocketManager {
 	/**
 	 * 断开链接
 	 * */
-	void disconnect(String connectionId) {
-		PushSocket socket = this.getSocket(connectionId);
+	public void disconnect(String connectionId, CometService service) {
+		if (null == service) {
+			throw new DispatchRuntimeException("没有找到service");
+		}
+		PushSocket socket = getSocket(connectionId);
+		service.quit(socket);
 		socket.close();
 	}
-
 }

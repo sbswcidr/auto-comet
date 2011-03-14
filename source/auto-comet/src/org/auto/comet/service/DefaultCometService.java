@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.auto.comet.web.Socket;
+import org.auto.comet.Socket;
 import org.auto.comet.web.RequestParameter;
 
 /**
