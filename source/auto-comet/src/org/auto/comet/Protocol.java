@@ -1,6 +1,8 @@
 package org.auto.comet;
 
 /**
+ * 协议相关常量
+ *
  * @author XiaohangHu
  * */
 public interface Protocol {
