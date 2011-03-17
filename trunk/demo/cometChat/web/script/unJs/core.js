@@ -160,12 +160,25 @@ Un.Util.getBoolean = function(array) {
 
 Un.StringUtils = {
 	trim : function(str) {
+		if (null == str)
+			return null;
 		return str.replace(/^\s+|\s+$/g, "");
 	},
 	startsWith : function(str1, str2) {
 		if (str1.substr(0, str2.length) == str2)
 			return true;
 		return false;
+	},
+	isBlank : function(str) {
+		if (typeof str == "undefined" || null == str)
+			return true;
+		var s = this.trim(str);
+		if ("" == s)
+			return true;
+		return false;
+	},
+	isNotBlank : function(str) {
+		return !StringUtils.isBlank(str);
 	}
 };
 
