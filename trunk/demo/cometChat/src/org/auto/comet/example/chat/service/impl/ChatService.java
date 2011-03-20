@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import net.sf.json.JSONObject;
 
+import org.auto.comet.ErrorHandler;
 import org.auto.comet.Socket;
 import org.auto.comet.example.chat.service.IChatService;
 import org.auto.comet.service.CometService;
@@ -34,6 +35,13 @@ public class ChatService implements IChatService, CometService {
 	@Override
 	public void accept(Socket pushSocket, RequestParameter requestParameter) {
 		String userId = requestParameter.getParameter("userId");
+		pushSocket.setErrorHandler(new ErrorHandler() {
+			@Override
+			public void error(Exception e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 		socketMapping.put(userId, pushSocket);
 		this.login(userId);
 	}
