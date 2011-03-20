@@ -14,11 +14,6 @@ import org.w3c.dom.NodeList;
  */
 public class XmlUtil {
 
-	// suppress default constructor for noninstantiability
-	private XmlUtil() {
-		throw new AssertionError();
-	}
-
 	/**
 	 * 获得Element类型子节点的迭代器
 	 *
@@ -62,6 +57,10 @@ public class XmlUtil {
 		return StringUtils.trim(value);
 	}
 
+	// suppress default constructor for noninstantiability
+	private XmlUtil() {
+		throw new AssertionError();
+	}
 }
 
 /**
