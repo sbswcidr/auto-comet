@@ -9,12 +9,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.auto.comet.JsonProtocolUtils;
 import org.auto.comet.LocalSocketStore;
 import org.auto.comet.Protocol;
 import org.auto.comet.PushSocket;
 import org.auto.comet.RequestHandle;
 import org.auto.comet.service.CometService;
-import org.auto.json.JsonObject;
 
 /**
  * @author XiaohangHu
@@ -67,11 +67,9 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		}
 		PushSocket socket = requestHandle.creatConnection();
 		PrintWriter write = response.getWriter();
-		// json格式数据
-		JsonObject commend = new JsonObject();
-		commend.put(Protocol.CONNECTIONID_KEY, socket.getId());
+		String commend = JsonProtocolUtils.getConnectionCommend(socket.getId());
 		// 返回生成的链接id
-		write.write(commend.toString());
+		write.write(commend);
 		write.flush();
 		Map<String, String[]> parameters = request.getParameterMap();
 		RequestParameter rp = new DefaultRequestParameter(parameters);
