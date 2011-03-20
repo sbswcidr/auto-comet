@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comets>
+
+	<comet request="/chat.comet"
+		class="org.auto.comet.example.chat.service.impl.ChatService">
+	</comet>
+
+</comets>
