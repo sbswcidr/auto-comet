@@ -16,12 +16,12 @@ import org.auto.comet.listener.SocketEvent;
 import org.auto.comet.listener.SocketListener;
 import org.auto.comet.web.listener.AsyncAdapter;
 import org.auto.json.JsonArray;
-import org.auto.json.JsonObject;
 
 /**
  * @author XiaohangHu
  * */
 public class PushSocket implements Socket {
+
 	private Serializable id;
 
 	private static final String CLOSE_MESSAGE;
@@ -34,10 +34,10 @@ public class PushSocket implements Socket {
 
 	private List<SocketListener> listeners = new LinkedList<SocketListener>();
 
+	private ErrorHandler errorHandler;
+
 	static {
-		JsonObject commend = new JsonObject();
-		commend.put(Protocol.SYNCHRONIZE_KEY, Protocol.DISCONNECT_VALUE);
-		CLOSE_MESSAGE = commend.toString();
+		CLOSE_MESSAGE = JsonProtocolUtils.getCloseCommend();
 	}
 	{
 		messages = new LinkedList<String>();
@@ -198,6 +198,14 @@ public class PushSocket implements Socket {
 
 	public void addListener(SocketListener listener) {
 		listeners.add(listener);
+	}
+
+	public ErrorHandler getErrorHandler() {
+		return errorHandler;
+	}
+
+	public void setErrorHandler(ErrorHandler errorHandler) {
+		this.errorHandler = errorHandler;
 	}
 
 }
