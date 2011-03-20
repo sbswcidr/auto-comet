@@ -24,6 +24,15 @@ public class RequestHandle {
 
 	private SocketStore socketStore;
 
+	private SocketListener socketListener = new SocketListener() {
+		@Override
+		public void onReallyClose(SocketEvent event) {
+			PushSocket soc = event.getPushSocket();
+			Serializable id = soc.getId();
+			removeSocket(id);
+		}
+	};
+
 	private SecureRandom random;
 	{
 		try {
@@ -94,14 +103,7 @@ public class RequestHandle {
 	 * */
 	public PushSocket creatConnection() {
 		PushSocket socket = createSocket();
-		socket.addListener(new SocketListener() {
-			@Override
-			public void onReallyClose(SocketEvent event) {
-				PushSocket soc = event.getPushSocket();
-				Serializable id = soc.getId();
-				removeSocket(id);
-			}
-		});
+		socket.addListener(socketListener);
 		this.addSocket(socket);
 		return socket;
 	}
