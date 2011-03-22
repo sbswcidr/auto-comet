@@ -3,7 +3,6 @@ package org.auto.comet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -74,8 +73,7 @@ public class PushSocket implements Socket {
 	}
 
 	private long getNowTimeInMillis() {
-		Calendar now = Calendar.getInstance();
-		return now.getTimeInMillis();
+		return System.currentTimeMillis();
 	}
 
 	/** 添加监听器 */
@@ -96,8 +94,32 @@ public class PushSocket implements Socket {
 		this.lastPushTime = getNowTimeInMillis();
 	}
 
+	/**
+	 * 处理推送超时，超时推送代表客户端长时间没有发送连接请求
+	 *
+	 * 超时会发生一个连接异常。
+	 *
+	 * @param pushTimeout
+	 *            超时时间
+	 * @return 是否超时
+	 */
+	public boolean processPushTimeOut(long pushTimeout) {
+		Long lastTime = this.getLastPushTime();
+		if (this.isWaiting()) {
+			return false;
+		} else {
+			long now = this.getNowTimeInMillis();
+			long sent = now - lastTime;
+			if (sent > pushTimeout) {
+				fireError(new PushException("推送超时"));
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/** 获取最后一次推送的时间 */
-	public Long getLastPushTime() {
+	protected Long getLastPushTime() {
 		return lastPushTime;
 	}
 
@@ -121,7 +143,7 @@ public class PushSocket implements Socket {
 		} catch (Exception e) {
 			this.fireError(e);
 		} catch (Throwable te) {
-			throw new PushRuntimeException(te);
+			throw new PushException(te);
 		}
 	}
 
@@ -238,10 +260,9 @@ public class PushSocket implements Socket {
 		}
 	}
 
-	public synchronized void sendMessage(String message)
-			throws PushRuntimeException {
+	public synchronized void sendMessage(String message) throws PushException {
 		if (isClosed()) {
-			throw new PushRuntimeException("连接已经关闭！");
+			throw new PushException("连接已经关闭！");
 		}
 		// 如果不是等待状态，将消息缓存
 		if (!isWaiting()) {
@@ -253,7 +274,7 @@ public class PushSocket implements Socket {
 		try {
 			pushMessage(message, response);
 		} catch (IOException e) {
-			throw new PushRuntimeException("IOException push message", e);
+			throw new PushException("IOException push message", e);
 		}
 		complete();
 	}

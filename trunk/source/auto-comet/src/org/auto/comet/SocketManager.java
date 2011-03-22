@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,18 +21,20 @@ import org.auto.comet.web.controller.SocketController;
  *
  * @author XiaohangHu
  * */
-public class RequestHandle {
+public class SocketManager {
 
 	private static final String RANDOM_ALGORITHM = "SHA1PRNG";
 
 	private SocketStore socketStore;
 
+	/** 默认为1分钟 */
+	private long pushTimeout = 60000l;
+
 	private SocketListener socketListener = new SocketListener() {
 		@Override
 		public void onReallyClose(SocketEvent event) {
-			PushSocket soc = event.getPushSocket();
-			Serializable id = soc.getId();
-			removeSocket(id);
+			PushSocket socket = event.getPushSocket();
+			removeSocket(socket);
 		}
 	};
 
@@ -43,8 +48,23 @@ public class RequestHandle {
 		}
 	}
 
-	public RequestHandle(SocketStore socketStore) {
+	public SocketManager(SocketStore socketStore) {
 		this.socketStore = socketStore;
+		startTimer();
+	}
+
+	/**
+	 * 开始定时任务
+	 * */
+	private void startTimer() {
+		Timer timer = new Timer(true);
+		long period = pushTimeout / 2l;
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				processPushTimeOut();
+			}
+		}, pushTimeout, period);
 	}
 
 	private String getRandom() {
@@ -64,8 +84,21 @@ public class RequestHandle {
 		return id;
 	}
 
+	public long getPushTimeout() {
+		return pushTimeout;
+	}
+
+	public void setPushTimeout(long pushTimeout) {
+		this.pushTimeout = pushTimeout;
+	}
+
 	public PushSocket getSocket(Serializable id) {
 		return socketStore.getSocket(id);
+	}
+
+	private PushSocket removeSocket(PushSocket socket) {
+		Serializable id = socket.getId();
+		return removeSocket(id);
 	}
 
 	private PushSocket removeSocket(Serializable id) {
@@ -86,6 +119,16 @@ public class RequestHandle {
 		return socket;
 	}
 
+	public void processPushTimeOut() {
+		Collection<PushSocket> sockets = this.socketStore.getAllSocket();
+		for (PushSocket socket : sockets) {
+			boolean timetOut = socket.processPushTimeOut(this.pushTimeout);
+			if (timetOut) {// 超时将socket移除
+				this.removeSocket(socket);
+			}
+		}
+	}
+
 	/**
 	 * 接收消息
 	 * */
@@ -93,7 +136,7 @@ public class RequestHandle {
 			HttpServletResponse response) throws IOException {
 		PushSocket socket = this.getSocket(connectionId);
 		if (null == socket) {
-			throw new PushRuntimeException("没有找到socket！");
+			throw new PushException("没有找到socket！");
 		}
 		socket.receiveRequest(request, response);
 	}

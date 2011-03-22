@@ -12,7 +12,7 @@ import org.auto.comet.JsonProtocolUtils;
 import org.auto.comet.LocalSocketStore;
 import org.auto.comet.Protocol;
 import org.auto.comet.PushSocket;
-import org.auto.comet.RequestHandle;
+import org.auto.comet.SocketManager;
 import org.auto.comet.web.controller.SocketController;
 
 /**
@@ -25,8 +25,8 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 */
 	private static final long serialVersionUID = -3671690949937300581L;
 
-	protected RequestHandle creatRequestHandle(ServletContext servletContext) {
-		RequestHandle requestHandle = new RequestHandle(
+	protected SocketManager creatRequestHandle(ServletContext servletContext) {
+		SocketManager requestHandle = new SocketManager(
 				getSocketStore(servletContext));
 		return requestHandle;
 	}
@@ -35,7 +35,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 			throws ServletException, IOException {
 
 		ServletContext servletContext = request.getServletContext();
-		RequestHandle requestHandle = creatRequestHandle(servletContext);
+		SocketManager requestHandle = creatRequestHandle(servletContext);
 
 		String synchronizValue = getSynchronizValue(request);
 		if (null == synchronizValue) {// 同步值为空则为接收消息
@@ -50,14 +50,14 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	/**
 	 * 接收消息
 	 * */
-	private static void receiveMessage(RequestHandle requestHandle,
+	private static void receiveMessage(SocketManager requestHandle,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		String connectionId = getConnectionId(request);
 		requestHandle.receiveMessage(connectionId, request, response);
 	}
 
-	private static void creatConnection(RequestHandle requestHandle,
+	private static void creatConnection(SocketManager requestHandle,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		SocketController service = getCometService(request);
@@ -76,7 +76,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	/**
 	 * 断开链接
 	 * */
-	private static void disconnect(RequestHandle requestHandle,
+	private static void disconnect(SocketManager requestHandle,
 			HttpServletRequest request) {
 		SocketController service = getCometService(request);
 		if (null == service) {
