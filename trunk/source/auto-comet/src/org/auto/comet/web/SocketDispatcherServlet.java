@@ -83,7 +83,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 			throw new DispatchRuntimeException("没有找到service");
 		}
 		String connectionId = getConnectionId(request);
-		requestHandle.disconnect(connectionId, service);
+		requestHandle.disconnect(connectionId, service, request);
 	}
 
 	private static String getSynchronizValue(HttpServletRequest request) {
