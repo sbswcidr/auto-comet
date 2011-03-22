@@ -1,7 +1,11 @@
 package org.auto;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.auto.comet.xml.PropertiesXmlDefinitionParser;
 import org.auto.io.ClassPathResource;
@@ -18,7 +22,30 @@ public class Test {
 	private static String xmlDefinitionMappingsLocation = "META-INF/auto.schemas";
 
 	public static void main(String[] args) throws Exception {
-		testJson();
+		// testJson();
+		// testCalendar();
+		testTimer();
+	}
+
+	public static void testTimer() throws InterruptedException {
+		System.out.println(Thread.currentThread().getId() + "!");
+		long t = 2000l;
+		new Timer(true).schedule(new TimerTask() { // true，表示执行的线程是一个守护线程
+					@Override
+					public void run() {
+						System.out.println("线程"
+								+ Thread.currentThread().getId() + "!");
+						// System.exit(1);
+					}
+				}, 1000l, t / 2);
+		Thread.sleep(10l);
+	}
+
+	public static void testCalendar() {
+		Calendar now = Calendar.getInstance();
+		System.out.println(now.getTimeInMillis());
+		Date date = new Date();
+		System.out.println(date.getTime());
 	}
 
 	public static void testJson() {
@@ -58,6 +85,7 @@ public class Test {
 				System.out.println(namespaceUri);
 			}
 		}
+
 	}
 
 }
