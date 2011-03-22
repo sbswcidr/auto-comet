@@ -13,7 +13,7 @@ public interface Socket {
 	 * 发送消息
 	 *
 	 */
-	void sendMessage(String message) throws PushRuntimeException;
+	void sendMessage(String message) throws PushException;
 
 	/**
 	 * 关闭连接
