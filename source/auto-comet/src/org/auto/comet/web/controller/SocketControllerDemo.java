@@ -31,7 +31,7 @@ public class SocketControllerDemo implements SocketController {
 	}
 
 	@Override
-	public void quit(Socket socket) {
+	public void quit(Socket socket, HttpServletRequest request) {
 		for (Entry<String, Socket> entry : socketMapping.entrySet()) {
 			Socket value = entry.getValue();
 			if (value.equals(socket)) {

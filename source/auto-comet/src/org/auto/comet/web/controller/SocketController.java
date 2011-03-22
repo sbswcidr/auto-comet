@@ -11,6 +11,6 @@ public interface SocketController {
 
 	void accept(Socket socket, HttpServletRequest request);
 
-	void quit(Socket socket);
+	void quit(Socket socket, HttpServletRequest request);
 
 }

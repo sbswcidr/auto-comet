@@ -154,12 +154,13 @@ public class SocketManager {
 	/**
 	 * 断开链接
 	 * */
-	public void disconnect(String connectionId, SocketController service) {
+	public void disconnect(String connectionId, SocketController service,
+			HttpServletRequest request) {
 		if (null == service) {
 			throw new DispatchRuntimeException("没有找到service");
 		}
 		PushSocket socket = getSocket(connectionId);
-		service.quit(socket);
+		service.quit(socket, request);
 		socket.close();
 	}
 }
