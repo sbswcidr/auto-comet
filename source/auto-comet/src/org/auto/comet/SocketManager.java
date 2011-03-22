@@ -122,6 +122,12 @@ public class SocketManager {
 	public void processPushTimeOut() {
 		Collection<PushSocket> sockets = this.socketStore.getAllSocket();
 		for (PushSocket socket : sockets) {
+			processPushTimeOut(socket);
+		}
+	}
+
+	private void processPushTimeOut(PushSocket socket) {
+		synchronized (socket) {
 			boolean timetOut = socket.processPushTimeOut(this.pushTimeout);
 			if (timetOut) {// 超时将socket移除
 				this.removeSocket(socket);
