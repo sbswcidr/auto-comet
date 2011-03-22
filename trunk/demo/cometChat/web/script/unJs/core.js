@@ -199,6 +199,40 @@ Un.ArrayUtils = {
 		return false;
 	}
 };
+
+Un.WindowUtils = {
+	/** 判断一个窗口是否有父窗口 */
+	hasParent : function(win) {
+		return win.parent == win;
+	},
+	/** 获取一个窗口的父窗口，顶层窗口没有父窗口 */
+	getParent : function(win) {
+		if (this.hasParent(win)) {
+			return win.parent;
+		}
+		return null;
+	},
+	/** 获取一个窗口的Opener */
+	getOpener : function(win) {
+		return win.opener;
+	},
+	/** 迭代所有父窗口 */
+	iteratorParent : function(win, fun, cal) {
+		var p = this.getParent(win);
+		if (p) {
+			fun.call(cal, p);
+			this.iteratorParent(p);
+		}
+	},
+	/** 迭代所有opener */
+	iteratorOpener : function(win, fun, cal) {
+		var op = this.getOpener(win);
+		if (op) {
+			fun.call(cal, op);
+			this.iteratorParent(op);
+		}
+	}
+};
 /** ******************************************************************** Util */
 /**
  * @method Un.newClass
