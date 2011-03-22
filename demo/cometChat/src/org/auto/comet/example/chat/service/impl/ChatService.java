@@ -48,7 +48,7 @@ public class ChatService implements IChatService, SocketController {
 	}
 
 	@Override
-	public void quit(Socket socket) {
+	public void quit(Socket socket, HttpServletRequest request) {
 		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
 			Socket value = entry.getValue();
 			if (value.equals(socket)) {
