@@ -1,17 +1,18 @@
-package org.auto.comet.service;
+package org.auto.comet.web.controller;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.auto.comet.Socket;
-import org.auto.comet.web.RequestParameter;
 
 /**
  * @author XiaohangHu
  * */
-public class DefaultCometService implements CometService {
+public class SocketControllerDemo implements SocketController {
 
 	private Map<String, Socket> socketMapping = new HashMap<String, Socket>();
 
@@ -24,8 +25,8 @@ public class DefaultCometService implements CometService {
 	}
 
 	@Override
-	public void accept(Socket socket, RequestParameter requestParameter) {
-		String userId = requestParameter.getParameter("userId");
+	public void accept(Socket socket, HttpServletRequest request) {
+		String userId = request.getParameter("userId");
 		socketMapping.put(userId, socket);
 	}
 

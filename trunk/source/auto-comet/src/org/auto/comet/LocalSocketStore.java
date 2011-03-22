@@ -1,6 +1,7 @@
 package org.auto.comet;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +30,10 @@ public class LocalSocketStore implements SocketStore {
 	public boolean hasSocket(Serializable id) {
 		Socket socket = this.getSocket(id);
 		return null != socket;
+	}
+
+	public Collection<PushSocket> getAllSocket() {
+		return this.sockets.values();
 	}
 
 }
