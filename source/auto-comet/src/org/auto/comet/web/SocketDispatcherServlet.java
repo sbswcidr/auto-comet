@@ -2,7 +2,6 @@ package org.auto.comet.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -14,7 +13,7 @@ import org.auto.comet.LocalSocketStore;
 import org.auto.comet.Protocol;
 import org.auto.comet.PushSocket;
 import org.auto.comet.RequestHandle;
-import org.auto.comet.service.CometService;
+import org.auto.comet.web.controller.SocketController;
 
 /**
  * @author XiaohangHu
@@ -61,7 +60,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	private static void creatConnection(RequestHandle requestHandle,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		CometService service = getCometService(request);
+		SocketController service = getCometService(request);
 		if (null == service) {
 			throw new DispatchRuntimeException("没有找到service");
 		}
@@ -71,9 +70,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		// 返回生成的链接id
 		write.write(commend);
 		write.flush();
-		Map<String, String[]> parameters = request.getParameterMap();
-		RequestParameter rp = new DefaultRequestParameter(parameters);
-		service.accept(socket, rp);
+		service.accept(socket, request);
 	}
 
 	/**
@@ -81,7 +78,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 * */
 	private static void disconnect(RequestHandle requestHandle,
 			HttpServletRequest request) {
-		CometService service = getCometService(request);
+		SocketController service = getCometService(request);
 		if (null == service) {
 			throw new DispatchRuntimeException("没有找到service");
 		}

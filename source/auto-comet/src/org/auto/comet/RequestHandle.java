@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.auto.comet.listener.SocketEvent;
 import org.auto.comet.listener.SocketListener;
-import org.auto.comet.service.CometService;
 import org.auto.comet.web.DispatchRuntimeException;
+import org.auto.comet.web.controller.SocketController;
 
 /**
  * 该类用于处理各种通信请求
@@ -111,7 +111,7 @@ public class RequestHandle {
 	/**
 	 * 断开链接
 	 * */
-	public void disconnect(String connectionId, CometService service) {
+	public void disconnect(String connectionId, SocketController service) {
 		if (null == service) {
 			throw new DispatchRuntimeException("没有找到service");
 		}
