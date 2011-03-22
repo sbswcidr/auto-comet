@@ -6,13 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONObject;
 
 import org.auto.comet.ErrorHandler;
 import org.auto.comet.Socket;
 import org.auto.comet.example.chat.service.IChatService;
-import org.auto.comet.service.CometService;
-import org.auto.comet.web.RequestParameter;
+import org.auto.comet.web.controller.SocketController;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Service;
  * @author XiaohangHu
  */
 @Service
-public class ChatService implements IChatService, CometService {
+public class ChatService implements IChatService, SocketController {
 
 	public static final String COMMAND_KEY = "command";
 	public static final String COMMAND_LOGIN = "login";
@@ -33,8 +34,8 @@ public class ChatService implements IChatService, CometService {
 	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
 
 	@Override
-	public void accept(Socket pushSocket, RequestParameter requestParameter) {
-		String userId = requestParameter.getParameter("userId");
+	public void accept(Socket pushSocket, HttpServletRequest request) {
+		String userId = request.getParameter("userId");
 		pushSocket.setErrorHandler(new ErrorHandler() {
 			@Override
 			public void error(Exception e) {
