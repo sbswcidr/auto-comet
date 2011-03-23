@@ -225,6 +225,9 @@ public class PushSocket implements Socket {
 	 * */
 	public synchronized void receiveRequest(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
+		if (isClosed()) {
+			throw new PushException("连接已经关闭！");
+		}
 		if (this.hasMessage()) {
 			// 如果有消息则直接将消息推送
 			pushMessage(this.messages, response);
@@ -280,6 +283,7 @@ public class PushSocket implements Socket {
 			long now = this.getNowTimeInMillis();
 			long sent = now - lastTime;
 			if (sent > pushTimeout) {
+				this.close = true;// 关闭连接
 				fireError(new PushException("推送超时"));
 				return true;
 			}
