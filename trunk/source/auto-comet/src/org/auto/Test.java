@@ -51,6 +51,7 @@ public class Test {
 	public static void testJson() {
 	}
 
+
 	public static void testXml() throws IOException {
 
 		XmlDocumentLoader documentLoader = new XmlDocumentLoader();
