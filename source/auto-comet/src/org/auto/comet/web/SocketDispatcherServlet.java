@@ -96,17 +96,29 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		return socketManager;
 	}
 
+	private static SocketManager getSocketManagerFromComtext(
+			ServletContext servletContext) {
+		SocketManager socketManager = (SocketManager) servletContext
+				.getAttribute(ServletContextKey.SOCKET_MANAGER_KEY);
+		return socketManager;
+	}
+
 	/**
 	 * manager 存放在 servletContext
 	 * */
 	private static SocketManager getSocketManager(ServletContext servletContext) {
-		SocketManager socketManager = (SocketManager) servletContext
-				.getAttribute(ServletContextKey.SOCKET_MANAGER_KEY);
-		if (null == socketManager) {// 延迟初始化
-			socketManager = creatSocketManager();
-			socketManager.startTimer();
-			servletContext.setAttribute(ServletContextKey.SOCKET_MANAGER_KEY,
-					socketManager);
+		SocketManager socketManager = getSocketManagerFromComtext(servletContext);
+		if (null == socketManager) {// 延迟初始化，双重校验锁
+			synchronized (SocketDispatcherServlet.class) {
+				socketManager = getSocketManagerFromComtext(servletContext);
+				if (null == socketManager) {
+					socketManager = creatSocketManager();
+					socketManager.startTimer();
+					servletContext
+							.setAttribute(ServletContextKey.SOCKET_MANAGER_KEY,
+									socketManager);
+				}
+			}
 		}
 		return socketManager;
 	}
