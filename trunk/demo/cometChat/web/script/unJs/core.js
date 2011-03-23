@@ -17,8 +17,7 @@ if (typeof Un == "undefined")
 	Un = {};
 Un.NAME = "un";
 
-Un.BLANK_IMAGE_URL = "unJs/style/blank.gif";
-Un.BLANK_IMAGE_URL = "../js/unJs/style/blank.gif";
+Un.BLANK_IMAGE_URL = Un.ROOT + "style/blank.gif";
 
 /** *浏览器的类型及版本 */
 Un.AGENT = {

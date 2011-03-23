@@ -1,53 +1,53 @@
 /** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */
 
-/** root */
-var UN_URL = "../../js/unJs/";
-
 /** files */
-var SCRIPTS = [ "un_core.js", "un_tabTree.js" ];
-var STYLES = [ "css/reset.css", "css/un_tabTree.css" ];
+var SCRIPTS = [ "core.js", "tabTree.js" ];
+var STYLES = [ "style/grey/css/reset.css", "style/grey/css/tabTree.css" ];
 
 /** $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */
 
 if (typeof Un == "undefined")
 	Un = {};
 
-Un.load = function() {
-	this.load.addScripts(this.load.files.scripts);
-	this.load.addStyles(this.load.files.styles);
-};
+Un.CodeLoader = {
+	getRoot : function() {
+		var scriptSrc, match, scripts = document.getElementsByTagName('script');
 
-Un.load.files = {
-	scripts : SCRIPTS,
-	styles : STYLES
-};
-
-Un.load.addScript = function(src, tag) {
-	var head = document.getElementsByTagName("head")[0];
-	var script = tag.appendChild(document.createElement("script"));
-	script.src = src;
-
-};
-
-Un.load.addStyle = function(src, tag) {
-	var head = document.getElementsByTagName("head")[0];
-	var link = tag.appendChild(document.createElement("link"));
-	link.href = src;
-	link.rel = "stylesheet";
-	link.type = "text/css";
-};
-
-Un.load.addScripts = function(scripts) {
-	for ( var i in scripts) {
-		this.addScript(UN_URL + scripts[i], this.tag);
+		for ( var i = 0, ln = scripts.length; i < ln; i++) {
+			scriptSrc = scripts[i].src;
+			match = scriptSrc.match(/load\.js$/);
+			if (match) {
+				var path = scriptSrc.substring(0, scriptSrc.length
+						- match[0].length);
+				return path;
+			}
+		}
+	},
+	loadScript : function(src) {
+		var script = document.createElement("script");
+		script.src = src;
+		document.appendChild(script);
+	},
+	loadStyle : function(src) {
+		var link = document.createElement("link");
+		link.href = src;
+		link.rel = "stylesheet";
+		link.type = "text/css";
+		document.appendChild(link);
+	},
+	loadScripts : function(scripts) {
+		for ( var i = 0, len = scripts.length; i < len; i++) {
+			this.loadScript(Un.ROOT + scripts[i]);
+		}
+	},
+	loadStyles : function(styles) {
+		for ( var i = 0, len = styles.length; i < len; i++) {
+			this.loadStyle(Un.ROOT + styles[i]);
+		}
 	}
 };
 
-Un.load.addStyles = function(styles) {
-	for ( var i in styles) {
-		this.addStyle(UN_URL + styles[i], this.tag);
-	}
-};
+Un.ROOT = Un.CodeLoader.getRoot();
 
-Un.load.tag = document.getElementsByTagName("head")[0];
-Un.load();
+Un.CodeLoader.loadScripts(SCRIPTS);
+Un.CodeLoader.loadStyles(STYLES);
