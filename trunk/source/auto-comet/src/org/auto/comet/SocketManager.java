@@ -118,6 +118,9 @@ public class SocketManager {
 		return socket;
 	}
 
+	/**
+	 * 推送超时处理
+	 * */
 	public void processPushTimeOut() {
 		Collection<PushSocket> sockets = this.socketStore.getAllSocket();
 		for (PushSocket socket : sockets) {
