@@ -94,30 +94,6 @@ public class PushSocket implements Socket {
 		this.lastPushTime = getNowTimeInMillis();
 	}
 
-	/**
-	 * 处理推送超时，超时推送代表客户端长时间没有发送连接请求
-	 *
-	 * 超时会发生一个连接异常。
-	 *
-	 * @param pushTimeout
-	 *            超时时间
-	 * @return 是否超时
-	 */
-	public boolean processPushTimeOut(long pushTimeout) {
-		Long lastTime = this.getLastPushTime();
-		if (this.isWaiting()) {
-			return false;
-		} else {
-			long now = this.getNowTimeInMillis();
-			long sent = now - lastTime;
-			if (sent > pushTimeout) {
-				fireError(new PushException("推送超时"));
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/** 获取最后一次推送的时间 */
 	protected Long getLastPushTime() {
 		return lastPushTime;
@@ -285,5 +261,29 @@ public class PushSocket implements Socket {
 	public synchronized void close() {
 		this.sendMessage(CLOSE_MESSAGE);
 		this.close = true;
+	}
+
+	/**
+	 * 处理推送超时，超时推送代表客户端长时间没有发送连接请求
+	 *
+	 * 超时会发生一个连接异常。
+	 *
+	 * @param pushTimeout
+	 *            超时时间
+	 * @return 是否超时
+	 */
+	public synchronized boolean processPushTimeOut(long pushTimeout) {
+		Long lastTime = this.getLastPushTime();
+		if (this.isWaiting()) {
+			return false;
+		} else {
+			long now = this.getNowTimeInMillis();
+			long sent = now - lastTime;
+			if (sent > pushTimeout) {
+				fireError(new PushException("推送超时"));
+				return true;
+			}
+		}
+		return false;
 	}
 }

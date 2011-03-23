@@ -13,6 +13,7 @@ import org.auto.comet.LocalSocketStore;
 import org.auto.comet.Protocol;
 import org.auto.comet.PushSocket;
 import org.auto.comet.SocketManager;
+import org.auto.comet.SocketStore;
 import org.auto.comet.web.controller.SocketController;
 
 /**
@@ -25,46 +26,40 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 */
 	private static final long serialVersionUID = -3671690949937300581L;
 
-	protected SocketManager creatRequestHandle(ServletContext servletContext) {
-		SocketManager requestHandle = new SocketManager(
-				getSocketStore(servletContext));
-		return requestHandle;
-	}
-
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		ServletContext servletContext = request.getServletContext();
-		SocketManager requestHandle = creatRequestHandle(servletContext);
+		SocketManager socketManager = getSocketManager(servletContext);
 
 		String synchronizValue = getSynchronizValue(request);
 		if (null == synchronizValue) {// 同步值为空则为接收消息
-			receiveMessage(requestHandle, request, response);
+			receiveMessage(socketManager, request, response);
 		} else if (Protocol.CONNECTION_VALUE.equals(synchronizValue)) {// 创建链接请求
-			creatConnection(requestHandle, request, response);
+			creatConnection(socketManager, request, response);
 		} else if (Protocol.DISCONNECT_VALUE.equals(synchronizValue)) {// 断开链接请求
-			disconnect(requestHandle, request);
+			disconnect(socketManager, request);
 		}
 	}
 
 	/**
 	 * 接收消息
 	 * */
-	private static void receiveMessage(SocketManager requestHandle,
+	private static void receiveMessage(SocketManager socketManager,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		String connectionId = getConnectionId(request);
-		requestHandle.receiveMessage(connectionId, request, response);
+		socketManager.receiveMessage(connectionId, request, response);
 	}
 
-	private static void creatConnection(SocketManager requestHandle,
+	private static void creatConnection(SocketManager socketManager,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		SocketController service = getCometService(request);
 		if (null == service) {
-			throw new DispatchRuntimeException("没有找到service");
+			throw new DispatchException("没有找到service");
 		}
-		PushSocket socket = requestHandle.creatConnection();
+		PushSocket socket = socketManager.creatConnection();
 		PrintWriter write = response.getWriter();
 		String commend = JsonProtocolUtils.getConnectionCommend(socket.getId());
 		// 返回生成的链接id
@@ -76,14 +71,14 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	/**
 	 * 断开链接
 	 * */
-	private static void disconnect(SocketManager requestHandle,
+	private static void disconnect(SocketManager socketManager,
 			HttpServletRequest request) {
 		SocketController service = getCometService(request);
 		if (null == service) {
-			throw new DispatchRuntimeException("没有找到service");
+			throw new DispatchException("没有找到service");
 		}
 		String connectionId = getConnectionId(request);
-		requestHandle.disconnect(connectionId, service, request);
+		socketManager.disconnect(connectionId, service, request);
 	}
 
 	private static String getSynchronizValue(HttpServletRequest request) {
@@ -95,17 +90,24 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		return request.getParameter(Protocol.CONNECTIONID_KEY);
 	}
 
+	protected static SocketManager creatSocketManager() {
+		SocketStore socketStore = new LocalSocketStore();
+		SocketManager socketManager = new SocketManager(socketStore);
+		return socketManager;
+	}
+
 	/**
 	 * manager 存放在 servletContext
 	 * */
-	private static LocalSocketStore getSocketStore(ServletContext servletContext) {
-		LocalSocketStore cometManager = (LocalSocketStore) servletContext
-				.getAttribute(ServletContextKey.SOCKET_STORE_KEY);
-		if (null == cometManager) {// 延迟初始化
-			cometManager = new LocalSocketStore();
-			servletContext.setAttribute(ServletContextKey.SOCKET_STORE_KEY,
-					cometManager);
+	private static SocketManager getSocketManager(ServletContext servletContext) {
+		SocketManager socketManager = (SocketManager) servletContext
+				.getAttribute(ServletContextKey.SOCKET_MANAGER_KEY);
+		if (null == socketManager) {// 延迟初始化
+			socketManager = creatSocketManager();
+			socketManager.startTimer();
+			servletContext.setAttribute(ServletContextKey.SOCKET_MANAGER_KEY,
+					socketManager);
 		}
-		return cometManager;
+		return socketManager;
 	}
 }
