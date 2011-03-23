@@ -78,4 +78,4 @@
 	constructor : function() {
 	}
 };
-Un.newClass(Un.Comet);
+Un.Comet = Un.newClass(Un.Comet);
