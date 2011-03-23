@@ -21,7 +21,7 @@ public class ContextLoaderListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent contextEvent) {
 		ServletContext servletContext = contextEvent.getServletContext();
 		LocalSocketStore cometContext = new LocalSocketStore();
-		servletContext.setAttribute(ServletContextKey.SOCKET_STORE_KEY,
+		servletContext.setAttribute(ServletContextKey.SOCKET_MANAGER_KEY,
 				cometContext);
 		logger.warn("comet init context");
 	}

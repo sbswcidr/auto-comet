@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.auto.comet.listener.SocketEvent;
 import org.auto.comet.listener.SocketListener;
-import org.auto.comet.web.DispatchRuntimeException;
+import org.auto.comet.web.DispatchException;
 import org.auto.comet.web.controller.SocketController;
 
 /**
@@ -50,13 +50,12 @@ public class SocketManager {
 
 	public SocketManager(SocketStore socketStore) {
 		this.socketStore = socketStore;
-		startTimer();
 	}
 
 	/**
 	 * 开始定时任务
 	 * */
-	private void startTimer() {
+	public void startTimer() {
 		Timer timer = new Timer(true);
 		long period = pushTimeout / 2l;
 		timer.schedule(new TimerTask() {
@@ -127,11 +126,9 @@ public class SocketManager {
 	}
 
 	private void processPushTimeOut(PushSocket socket) {
-		synchronized (socket) {
-			boolean timetOut = socket.processPushTimeOut(this.pushTimeout);
-			if (timetOut) {// 超时将socket移除
-				this.removeSocket(socket);
-			}
+		boolean timetOut = socket.processPushTimeOut(this.pushTimeout);
+		if (timetOut) {// 超时将socket移除
+			this.removeSocket(socket);
 		}
 	}
 
@@ -163,7 +160,7 @@ public class SocketManager {
 	public void disconnect(String connectionId, SocketController service,
 			HttpServletRequest request) {
 		if (null == service) {
-			throw new DispatchRuntimeException("没有找到service");
+			throw new DispatchException("没有找到service");
 		}
 		PushSocket socket = getSocket(connectionId);
 		service.quit(socket, request);

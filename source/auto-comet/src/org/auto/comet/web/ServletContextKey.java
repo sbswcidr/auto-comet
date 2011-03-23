@@ -8,6 +8,6 @@ package org.auto.comet.web;
 public interface ServletContextKey {
 
 	/** socket store key */
-	String SOCKET_STORE_KEY = "_SOCKET_STORE_COMET";
+	String SOCKET_MANAGER_KEY = "SOCKET_MANAGER_KEY";
 
 }
