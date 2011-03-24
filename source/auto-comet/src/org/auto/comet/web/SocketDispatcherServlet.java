@@ -108,7 +108,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 * */
 	private static SocketManager getSocketManager(ServletContext servletContext) {
 		SocketManager socketManager = getSocketManagerFromComtext(servletContext);
-		if (null == socketManager) {// 延迟初始化，双重校验锁
+		if (null == socketManager) {// 延迟初始化，双重校验锁。或许有问题
 			synchronized (SocketDispatcherServlet.class) {
 				socketManager = getSocketManagerFromComtext(servletContext);
 				if (null == socketManager) {
