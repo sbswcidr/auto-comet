@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
+ *
  * @author XiaohangHu
  * */
 public interface SocketStore {
