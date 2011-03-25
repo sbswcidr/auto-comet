@@ -36,15 +36,14 @@ public class PushSocket implements Socket {
 
 	private static final String CLOSE_MESSAGE;
 
-	/**
-	 * 消息队列
-	 * */
+	/** 消息队列 */
 	private List<String> messages;
 
-	/**
-	 * 是否已经预关闭
-	 * */
+	/** 是否已经预关闭 */
 	private boolean close = false;
+
+	/** 异步超时时间，默认一小时 */
+	private long asyncTimeout = 3600000;
 
 	/**
 	 * 记录上一次推送的时间。客户端长时间没有轮询，应该发生一个异常。
@@ -100,26 +99,34 @@ public class PushSocket implements Socket {
 	}
 
 	/** 异步等待消息 */
-	private void waitMessage(HttpServletRequest request) {
+	private void waitMessage(HttpServletRequest request) throws PushException {
 		try {
 			AsyncContext ac = request.startAsync();
-			ac.setTimeout(3600000);// 一小时
+			ac.setTimeout(this.asyncTimeout);
 			ac.addListener(new AsyncAdapter() {
 				@Override
 				public void onError(AsyncEvent asyncevent) throws IOException {
-					// TODO Auto-generated method stub
+					close();
+					PushException e = new PushException("async context error!");
+					fireError(e);
+					throw e;
 				}
 
 				@Override
 				public void onTimeout(AsyncEvent asyncevent) throws IOException {
 					close();
+					PushException e = new PushException(
+							"async context timeout!");
+					fireError(e);
+					throw e;
 				}
 			});
 			this.asyncContext = ac;
 		} catch (Exception e) {
 			this.fireError(e);
+			throw new PushException("startAsync exception!", e);
 		} catch (Throwable te) {
-			throw new PushException(te);
+			throw new PushException("startAsync exception!", te);
 		}
 	}
 
@@ -183,9 +190,13 @@ public class PushSocket implements Socket {
 		resetLastPushTime();
 	}
 
-	private void pushMessage(List<String> messages, ServletResponse response)
-			throws IOException {
-		pushMessage(messages, response.getWriter());
+	private void pushMessage(List<String> messages, ServletResponse response) {
+		try {
+			pushMessage(messages, response.getWriter());
+		} catch (IOException e) {
+			this.fireError(e);
+			throw new PushException("IOException push message", e);
+		}
 	}
 
 	private void pushMessage(String message, ServletResponse response)
@@ -202,6 +213,8 @@ public class PushSocket implements Socket {
 				userMessages.add(message);
 			}
 		}
+		// 清空缓存
+		this.messages.clear();
 		return userMessages;
 	}
 
@@ -234,9 +247,11 @@ public class PushSocket implements Socket {
 	 * @throws IOException
 	 * */
 	public synchronized void receiveRequest(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response) {
 		if (isClosed()) {
-			throw new PushException("连接已经关闭！");
+			PushException e = new PushException("连接已经关闭！");
+			this.fireError(e);
+			throw e;
 		}
 		if (this.hasMessage()) {
 			// 如果有消息则直接将消息推送
@@ -251,7 +266,9 @@ public class PushSocket implements Socket {
 
 	public synchronized void sendMessage(String message) throws PushException {
 		if (isClosed()) {
-			throw new PushException("连接已经关闭！");
+			PushException e = new PushException("连接已经关闭！");
+			this.fireError(e);
+			throw e;
 		}
 		// 如果不是等待状态，将消息缓存
 		if (!isWaiting()) {
@@ -263,6 +280,7 @@ public class PushSocket implements Socket {
 		try {
 			pushMessage(message, response);
 		} catch (IOException e) {
+			this.fireError(e);
 			throw new PushException("IOException push message", e);
 		}
 		complete();
@@ -294,7 +312,8 @@ public class PushSocket implements Socket {
 			long sent = now - lastTime;
 			if (sent > pushTimeout) {
 				this.close = true;// 关闭连接
-				fireError(new PushException("推送超时"));
+				PushException e = new PushException("推送超时");
+				fireError(e);
 				return true;
 			}
 		}

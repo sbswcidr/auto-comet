@@ -1,6 +1,5 @@
 package org.auto.comet;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -123,7 +122,7 @@ public class SocketManager {
 	 * */
 	public void processPushTimeOut() {
 		Collection<PushSocket> sockets = this.socketStore.getAllSocket();
-		for (PushSocket socket : sockets) {
+		for (PushSocket socket : sockets) {// 检查所有的socket是否超时
 			processPushTimeOut(socket);
 		}
 	}
@@ -139,7 +138,7 @@ public class SocketManager {
 	 * 接收消息
 	 * */
 	public void receiveMessage(String connectionId, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response) {
 		PushSocket socket = this.getSocket(connectionId);
 		if (null == socket) {
 			throw new PushException("没有找到socket！");
