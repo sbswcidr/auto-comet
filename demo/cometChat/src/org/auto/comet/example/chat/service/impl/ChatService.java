@@ -37,8 +37,9 @@ public class ChatService implements IChatService, SocketController {
 	public void accept(Socket pushSocket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		pushSocket.setErrorHandler(new ErrorHandler() {
+
 			@Override
-			public void error(Exception e) {
+			public void error(Socket socket, Exception e) {
 				// TODO Auto-generated method stub
 
 			}
