@@ -23,7 +23,7 @@ public class ContextLoaderListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent contextEvent) {
 		ServletContext servletContext = contextEvent.getServletContext();
 		initSocketManager(servletContext);
-		logger.info("comet init context");
+		logger.info("comet init context.");
 	}
 
 	private static void initSocketManager(ServletContext servletContext) {
