@@ -156,7 +156,7 @@ public class PushSocket implements Socket {
 	protected void fireError(Exception e) {
 		ErrorHandler handler = this.getErrorHandler();
 		if (null != handler) {
-			handler.error(e);
+			handler.error(this, e);
 		}
 	}
 
@@ -193,6 +193,16 @@ public class PushSocket implements Socket {
 		List<String> msgs = new LinkedList<String>();
 		msgs.add(message);
 		pushMessage(msgs, response);
+	}
+
+	public List<String> getUserMessages() {
+		List<String> userMessages = new LinkedList<String>();
+		for (String message : messages) {
+			if (!this.isCloseMessage(message)) {
+				userMessages.add(message);
+			}
+		}
+		return userMessages;
 	}
 
 	/** ~~~~~~~~~~~~~~~~~~~~~~~状态获取~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

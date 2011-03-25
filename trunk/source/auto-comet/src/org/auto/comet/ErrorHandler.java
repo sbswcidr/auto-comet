@@ -9,6 +9,6 @@ package org.auto.comet;
  * */
 public interface ErrorHandler {
 
-	public void error(Exception e);
+	public void error(Socket socket, Exception e);
 
 }
