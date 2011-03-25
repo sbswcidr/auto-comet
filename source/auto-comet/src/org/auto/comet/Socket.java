@@ -1,5 +1,7 @@
 package org.auto.comet;
 
+import java.util.List;
+
 import org.auto.comet.listener.SocketListener;
 
 /**
@@ -32,5 +34,13 @@ public interface Socket {
 	 *
 	 */
 	void addListener(SocketListener listener);
+
+	/**
+	 * 获得用户缓存的消息
+	 *
+	 * 当发生异常时，可以尝试获取没有发送成功的消息
+	 *
+	 */
+	List<String> getUserMessages();
 
 }
