@@ -34,7 +34,7 @@ public abstract class AbstractDispatcherServlet extends HttpServlet {
 				.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 	}
 
-	protected static SocketController getCometService(HttpServletRequest request) {
+	protected static SocketController getCometController(HttpServletRequest request) {
 		ServletContext servletContext = request.getServletContext();
 		UrlHandlerMapping mapping = getUrlHandlerMapping(servletContext);
 		String uri = RequestUtils.getServletPath(request);

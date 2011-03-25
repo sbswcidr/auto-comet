@@ -15,6 +15,7 @@ import org.auto.comet.PushSocket;
 import org.auto.comet.SocketManager;
 import org.auto.comet.SocketStore;
 import org.auto.comet.web.controller.SocketController;
+import org.auto.web.util.RequestUtils;
 
 /**
  * @author XiaohangHu
@@ -55,9 +56,11 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	private static void creatConnection(SocketManager socketManager,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		SocketController service = getCometService(request);
+		SocketController service = getCometController(request);
 		if (null == service) {
-			throw new DispatchException("没有找到service");
+			String uri = RequestUtils.getServletPath(request);
+			throw new DispatchException("Cant find comet controller by [" + uri
+					+ "]. Did you registered it?");
 		}
 		PushSocket socket = socketManager.creatConnection();
 		PrintWriter write = response.getWriter();
@@ -73,9 +76,11 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 * */
 	private static void disconnect(SocketManager socketManager,
 			HttpServletRequest request) {
-		SocketController service = getCometService(request);
+		SocketController service = getCometController(request);
 		if (null == service) {
-			throw new DispatchException("没有找到service");
+			String uri = RequestUtils.getServletPath(request);
+			throw new DispatchException("Cant find comet controller by [" + uri
+					+ "]. Did you registered it?");
 		}
 		String connectionId = getConnectionId(request);
 		socketManager.disconnect(connectionId, service, request);
