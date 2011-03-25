@@ -47,8 +47,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 * 接收消息
 	 * */
 	private static void receiveMessage(SocketManager socketManager,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
+			HttpServletRequest request, HttpServletResponse response) {
 		String connectionId = getConnectionId(request);
 		socketManager.receiveMessage(connectionId, request, response);
 	}
