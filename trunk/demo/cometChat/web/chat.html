@@ -28,7 +28,7 @@
 		//loginWindow.show();
 
 		var sender = {
-			url : "http://localhost:8080/cometChat/chat.do?method=sendMessage",
+			url : "/cometChat/chat.do?method=sendMessage",
 			send : function(o) {
 				Un.Ajax.request({
 					url : this.url,
@@ -56,7 +56,7 @@
 		//menuWindow.removeUser("huhang1986@126.com");
 
 		var comet = new Un.Comet({
-			url : "http://localhost:8080/cometChat/chat.comet",
+			url : "/cometChat/chat.comet",
 			accept : function(data) {
 				var command = data[COMMAND_KEY];
 				if (command == COMMAND_LOGIN) {
