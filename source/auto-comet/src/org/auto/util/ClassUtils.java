@@ -1,8 +1,16 @@
 package org.auto.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.CodeVisitor;
+
 /**
  * Class工具类
- *
+ * 
  * @author XiaohangHu
  * */
 public class ClassUtils {
@@ -21,7 +29,7 @@ public class ClassUtils {
 	 * example, for class path resource loading (but not necessarily for
 	 * <code>Class.forName</code>, which accepts a <code>null</code> ClassLoader
 	 * reference as well).
-	 *
+	 * 
 	 * @return the default ClassLoader (never <code>null</code>)
 	 * @see java.lang.Thread#getContextClassLoader()
 	 */
@@ -39,4 +47,67 @@ public class ClassUtils {
 		}
 		return cl;
 	}
+
+	/**
+	 * 从流中读取类
+	 * */
+	public static Class<?> getClassFromInputStream(InputStream inputStream)
+			throws IOException {
+		ClassReader classReader = new ClassReader(inputStream);
+		SampleClassVisitor visitor = new SampleClassVisitor();
+		classReader.accept(visitor, true);
+		String className = visitor.getClassName();
+		try {
+			return Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("没有找到类 [" + className + "]", e);
+		}
+	}
+
+}
+
+class SampleClassVisitor implements ClassVisitor {
+
+	private String className;
+
+	public String getClassName() {
+		return this.className;
+	}
+
+	private String convertResourcePathToClassName(String resourcePath) {
+		return resourcePath.replace('/', '.');
+	}
+
+	public void visit(int version, int access, String name, String signature,
+			String[] interfaces, String supername) {
+		this.className = convertResourcePathToClassName(name);
+	}
+
+	public void visitAttribute(Attribute arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visitField(int arg0, String arg1, String arg2, Object arg3,
+			Attribute arg4) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public CodeVisitor visitMethod(int arg0, String arg1, String arg2,
+			String[] arg3, Attribute arg4) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void visitEnd() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void visitInnerClass(String arg0, String arg1, String arg2, int arg3) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
