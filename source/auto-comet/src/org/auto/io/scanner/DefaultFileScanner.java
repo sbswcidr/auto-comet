@@ -58,7 +58,7 @@ public class DefaultFileScanner implements FileScanner {
 		if (rootDir.isDirectory()) {
 			doRetrieveMatchingFiles(this.rootDir);
 		} else {
-			this.process(this.rootDir);
+			this.handle(this.rootDir);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class DefaultFileScanner implements FileScanner {
 				doRetrieveMatchingFiles(contentFile);
 			} else {
 				if (matchPattern(currPath)) {
-					this.process(contentFile);
+					this.handle(contentFile);
 				}
 			}
 		}
@@ -118,7 +118,7 @@ public class DefaultFileScanner implements FileScanner {
 		this.retrieveMatchingFiles();
 	}
 
-	protected void process(File file) {
+	protected void handle(File file) {
 		List<FileHandler> fileHandlers = this.getHandlers();
 		for (FileHandler fileHandler : fileHandlers) {
 			fileHandler.handle(file);
