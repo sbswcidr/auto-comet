@@ -17,7 +17,7 @@ public class DefaultFileScanner implements FileScanner {
 
 	private File rootDir;
 
-	private List<FileHandler> fileProcessors = new LinkedList<FileHandler>();
+	private List<FileHandler> fileHandlers = new LinkedList<FileHandler>();
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -119,9 +119,9 @@ public class DefaultFileScanner implements FileScanner {
 	}
 
 	protected void process(File file) {
-		List<FileHandler> fileProcessors = this.getProcessors();
-		for (FileHandler fileProcessor : fileProcessors) {
-			fileProcessor.handle(file);
+		List<FileHandler> fileHandlers = this.getHandlers();
+		for (FileHandler fileHandler : fileHandlers) {
+			fileHandler.handle(file);
 		}
 	}
 
@@ -137,12 +137,12 @@ public class DefaultFileScanner implements FileScanner {
 		this.fullPattern = this.getFullPattern();
 	}
 
-	public List<FileHandler> getProcessors() {
-		return fileProcessors;
+	public List<FileHandler> getHandlers() {
+		return fileHandlers;
 	}
 
-	public void addProcessor(FileHandler processor) {
-		this.fileProcessors.add(processor);
+	public void addHandler(FileHandler handler) {
+		this.fileHandlers.add(handler);
 	}
 
 	public PathMatcher getPathMatcher() {
