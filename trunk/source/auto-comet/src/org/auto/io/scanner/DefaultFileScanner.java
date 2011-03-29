@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.auto.io.AntPathMatcher;
 import org.auto.io.PathMatcher;
-import org.auto.io.processor.FileProcessor;
+import org.auto.io.handler.FileHandler;
 
 /**
  * 文件扫描器
@@ -17,7 +17,7 @@ public class DefaultFileScanner implements FileScanner {
 
 	private File rootDir;
 
-	private List<FileProcessor> fileProcessors = new LinkedList<FileProcessor>();
+	private List<FileHandler> fileProcessors = new LinkedList<FileHandler>();
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -119,9 +119,9 @@ public class DefaultFileScanner implements FileScanner {
 	}
 
 	protected void process(File file) {
-		List<FileProcessor> fileProcessors = this.getProcessors();
-		for (FileProcessor fileProcessor : fileProcessors) {
-			fileProcessor.process(file);
+		List<FileHandler> fileProcessors = this.getProcessors();
+		for (FileHandler fileProcessor : fileProcessors) {
+			fileProcessor.handle(file);
 		}
 	}
 
@@ -137,11 +137,11 @@ public class DefaultFileScanner implements FileScanner {
 		this.fullPattern = this.getFullPattern();
 	}
 
-	public List<FileProcessor> getProcessors() {
+	public List<FileHandler> getProcessors() {
 		return fileProcessors;
 	}
 
-	public void addProcessor(FileProcessor processor) {
+	public void addProcessor(FileHandler processor) {
 		this.fileProcessors.add(processor);
 	}
 

@@ -10,7 +10,7 @@ import java.util.jar.JarFile;
 
 import org.auto.io.AntPathMatcher;
 import org.auto.io.PathMatcher;
-import org.auto.io.processor.ClassProcessor;
+import org.auto.io.handler.ClassHandler;
 import org.auto.util.ClassUtils;
 
 /**
@@ -26,7 +26,7 @@ public class ClassJarScanner implements ClassScanner {
 
     private JarFile jarFile;
 
-    private List<ClassProcessor> classProcessors = new LinkedList<ClassProcessor>();
+    private List<ClassHandler> classProcessors = new LinkedList<ClassHandler>();
 
     private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -74,9 +74,9 @@ public class ClassJarScanner implements ClassScanner {
      * 处理扫描结果
      */
     private void process(Class<?> clazz) {
-        List<ClassProcessor> classProcessors = this.getProcessors();
-        for (ClassProcessor classProcessor : classProcessors) {
-            classProcessor.process(clazz);
+        List<ClassHandler> classProcessors = this.getProcessors();
+        for (ClassHandler classProcessor : classProcessors) {
+            classProcessor.handle(clazz);
         }
     }
 
@@ -116,15 +116,15 @@ public class ClassJarScanner implements ClassScanner {
         this.pathMatcher = pathMatcher;
     }
 
-    public List<ClassProcessor> getProcessors() {
+    public List<ClassHandler> getProcessors() {
         return classProcessors;
     }
 
-    public void setProcessors(List<ClassProcessor> classProcessors) {
+    public void setProcessors(List<ClassHandler> classProcessors) {
         this.classProcessors = classProcessors;
     }
 
-    public void addProcessor(ClassProcessor classProcessor) {
+    public void addProcessor(ClassHandler classProcessor) {
         this.classProcessors.add(classProcessor);
     }
 

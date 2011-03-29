@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.auto.io.processor.ClassProcessor;
-import org.auto.io.processor.FileProcessor;
+import org.auto.io.handler.ClassHandler;
+import org.auto.io.handler.FileHandler;
 import org.auto.util.ClassUtils;
 
 /**
@@ -19,7 +19,7 @@ import org.auto.util.ClassUtils;
 public class ClassFileScanner implements ClassScanner {
 
 	private DefaultFileScanner fileScanner;
-	private List<ClassProcessor> classProcessors = new LinkedList<ClassProcessor>();
+	private List<ClassHandler> classProcessors = new LinkedList<ClassHandler>();
 
 	/**
 	 * @param file
@@ -29,8 +29,8 @@ public class ClassFileScanner implements ClassScanner {
 		this.fileScanner = new DefaultFileScanner(file);
 		fileScanner.setPattern(DEFAULT_CLASS_RESOURCE_PATTERN);
 
-		fileScanner.addProcessor(new FileProcessor() {
-			public void process(File file) {
+		fileScanner.addProcessor(new FileHandler() {
+			public void handle(File file) {
 				Class<?> clazz;
 				try {
 					clazz = getClassFromFile(file);
@@ -38,8 +38,8 @@ public class ClassFileScanner implements ClassScanner {
 					throw new RuntimeException("读取文件 [" + file.getName()
 							+ "] 时出错", e);
 				}
-				for (ClassProcessor classProcessor : getProcessors()) {
-					classProcessor.process(clazz);
+				for (ClassHandler classProcessor : getProcessors()) {
+					classProcessor.handle(clazz);
 				}
 			}
 		});
@@ -69,15 +69,15 @@ public class ClassFileScanner implements ClassScanner {
 		return ClassUtils.getClassFromInputStream(inputStream);
 	}
 
-	public List<ClassProcessor> getProcessors() {
+	public List<ClassHandler> getProcessors() {
 		return classProcessors;
 	}
 
-	public void setProcessors(List<ClassProcessor> classProcessors) {
+	public void setProcessors(List<ClassHandler> classProcessors) {
 		this.classProcessors = classProcessors;
 	}
 
-	public void addProcessor(ClassProcessor classProcessor) {
+	public void addProcessor(ClassHandler classProcessor) {
 		this.classProcessors.add(classProcessor);
 	}
 

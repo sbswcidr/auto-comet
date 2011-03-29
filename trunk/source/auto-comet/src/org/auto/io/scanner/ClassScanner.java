@@ -1,6 +1,6 @@
 package org.auto.io.scanner;
 
-import org.auto.io.processor.ClassProcessor;
+import org.auto.io.handler.ClassHandler;
 
 /**
  * @author huxh
@@ -12,6 +12,6 @@ public interface ClassScanner extends Scanner {
 	/**
 	 * 添加处理器
 	 * */
-	void addProcessor(ClassProcessor classProcessor);
+	void addProcessor(ClassHandler classProcessor);
 
 }
