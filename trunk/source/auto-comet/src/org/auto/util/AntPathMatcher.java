@@ -1,9 +1,10 @@
-package org.auto.io;
+package org.auto.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+
 
 /**
  * 蚂蚁路径匹配器
