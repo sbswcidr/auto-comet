@@ -55,7 +55,7 @@ public class ClassJarScanner implements ClassScanner {
                 InputStream inputStream = jarFile.getInputStream(entry);
                 try {
                     Class<?> clazz = getClassFromInputStream(inputStream);
-                    this.process(clazz);
+                    this.handle(clazz);
                 } finally {
                     try {
                         if (inputStream != null) {
@@ -73,7 +73,7 @@ public class ClassJarScanner implements ClassScanner {
      *
      * 处理扫描结果
      */
-    private void process(Class<?> clazz) {
+    private void handle(Class<?> clazz) {
         List<ClassHandler> classHandlers = this.getHandlers();
         for (ClassHandler classHandler : classHandlers) {
             classHandler.handle(clazz);
