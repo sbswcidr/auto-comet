@@ -14,7 +14,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.auto.io.ResourceUtils;
-import org.auto.io.processor.ClassProcessor;
+import org.auto.io.handler.ClassHandler;
 
 /**
  * 包扫描器
@@ -24,7 +24,7 @@ import org.auto.io.processor.ClassProcessor;
 public class ClassPackageScanner implements ClassScanner {
 
     private String basePackage;
-    private List<ClassProcessor> classProcessors = new LinkedList<ClassProcessor>();
+    private List<ClassHandler> classProcessors = new LinkedList<ClassHandler>();
 
     /**
      * @param basePackage
@@ -161,15 +161,15 @@ public class ClassPackageScanner implements ClassScanner {
         return Thread.currentThread().getContextClassLoader();
     }
 
-    public List<ClassProcessor> getProcessors() {
+    public List<ClassHandler> getProcessors() {
         return classProcessors;
     }
 
-    public void setProcessors(List<ClassProcessor> classProcessors) {
+    public void setProcessors(List<ClassHandler> classProcessors) {
         this.classProcessors = classProcessors;
     }
 
-    public void addProcessor(ClassProcessor classProcessor) {
+    public void addProcessor(ClassHandler classProcessor) {
         this.classProcessors.add(classProcessor);
     }
 }
