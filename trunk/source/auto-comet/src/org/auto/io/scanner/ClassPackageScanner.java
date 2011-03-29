@@ -24,7 +24,7 @@ import org.auto.io.handler.ClassHandler;
 public class ClassPackageScanner implements ClassScanner {
 
     private String basePackage;
-    private List<ClassHandler> classProcessors = new LinkedList<ClassHandler>();
+    private List<ClassHandler> classHandlers = new LinkedList<ClassHandler>();
 
     /**
      * @param basePackage
@@ -122,7 +122,7 @@ public class ClassPackageScanner implements ClassScanner {
         ClassJarScanner classJarScanner = new ClassJarScanner(jarFile);
         String pattern = rootEntryPath + "/" + DEFAULT_CLASS_RESOURCE_PATTERN;
         classJarScanner.setPattern(pattern);
-        classJarScanner.setProcessors(this.getProcessors());
+        classJarScanner.setHandlers(this.getHandlers());
         classJarScanner.scan();
     }
 
@@ -131,7 +131,7 @@ public class ClassPackageScanner implements ClassScanner {
         try {
             file = new File(url.toURI());
             ClassFileScanner classFileScanner = new ClassFileScanner(file);
-            classFileScanner.setProcessors(this.getProcessors());
+            classFileScanner.setHandlers(this.getHandlers());
             classFileScanner.scan();
         } catch (URISyntaxException e) {
             throw new RuntimeException("读取文件[" + url.getFile() + "] 时出错!", e);
@@ -161,15 +161,15 @@ public class ClassPackageScanner implements ClassScanner {
         return Thread.currentThread().getContextClassLoader();
     }
 
-    public List<ClassHandler> getProcessors() {
-        return classProcessors;
+    public List<ClassHandler> getHandlers() {
+        return classHandlers;
     }
 
-    public void setProcessors(List<ClassHandler> classProcessors) {
-        this.classProcessors = classProcessors;
+    public void setHandlers(List<ClassHandler> classHandlers) {
+        this.classHandlers = classHandlers;
     }
 
-    public void addProcessor(ClassHandler classProcessor) {
-        this.classProcessors.add(classProcessor);
+    public void addHandler(ClassHandler classHandler) {
+        this.classHandlers.add(classHandler);
     }
 }

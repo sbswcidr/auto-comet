@@ -19,7 +19,7 @@ import org.auto.util.ClassUtils;
 public class ClassFileScanner implements ClassScanner {
 
 	private DefaultFileScanner fileScanner;
-	private List<ClassHandler> classProcessors = new LinkedList<ClassHandler>();
+	private List<ClassHandler> classHandlers = new LinkedList<ClassHandler>();
 
 	/**
 	 * @param file
@@ -29,7 +29,7 @@ public class ClassFileScanner implements ClassScanner {
 		this.fileScanner = new DefaultFileScanner(file);
 		fileScanner.setPattern(DEFAULT_CLASS_RESOURCE_PATTERN);
 
-		fileScanner.addProcessor(new FileHandler() {
+		fileScanner.addHandler(new FileHandler() {
 			public void handle(File file) {
 				Class<?> clazz;
 				try {
@@ -38,8 +38,8 @@ public class ClassFileScanner implements ClassScanner {
 					throw new RuntimeException("读取文件 [" + file.getName()
 							+ "] 时出错", e);
 				}
-				for (ClassHandler classProcessor : getProcessors()) {
-					classProcessor.handle(clazz);
+				for (ClassHandler classHandler : getHandlers()) {
+					classHandler.handle(clazz);
 				}
 			}
 		});
@@ -69,16 +69,16 @@ public class ClassFileScanner implements ClassScanner {
 		return ClassUtils.getClassFromInputStream(inputStream);
 	}
 
-	public List<ClassHandler> getProcessors() {
-		return classProcessors;
+	public List<ClassHandler> getHandlers() {
+		return classHandlers;
 	}
 
-	public void setProcessors(List<ClassHandler> classProcessors) {
-		this.classProcessors = classProcessors;
+	public void setHandlers(List<ClassHandler> classHandlers) {
+		this.classHandlers = classHandlers;
 	}
 
-	public void addProcessor(ClassHandler classProcessor) {
-		this.classProcessors.add(classProcessor);
+	public void addHandler(ClassHandler classHandler) {
+		this.classHandlers.add(classHandler);
 	}
 
 }

@@ -7,5 +7,5 @@ import org.auto.io.handler.FileHandler;
  */
 public interface FileScanner extends Scanner {
 
-	void addProcessor(FileHandler processor);
+	void addHandler(FileHandler handler);
 }

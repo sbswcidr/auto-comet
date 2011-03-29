@@ -26,7 +26,7 @@ public class ClassJarScanner implements ClassScanner {
 
     private JarFile jarFile;
 
-    private List<ClassHandler> classProcessors = new LinkedList<ClassHandler>();
+    private List<ClassHandler> classHandlers = new LinkedList<ClassHandler>();
 
     private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -74,9 +74,9 @@ public class ClassJarScanner implements ClassScanner {
      * 处理扫描结果
      */
     private void process(Class<?> clazz) {
-        List<ClassHandler> classProcessors = this.getProcessors();
-        for (ClassHandler classProcessor : classProcessors) {
-            classProcessor.handle(clazz);
+        List<ClassHandler> classHandlers = this.getHandlers();
+        for (ClassHandler classHandler : classHandlers) {
+            classHandler.handle(clazz);
         }
     }
 
@@ -116,16 +116,16 @@ public class ClassJarScanner implements ClassScanner {
         this.pathMatcher = pathMatcher;
     }
 
-    public List<ClassHandler> getProcessors() {
-        return classProcessors;
+    public List<ClassHandler> getHandlers() {
+        return classHandlers;
     }
 
-    public void setProcessors(List<ClassHandler> classProcessors) {
-        this.classProcessors = classProcessors;
+    public void setHandlers(List<ClassHandler> classHandlers) {
+        this.classHandlers = classHandlers;
     }
 
-    public void addProcessor(ClassHandler classProcessor) {
-        this.classProcessors.add(classProcessor);
+    public void addHandler(ClassHandler classHandler) {
+        this.classHandlers.add(classHandler);
     }
 
 }

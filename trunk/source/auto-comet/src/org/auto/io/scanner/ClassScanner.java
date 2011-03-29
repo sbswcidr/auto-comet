@@ -12,6 +12,6 @@ public interface ClassScanner extends Scanner {
 	/**
 	 * 添加处理器
 	 * */
-	void addProcessor(ClassHandler classProcessor);
+	void addHandler(ClassHandler classHandler);
 
 }
