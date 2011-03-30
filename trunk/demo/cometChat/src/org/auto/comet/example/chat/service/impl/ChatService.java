@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.json.JSONObject;
 
 import org.auto.comet.ErrorHandler;
+import org.auto.comet.PushException;
 import org.auto.comet.Socket;
 import org.auto.comet.example.chat.service.IChatService;
 import org.auto.comet.web.controller.SocketController;
@@ -39,7 +40,7 @@ public class ChatService implements IChatService, SocketController {
 		pushSocket.setErrorHandler(new ErrorHandler() {
 
 			@Override
-			public void error(Socket socket, Exception e) {
+			public void error(Socket socket, PushException e) {
 				// TODO Auto-generated method stub
 
 			}
