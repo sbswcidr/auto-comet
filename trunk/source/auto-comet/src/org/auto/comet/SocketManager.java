@@ -117,6 +117,13 @@ public class SocketManager {
 		return socket;
 	}
 
+	private void processPushTimeOut(PushSocket socket) {
+		boolean timetOut = socket.processPushTimeOut(this.pushTimeout);
+		if (timetOut) {// 超时将socket移除
+			this.removeSocket(socket);
+		}
+	}
+
 	/**
 	 * 推送超时处理
 	 * */
@@ -124,13 +131,6 @@ public class SocketManager {
 		Collection<PushSocket> sockets = this.socketStore.getAllSocket();
 		for (PushSocket socket : sockets) {// 检查所有的socket是否超时
 			processPushTimeOut(socket);
-		}
-	}
-
-	private void processPushTimeOut(PushSocket socket) {
-		boolean timetOut = socket.processPushTimeOut(this.pushTimeout);
-		if (timetOut) {// 超时将socket移除
-			this.removeSocket(socket);
 		}
 	}
 
