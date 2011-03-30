@@ -99,7 +99,7 @@ public class PushSocket implements Socket {
 	}
 
 	/** 异步等待消息 */
-	private void waitMessage(HttpServletRequest request) throws PushException {
+	private void waitMessage(HttpServletRequest request) {
 		try {
 			AsyncContext ac = request.startAsync();
 			ac.setTimeout(this.asyncTimeout);
@@ -109,24 +109,27 @@ public class PushSocket implements Socket {
 					close();
 					PushException e = new PushException("async context error!");
 					fireError(e);
-					throw e;
 				}
 
 				@Override
 				public void onTimeout(AsyncEvent asyncevent) throws IOException {
 					close();
 					PushException e = new PushException(
-							"async context timeout!");
+							"Async context timeout! wait message more then ["
+									+ asyncTimeout + "]ms");
 					fireError(e);
-					throw e;
 				}
 			});
 			this.asyncContext = ac;
 		} catch (Exception e) {
-			this.fireError(e);
-			throw new PushException("startAsync exception!", e);
+			PushException pe = new PushException(
+					"StartAsync exception! May be the servlet or filter is not async.",
+					e);
+			this.fireError(pe);
 		} catch (Throwable te) {
-			throw new PushException("startAsync exception!", te);
+			throw new PushException(
+					"StartAsync exception! May be the servlet or filter is not async.",
+					te);
 		}
 	}
 
@@ -160,10 +163,12 @@ public class PushSocket implements Socket {
 	/**
 	 * 触发异常处理
 	 * */
-	protected void fireError(Exception e) {
+	protected void fireError(PushException e) {
 		ErrorHandler handler = this.getErrorHandler();
 		if (null != handler) {
 			handler.error(this, e);
+		} else {
+			throw e;
 		}
 	}
 
@@ -194,8 +199,8 @@ public class PushSocket implements Socket {
 		try {
 			pushMessage(messages, response.getWriter());
 		} catch (IOException e) {
-			this.fireError(e);
-			throw new PushException("IOException push message", e);
+			PushException pe = new PushException("IOException push message", e);
+			this.fireError(pe);
 		}
 	}
 
@@ -249,9 +254,8 @@ public class PushSocket implements Socket {
 	public synchronized void receiveRequest(HttpServletRequest request,
 			HttpServletResponse response) {
 		if (isClosed()) {
-			PushException e = new PushException("连接已经关闭！");
+			PushException e = new PushException("Use a closed pushSocked!");
 			this.fireError(e);
-			throw e;
 		}
 		if (this.hasMessage()) {
 			// 如果有消息则直接将消息推送
@@ -264,11 +268,10 @@ public class PushSocket implements Socket {
 		}
 	}
 
-	public synchronized void sendMessage(String message) throws PushException {
+	public synchronized void sendMessage(String message) {
 		if (isClosed()) {
-			PushException e = new PushException("连接已经关闭！");
+			PushException e = new PushException("Use a closed pushSocked!");
 			this.fireError(e);
-			throw e;
 		}
 		// 如果不是等待状态，将消息缓存
 		if (!isWaiting()) {
@@ -280,8 +283,8 @@ public class PushSocket implements Socket {
 		try {
 			pushMessage(message, response);
 		} catch (IOException e) {
-			this.fireError(e);
-			throw new PushException("IOException push message", e);
+			PushException pe = new PushException("IOException push message", e);
+			this.fireError(pe);
 		}
 		complete();
 	}
@@ -312,7 +315,9 @@ public class PushSocket implements Socket {
 			long sent = now - lastTime;
 			if (sent > pushTimeout) {
 				this.close = true;// 关闭连接
-				PushException e = new PushException("推送超时");
+				PushException e = new PushException(
+						"Push timeout! The client has no connection more than["
+								+ pushTimeout + "]ms");
 				fireError(e);
 				return true;
 			}

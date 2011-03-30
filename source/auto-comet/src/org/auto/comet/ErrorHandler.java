@@ -11,9 +11,10 @@ public interface ErrorHandler {
 
 	/**
 	 * @param socket
+	 *            can getUserMessages from the socket
 	 * @param e
-	 *            : Exception,IOException,PushException
+	 *            : PushException
 	 * */
-	public void error(Socket socket, Exception e);
+	public void error(Socket socket, PushException e);
 
 }
