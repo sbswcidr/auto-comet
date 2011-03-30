@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns="http://www.thunisoft.com/sync" targetNamespace="http://www.thunisoft.com/sync">
+	xmlns="http://www.auto.org/schema/comet" targetNamespace="http://www.auto.org/schema/comet">
 
 	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
 
 	<xsd:annotation>
 		<xsd:documentation>
-			<![CDATA[DataSync XML Beans Schema]]>
+			<![CDATA[auto-comet XML schema]]>
 		</xsd:documentation>
 	</xsd:annotation>
 
-	<xsd:element name="sources">
+	<xsd:element name="comets">
 		<xsd:annotation>
 			<xsd:documentation>
-				<![CDATA[同步实体根]]>
+				<![CDATA[comets]]>
 			</xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:choice minOccurs="0" maxOccurs="unbounded">
-					<xsd:element ref="source" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element ref="comet" minOccurs="0" maxOccurs="unbounded" />
 					<xsd:any namespace="##other" processContents="strict"
 						minOccurs="0" maxOccurs="unbounded" />
 				</xsd:choice>
@@ -29,86 +29,36 @@
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="source">
+	<xsd:element name="comet">
 		<xsd:annotation>
 			<xsd:documentation>
-				<![CDATA[需要同步的实体]]>
+				<![CDATA[comet]]>
 			</xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:choice minOccurs="0" maxOccurs="unbounded">
-					<xsd:element ref="target" maxOccurs="unbounded" />
 					<xsd:any namespace="##other" processContents="strict"
 						minOccurs="0" maxOccurs="unbounded" />
 				</xsd:choice>
 			</xsd:sequence>
+			<xsd:attribute name="request" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[url pattern]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 			<xsd:attribute name="class" type="xsd:string" use="required">
 				<xsd:annotation>
 					<xsd:documentation source="java:java.lang.Class">
-						<![CDATA[需要同步的实体类，类全称！]]>
+						<![CDATA[comet must implements org.auto.comet.web.controller.SocketController]]>
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="target">
-		<xsd:annotation>
-			<xsd:documentation>
-			<![CDATA[同步到的目标实体]]>
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element ref="property" minOccurs="0" maxOccurs="unbounded" />
-			</xsd:sequence>
-			<xsd:attribute name="class" type="xsd:string" use="required">
-				<xsd:annotation>
-					<xsd:documentation source="java:java.lang.Class">
-						<![CDATA[同步到的目标类，类全称！]]>
-					</xsd:documentation>
-				</xsd:annotation>
-			</xsd:attribute>
-			<xsd:attribute name="auto-convert" type="xsd:boolean">
-				<xsd:annotation>
-					<xsd:documentation source="java:java.lang.Class">
-						<![CDATA[是否自动转化名称相同的属性，默认true]]>
-					</xsd:documentation>
-				</xsd:annotation>
-			</xsd:attribute>
-		</xsd:complexType>
-	</xsd:element>
 
-	<xsd:element name="property">
-		<xsd:annotation>
-			<xsd:documentation source="java:java.lang.Class">
-				<![CDATA[需要转换的属性]]>
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:complexType>
-			<xsd:attribute name="name" type="xsd:string" use="required">
-				<xsd:annotation>
-					<xsd:documentation source="java:java.lang.Class">
-						<![CDATA[实体属性名称 ]]>
-					</xsd:documentation>
-				</xsd:annotation>
-			</xsd:attribute>
-			<xsd:attribute name="converter-name" type="xsd:string">
-				<xsd:annotation>
-					<xsd:documentation source="java:java.lang.Class">
-						<![CDATA[转换器名称]]>
-					</xsd:documentation>
-				</xsd:annotation>
-			</xsd:attribute>
-			<xsd:attribute name="sourse" type="xsd:string">
-				<xsd:annotation>
-					<xsd:documentation source="java:java.lang.Class">
-						<![CDATA[源实体属性名称 ]]>
-					</xsd:documentation>
-				</xsd:annotation>
-			</xsd:attribute>
-		</xsd:complexType>
-	</xsd:element>
 
 </xsd:schema>
