@@ -2,6 +2,8 @@
 <comets xmlns="http://www.auto.org/schema/comet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.auto.org/schema/comet http://www.auto.org/schema/comet/auto-comet-1.0.xsd">
 
+	<constant name="comet.objectFactory" value="spring" />
+
 	<comet request="/chat.comet"
 		class="org.auto.comet.example.chat.service.impl.ChatService">
 	</comet>
