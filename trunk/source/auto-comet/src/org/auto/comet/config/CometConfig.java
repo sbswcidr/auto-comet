@@ -1,21 +1,28 @@
 package org.auto.comet.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author XiaohangHu
  * */
 public class CometConfig {
 
-	private Map<String, String> constant = new HashMap<String, String>();
+	private String request;
 
-	public void addConstant(String name, String value) {
-		this.constant.put(name, value);
+	private Class<?> clazz;
+
+	public String getRequest() {
+		return request;
 	}
 
-	public String getConstant(String name) {
-		return this.constant.get(name);
+	public void setRequest(String request) {
+		this.request = request;
+	}
+
+	public Class<?> getClazz() {
+		return clazz;
+	}
+
+	public void setClazz(Class<?> clazz) {
+		this.clazz = clazz;
 	}
 
 }
