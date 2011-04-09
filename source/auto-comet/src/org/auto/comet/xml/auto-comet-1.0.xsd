@@ -10,17 +10,17 @@
 		</xsd:documentation>
 	</xsd:annotation>
 
-	<xsd:element name="comets">
+	<xsd:element name="auto-comet">
 		<xsd:annotation>
 			<xsd:documentation>
-				<![CDATA[comets]]>
+				<![CDATA[auto-comet]]>
 			</xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:choice minOccurs="0" maxOccurs="unbounded">
 					<xsd:element ref="comet" minOccurs="0" maxOccurs="unbounded" />
-					<xsd:element ref="constant" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element ref="property" minOccurs="0" maxOccurs="unbounded" />
 					<xsd:any namespace="##other" processContents="strict"
 						minOccurs="0" maxOccurs="unbounded" />
 				</xsd:choice>
@@ -30,7 +30,7 @@
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="constant">
+	<xsd:element name="property">
 		<xsd:annotation>
 			<xsd:documentation>
 				<![CDATA[comet]]>
@@ -46,14 +46,14 @@
 			<xsd:attribute name="name" type="xsd:string" use="required">
 				<xsd:annotation>
 					<xsd:documentation>
-						<![CDATA[constant name]]>
+						<![CDATA[property name]]>
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
 			<xsd:attribute name="value" type="xsd:string" use="required">
 				<xsd:annotation>
 					<xsd:documentation source="java:java.lang.Class">
-						<![CDATA[constant value]]>
+						<![CDATA[property value]]>
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
@@ -73,6 +73,7 @@
 						minOccurs="0" maxOccurs="unbounded" />
 				</xsd:choice>
 			</xsd:sequence>
+
 			<xsd:attribute name="request" type="xsd:string" use="required">
 				<xsd:annotation>
 					<xsd:documentation>
@@ -80,13 +81,15 @@
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
-			<xsd:attribute name="class" type="xsd:string" use="required">
+			<xsd:attribute name="class" type="xsd:string">
 				<xsd:annotation>
 					<xsd:documentation source="java:java.lang.Class">
 						<![CDATA[comet must implements org.auto.comet.web.controller.SocketController]]>
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
+			<xsd:anyAttribute namespace="##other"
+				processContents="strict"></xsd:anyAttribute>
 		</xsd:complexType>
 	</xsd:element>
 
