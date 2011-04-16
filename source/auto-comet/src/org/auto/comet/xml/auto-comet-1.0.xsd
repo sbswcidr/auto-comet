@@ -81,7 +81,7 @@
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
-			<xsd:attribute name="class" type="xsd:string">
+			<xsd:attribute name="controller" type="xsd:string" use="required">
 				<xsd:annotation>
 					<xsd:documentation source="java:java.lang.Class">
 						<![CDATA[comet must implements org.auto.comet.web.controller.SocketController]]>
