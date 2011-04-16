@@ -1,6 +1,8 @@
 package org.auto.comet.web;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,6 +10,7 @@ import org.auto.comet.web.controller.SocketController;
 import org.auto.web.util.RequestUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 
 /**
  * @author XiaohangHu
@@ -34,7 +37,8 @@ public abstract class AbstractDispatcherServlet extends HttpServlet {
 				.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 	}
 
-	protected static SocketController getCometController(HttpServletRequest request) {
+	protected static SocketController getCometController(
+			HttpServletRequest request) {
 		ServletContext servletContext = request.getServletContext();
 		UrlHandlerMapping mapping = getUrlHandlerMapping(servletContext);
 		String uri = RequestUtils.getServletPath(request);

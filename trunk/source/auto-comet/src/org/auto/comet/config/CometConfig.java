@@ -7,7 +7,7 @@ public class CometConfig {
 
 	private String request;
 
-	private Class<?> clazz;
+	private String controller;
 
 	public String getRequest() {
 		return request;
@@ -17,12 +17,12 @@ public class CometConfig {
 		this.request = request;
 	}
 
-	public Class<?> getClazz() {
-		return clazz;
+	public String getController() {
+		return controller;
 	}
 
-	public void setClazz(Class<?> clazz) {
-		this.clazz = clazz;
+	public void setController(String controller) {
+		this.controller = controller;
 	}
 
 }

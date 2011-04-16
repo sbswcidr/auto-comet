@@ -3,11 +3,13 @@ package org.auto.comet.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.auto.comet.JsonProtocolUtils;
 import org.auto.comet.LocalSocketStore;
 import org.auto.comet.Protocol;
@@ -22,15 +24,45 @@ import org.auto.web.util.RequestUtils;
  * */
 public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
+	public static final String INIT_PARAMETER_CONFIG_LOCATION = "dispatcherConfigLocation";
+
+	private UrlHandlerMapping urlHandlerMapping;
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -3671690949937300581L;
 
+	public final void init() throws ServletException {
+		initHandlerMapping();
+		initSocketManager();
+	}
+
+	protected void initHandlerMapping() {
+		ServletConfig config = getServletConfig();
+		String dispatcherConfigLocation = config
+				.getInitParameter(INIT_PARAMETER_CONFIG_LOCATION);
+		if (StringUtils.isBlank(dispatcherConfigLocation)) {
+			dispatcherConfigLocation = getDefaultDispatcherConfigLocation();
+		}
+
+	}
+
+	protected void initSocketManager() throws ServletException {
+		ServletContext servletContext = getServletContext();
+		SocketManager socketManager = creatSocketManager();
+		socketManager.startTimer();
+		servletContext.setAttribute(ServletContextKey.SOCKET_MANAGER_KEY,
+				socketManager);
+	}
+
+	public String getDefaultDispatcherConfigLocation() {
+		return "/WEB-INF/dispatcher-servlet.xml";
+	}
+
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		ServletContext servletContext = request.getServletContext();
+		ServletContext servletContext = getServletContext();
 		SocketManager socketManager = getSocketManager(servletContext);
 
 		String synchronizValue = getSynchronizValue(request);
@@ -112,17 +144,8 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 * */
 	private static SocketManager getSocketManager(ServletContext servletContext) {
 		SocketManager socketManager = getSocketManagerFromComtext(servletContext);
-		if (null == socketManager) {// 延迟初始化，双重校验锁。或许有问题
-			synchronized (SocketDispatcherServlet.class) {
-				socketManager = getSocketManagerFromComtext(servletContext);
-				if (null == socketManager) {
-					socketManager = creatSocketManager();
-					socketManager.startTimer();
-					servletContext
-							.setAttribute(ServletContextKey.SOCKET_MANAGER_KEY,
-									socketManager);
-				}
-			}
+		if (null == socketManager) {
+			throw new DispatchException("Cant find socketManager!");
 		}
 		return socketManager;
 	}
