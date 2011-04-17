@@ -1,4 +1,4 @@
-package org.auto.io.file;
+package org.auto.io.scanner;
 
 import java.io.File;
 

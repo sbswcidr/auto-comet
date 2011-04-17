@@ -1,4 +1,4 @@
-package org.auto.io.file.classFile;
+package org.auto.io.scanner.classFile;
 
 import java.io.File;
 import java.io.IOException;

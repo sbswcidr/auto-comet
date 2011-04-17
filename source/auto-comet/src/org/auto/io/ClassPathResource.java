@@ -49,7 +49,7 @@ public class ClassPathResource implements Resource {
 	 * 描述
 	 */
 	public String getDescription() {
-		return "class path resource [" + this.path + "]";
+		return "ClassPath resource [" + this.path + "]";
 	}
 
 }
