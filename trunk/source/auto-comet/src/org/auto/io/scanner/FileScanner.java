@@ -7,5 +7,5 @@ public interface FileScanner {
 
 	void scan();
 
-	void addHandler(FileHandler handler) throws FileScannerException;
+	void addHandler(FileHandler handler) throws ScannerException;
 }

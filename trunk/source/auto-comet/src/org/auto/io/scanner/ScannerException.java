@@ -4,22 +4,22 @@ package org.auto.io.scanner;
  *
  * @author XiaohangHu
  */
-public class FileScannerException extends RuntimeException {
+public class ScannerException extends RuntimeException {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 5982113877670286969L;
 
-	public FileScannerException() {
+	public ScannerException() {
 		super();
 	}
 
-	public FileScannerException(String message) {
+	public ScannerException(String message) {
 		super(message);
 	}
 
-	public FileScannerException(String message, Throwable cause) {
+	public ScannerException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

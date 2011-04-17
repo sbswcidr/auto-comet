@@ -72,7 +72,7 @@ public class ClassPathResourceScanner implements ResourceScanner {
 				try {
 					scanJarUrl(url);
 				} catch (IOException e) {
-					throw new FileScannerException("IOException ["
+					throw new ScannerException("IOException ["
 							+ url.getPath() + "]!", e);
 				}
 			} else {
@@ -90,7 +90,7 @@ public class ClassPathResourceScanner implements ResourceScanner {
 					});
 					fileScanner.scan();
 				} catch (URISyntaxException e) {
-					throw new FileScannerException("URISyntaxException [" + url
+					throw new ScannerException("URISyntaxException [" + url
 							+ "]", e);
 				}
 			}
@@ -164,7 +164,7 @@ public class ClassPathResourceScanner implements ResourceScanner {
 		try {
 			resourceUrls = getClassLoader().getResources(location);
 		} catch (IOException e1) {
-			throw new FileScannerException("IOException get resources ["
+			throw new ScannerException("IOException get resources ["
 					+ location + "] from classLoader!", e1);
 		}
 		return resourceUrls;
