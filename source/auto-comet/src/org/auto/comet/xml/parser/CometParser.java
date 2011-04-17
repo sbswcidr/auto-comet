@@ -21,7 +21,6 @@ public class CometParser {
 	public static final String CONTROLLER_ATTRIBUTE = "controller";
 
 	/**
-	 * 将Element转化为Sourc
 	 * */
 	public CometConfig parse(Element element) {
 

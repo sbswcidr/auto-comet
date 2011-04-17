@@ -1,8 +1,10 @@
 package org.auto;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,6 +15,7 @@ import org.auto.util.PropertiesLoaderUtils;
 import org.auto.xml.XmlDocumentLoader;
 import org.auto.xml.XmlDefinitionManager;
 import org.auto.xml.XmlDefinitionResolver;
+import org.springframework.util.ClassUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,7 +27,19 @@ public class Test {
 	public static void main(String[] args) throws Exception {
 		// testJson();
 		// testCalendar();
-		testTimer();
+		// testTimer();
+		testClassLoader();
+	}
+
+	public static void testClassLoader() throws InterruptedException,
+			IOException {
+		Enumeration<URL> enumeration = ClassUtils.getDefaultClassLoader()
+				.getResources("org/auto/");
+
+		while (enumeration.hasMoreElements()) {
+			URL url = enumeration.nextElement();
+			System.out.println(url);
+		}
 	}
 
 	public static void testTimer() throws InterruptedException {
@@ -50,7 +65,6 @@ public class Test {
 
 	public static void testJson() {
 	}
-
 
 	public static void testXml() throws IOException {
 

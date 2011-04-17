@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.auto.io.Resource;
 import org.auto.io.UrlResource;
 
@@ -69,16 +70,26 @@ public class PropertiesLoaderUtils {
 	}
 
 	public static Properties loadClassPathProperties(String path,
-			ClassLoader classLoader) throws IOException {
+			ClassLoader classLoader) {
 		if (null == classLoader) {
 			classLoader = ClassUtils.getDefaultClassLoader();
 		}
+		if (StringUtils.isBlank(path)) {
+			throw new IllegalArgumentException("Path  must not be null!");
+		}
+
 		Properties properties = new Properties();
-		Enumeration<URL> urls = classLoader.getResources(path);
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			Resource resource = new UrlResource(url);
-			PropertiesLoaderUtils.fillProperties(properties, resource);
+		Enumeration<URL> urls;
+		try {
+			urls = classLoader.getResources(path);
+			while (urls.hasMoreElements()) {
+				URL url = urls.nextElement();
+				Resource resource = new UrlResource(url);
+				PropertiesLoaderUtils.fillProperties(properties, resource);
+			}
+		} catch (IOException e) {
+			throw new IllegalArgumentException(
+					"IOException load class path properties[" + path + "]!", e);
 		}
 		return properties;
 	}

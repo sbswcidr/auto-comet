@@ -23,16 +23,18 @@ import org.auto.web.util.RequestUtils;
  * @author XiaohangHu
  * */
 public class SocketDispatcherServlet extends AbstractDispatcherServlet {
-
-	public static final String INIT_PARAMETER_CONFIG_LOCATION = "dispatcherConfigLocation";
-
-	private UrlHandlerMapping urlHandlerMapping;
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -3671690949937300581L;
 
+	public static final String INIT_PARAMETER_CONFIG_LOCATION = "dispatcherConfigLocation";
+
+	private UrlHandlerMapping urlHandlerMapping;
+	private SocketManager socketManager;
+
 	public final void init() throws ServletException {
+		super.init();
 		initHandlerMapping();
 		initSocketManager();
 	}
@@ -44,15 +46,12 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		if (StringUtils.isBlank(dispatcherConfigLocation)) {
 			dispatcherConfigLocation = getDefaultDispatcherConfigLocation();
 		}
-
 	}
 
 	protected void initSocketManager() throws ServletException {
-		ServletContext servletContext = getServletContext();
 		SocketManager socketManager = creatSocketManager();
 		socketManager.startTimer();
-		servletContext.setAttribute(ServletContextKey.SOCKET_MANAGER_KEY,
-				socketManager);
+		this.socketManager = socketManager;
 	}
 
 	public String getDefaultDispatcherConfigLocation() {
@@ -62,8 +61,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		ServletContext servletContext = getServletContext();
-		SocketManager socketManager = getSocketManager(servletContext);
+		SocketManager socketManager = getSocketManager();
 
 		String synchronizValue = getSynchronizValue(request);
 		if (null == synchronizValue) {// 同步值为空则为接收消息
@@ -132,21 +130,11 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		return socketManager;
 	}
 
-	private static SocketManager getSocketManagerFromComtext(
-			ServletContext servletContext) {
-		SocketManager socketManager = (SocketManager) servletContext
-				.getAttribute(ServletContextKey.SOCKET_MANAGER_KEY);
-		return socketManager;
-	}
-
-	/**
-	 * manager 存放在 servletContext
-	 * */
-	private static SocketManager getSocketManager(ServletContext servletContext) {
-		SocketManager socketManager = getSocketManagerFromComtext(servletContext);
+	private SocketManager getSocketManager() {
 		if (null == socketManager) {
 			throw new DispatchException("Cant find socketManager!");
 		}
 		return socketManager;
 	}
+
 }
