@@ -1,7 +1,5 @@
 package org.auto.io;
 
-import org.springframework.core.io.Resource;
-
 /**
  *
  * @author XiaohangHu

@@ -27,7 +27,7 @@ import org.springframework.util.ClassUtils;
  * */
 public class ClassPathResourceScanner implements ResourceScanner {
 
-	private String location;
+	private String locationPattern;
 
 	private String rootDirPath;
 
@@ -37,14 +37,14 @@ public class ClassPathResourceScanner implements ResourceScanner {
 
 	private List<ResourceHandler> handlers = new LinkedList<ResourceHandler>();
 
-	public ClassPathResourceScanner(String location) {
-		this.location = location;
-		rootDirPath = determineRootDir(location);
-		subPattern = location.substring(rootDirPath.length());
+	public ClassPathResourceScanner(String locationPattern) {
+		this.locationPattern = locationPattern;
+		rootDirPath = determineRootDir(locationPattern);
+		subPattern = locationPattern.substring(rootDirPath.length());
 	}
 
-	public String getLocation() {
-		return location;
+	public String getLocationPattern() {
+		return locationPattern;
 	}
 
 	protected String determineRootDir(String location) {
@@ -72,8 +72,8 @@ public class ClassPathResourceScanner implements ResourceScanner {
 				try {
 					scanJarUrl(url);
 				} catch (IOException e) {
-					throw new ScannerException("IOException ["
-							+ url.getPath() + "]!", e);
+					throw new ScannerException("IOException [" + url.getPath()
+							+ "]!", e);
 				}
 			} else {
 				try {
@@ -164,8 +164,8 @@ public class ClassPathResourceScanner implements ResourceScanner {
 		try {
 			resourceUrls = getClassLoader().getResources(location);
 		} catch (IOException e1) {
-			throw new ScannerException("IOException get resources ["
-					+ location + "] from classLoader!", e1);
+			throw new ScannerException("IOException get resources [" + location
+					+ "] from classLoader!", e1);
 		}
 		return resourceUrls;
 	}
