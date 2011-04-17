@@ -28,10 +28,16 @@ public class UrlResource implements Resource {
 	 * @see java.net.URLConnection#setUseCaches(boolean)
 	 * @see java.net.URLConnection#getInputStream()
 	 */
-	public InputStream getInputStream() throws IOException {
-		URLConnection con = this.url.openConnection();
-		con.setUseCaches(false);
-		return con.getInputStream();
+	public InputStream getInputStream() throws ReadResourceException {
+		URLConnection con;
+		try {
+			con = this.url.openConnection();
+			con.setUseCaches(false);
+			return con.getInputStream();
+		} catch (IOException e) {
+			throw new ReadResourceException("IOException read "
+					+ getDescription(), e);
+		}
 	}
 
 	/**
