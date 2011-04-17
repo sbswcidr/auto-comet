@@ -37,4 +37,9 @@ public class WebServerResourceLoader extends DefaultResourceLoader {
 		}
 	}
 
+	public Resource[] getResources(String locationPattern) {
+		// TODO..
+		return null;
+	}
+
 }
