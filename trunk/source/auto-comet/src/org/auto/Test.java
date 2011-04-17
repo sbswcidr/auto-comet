@@ -11,6 +11,9 @@ import java.util.TimerTask;
 
 import org.auto.comet.xml.PropertiesXmlDefinitionParser;
 import org.auto.io.ClassPathResource;
+import org.auto.io.Resource;
+import org.auto.io.scanner.ClassPathResourceScanner;
+import org.auto.io.scanner.ResourceHandler;
 import org.auto.util.PropertiesLoaderUtils;
 import org.auto.xml.XmlDocumentLoader;
 import org.auto.xml.XmlDefinitionManager;
@@ -28,7 +31,21 @@ public class Test {
 		// testJson();
 		// testCalendar();
 		// testTimer();
-		testClassLoader();
+		// testClassLoader();
+
+		ClassPathResourceScanner scanner = new ClassPathResourceScanner(
+				"org/auto/**/*.class");
+
+		scanner.addHandler(new ResourceHandler() {
+
+			@Override
+			public void handle(Resource t) {
+				System.out.println(t.getDescription());
+			}
+		});
+
+		scanner.scan();
+
 	}
 
 	public static void testClassLoader() throws InterruptedException,
