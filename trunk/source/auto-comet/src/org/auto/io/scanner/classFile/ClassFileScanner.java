@@ -1,4 +1,4 @@
-package org.auto.io.file.classFile;
+package org.auto.io.scanner.classFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.auto.io.file.DefaultFileScanner;
-import org.auto.io.file.FileHandler;
+import org.auto.io.scanner.FileHandler;
+import org.auto.io.scanner.PatternFileScanner;
 import org.auto.util.ClassUtils;
 
 /**
@@ -18,7 +18,7 @@ import org.auto.util.ClassUtils;
  * */
 public class ClassFileScanner implements ClassScanner {
 
-	private DefaultFileScanner fileScanner;
+	private PatternFileScanner fileScanner;
 	private List<ClassHandler> classHandlers = new LinkedList<ClassHandler>();
 
 	/**
@@ -26,7 +26,7 @@ public class ClassFileScanner implements ClassScanner {
 	 *            要扫描的目录或者文件
 	 * */
 	public ClassFileScanner(File file) {
-		this.fileScanner = new DefaultFileScanner(file);
+		this.fileScanner = new PatternFileScanner(file);
 		fileScanner.setPattern(DEFAULT_CLASS_RESOURCE_PATTERN);
 
 		fileScanner.addHandler(new FileHandler() {

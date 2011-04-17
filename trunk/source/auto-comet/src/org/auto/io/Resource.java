@@ -20,4 +20,5 @@ public interface Resource {
 	 * @see java.lang.Object#toString()
 	 */
 	String getDescription();
+
 }

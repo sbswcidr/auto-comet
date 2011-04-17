@@ -1,7 +1,11 @@
 package org.auto.io;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.jar.JarFile;
 
 public abstract class ResourceUtils {
 
@@ -55,6 +59,22 @@ public abstract class ResourceUtils {
 				|| URL_PROTOCOL_VFSZIP.equals(protocol)
 				|| URL_PROTOCOL_WSJAR.equals(protocol) || (URL_PROTOCOL_CODE_SOURCE
 				.equals(protocol) && url.getPath().indexOf(JAR_URL_SEPARATOR) != -1));
+	}
+
+	public static JarFile getJarFile(String jarFileUrl) throws IOException {
+		if (jarFileUrl.startsWith(ResourceUtils.FILE_URL_PREFIX)) {
+			try {
+				String uriPath = jarFileUrl.replace(" ", "%20");
+				URI uri = new URI(uriPath);
+				return new JarFile(uri.getSchemeSpecificPart());
+			} catch (URISyntaxException ex) {
+				return new JarFile(
+						jarFileUrl.substring(ResourceUtils.FILE_URL_PREFIX
+								.length()));
+			}
+		} else {
+			return new JarFile(jarFileUrl);
+		}
 	}
 
 }

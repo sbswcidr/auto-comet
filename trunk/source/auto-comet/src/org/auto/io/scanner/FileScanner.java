@@ -1,4 +1,4 @@
-package org.auto.io.file;
+package org.auto.io.scanner;
 
 import org.auto.io.Scanner;
 
@@ -7,5 +7,5 @@ import org.auto.io.Scanner;
  */
 public interface FileScanner extends Scanner {
 
-	void addHandler(FileHandler handler);
+	void addHandler(FileHandler handler) throws FileScannerException;
 }

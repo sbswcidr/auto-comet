@@ -1,4 +1,4 @@
-package org.auto.io.file;
+package org.auto.io.scanner;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -12,7 +12,7 @@ import org.auto.util.PathMatcher;
  *
  * @author huxh
  * */
-public class DefaultFileScanner implements FileScanner {
+public class PatternFileScanner implements FileScanner {
 
 	private File rootDir;
 
@@ -31,7 +31,7 @@ public class DefaultFileScanner implements FileScanner {
 	 * @param rootDir
 	 *            要扫描的目录或者文件
 	 * */
-	public DefaultFileScanner(File rootDir) {
+	public PatternFileScanner(File rootDir) {
 		this.rootDir = rootDir;
 		this.fullPattern = this.getFullPattern();
 	}
