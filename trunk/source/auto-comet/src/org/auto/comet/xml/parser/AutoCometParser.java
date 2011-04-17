@@ -25,8 +25,6 @@ public class AutoCometParser {
 	/**
 	 * 读取document加入到配置中
 	 *
-	 * @param config
-	 *            数据同步配置
 	 * @param document
 	 * */
 	public void addConfig(AutoCometConfig config, Document document) {
