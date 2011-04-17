@@ -1,6 +1,5 @@
 package org.auto.io;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -9,7 +8,7 @@ import java.io.InputStream;
  */
 public interface Resource {
 
-	InputStream getInputStream() throws IOException;
+	InputStream getInputStream() throws ReadResourceException;
 
 	/**
 	 * Return a description for this resource, to be used for error output when

@@ -1,7 +1,5 @@
 package org.auto.io;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.auto.util.ClassUtils;
@@ -34,12 +32,12 @@ public class ClassPathResource implements Resource {
 		return this.classLoader;
 	}
 
-	public InputStream getInputStream() throws IOException {
+	public InputStream getInputStream() throws ReadResourceException {
 		InputStream is = null;
 		is = this.getClassLoader().getResourceAsStream(this.path);
 		if (is == null) {
-			throw new FileNotFoundException(getDescription()
-					+ " cannot be opened because it does not exist");
+			throw new ReadResourceException(getDescription()
+					+ " cannot be opened because it does not exist!");
 		}
 		return is;
 	}
