@@ -1,4 +1,4 @@
-package org.auto.io;
+package org.auto.io.scanner;
 
 /**
  * @author huxh
