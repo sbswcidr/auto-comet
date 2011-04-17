@@ -4,22 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.JarURLConnection;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.auto.io.ResourceUtils;
-import org.auto.io.scanner.classFile.ClassFileScanner;
-import org.auto.io.scanner.classFile.ClassHandler;
-import org.auto.io.scanner.classFile.ClassJarScanner;
-import org.auto.util.AntPathMatcher;
-import org.auto.util.PathMatcher;
 import org.springframework.util.ClassUtils;
 
 /**
