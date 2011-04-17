@@ -1,0 +1,94 @@
+package org.auto.web.resource;
+
+import java.util.Iterator;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+
+import org.auto.io.Resource;
+import org.auto.io.scanner.AbstractPatternResourceScanner;
+
+/**
+ *
+ * @author huxh
+ * */
+public class ServletContextResourceScanner extends
+		AbstractPatternResourceScanner {
+
+	private ServletContext servletContext;
+
+	private String locationPattern;
+
+	private String rootDirPath;
+
+	public ServletContextResourceScanner(String locationPattern,
+			ServletContext servletContext) {
+		this.locationPattern = locationPattern;
+		rootDirPath = determineRootDir(locationPattern);
+		this.servletContext = servletContext;
+	}
+
+	public String getLocationPattern() {
+		return locationPattern;
+	}
+
+	protected void doRetrieveMatchingServletContextResources(String dir) {
+
+		Set<String> candidates = servletContext.getResourcePaths(dir);
+		if (candidates != null) {
+			boolean dirDepthNotFixed = (locationPattern.indexOf("**") != -1);
+			for (Iterator<String> it = candidates.iterator(); it.hasNext();) {
+				String currPath = (String) it.next();
+				if (!currPath.startsWith(dir)) {
+					// Returned resource path does not start with relative
+					// directory:
+					// assuming absolute path returned -> strip absolute path.
+					int dirIndex = currPath.indexOf(dir);
+					if (dirIndex != -1) {
+						currPath = currPath.substring(dirIndex);
+					}
+				}
+				if (currPath.endsWith("/")
+						&& (dirDepthNotFixed || countOccurrencesOf(currPath,
+								"/") <= countOccurrencesOf(locationPattern, "/"))) {
+					// Search subdirectories recursively:
+					// ServletContext.getResourcePaths
+					// only returns entries for one directory level.
+					doRetrieveMatchingServletContextResources(currPath);
+				}
+				if (getPathMatcher().match(locationPattern, currPath)) {
+					Resource resource = new ServletContextResource(
+							servletContext, currPath);
+					this.handleResource(resource);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Count the occurrences of the substring in string s.
+	 *
+	 * @param str
+	 *            string to search in. Return 0 if this is null.
+	 * @param sub
+	 *            string to search for. Return 0 if this is null.
+	 */
+	public static int countOccurrencesOf(String str, String sub) {
+		if (str == null || sub == null || str.length() == 0
+				|| sub.length() == 0) {
+			return 0;
+		}
+		int count = 0, pos = 0, idx = 0;
+		while ((idx = str.indexOf(sub, pos)) != -1) {
+			++count;
+			pos = idx + sub.length();
+		}
+		return count;
+	}
+
+	@Override
+	public void scan() {
+		this.determineRootDir(rootDirPath);
+	}
+
+}
