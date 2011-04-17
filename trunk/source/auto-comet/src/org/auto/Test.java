@@ -27,25 +27,32 @@ import org.w3c.dom.NodeList;
 public class Test {
 	private static String xmlDefinitionMappingsLocation = "META-INF/auto.schemas";
 
+	public static int count = 0;
+
 	public static void main(String[] args) throws Exception {
 		// testJson();
 		// testCalendar();
 		// testTimer();
 		// testClassLoader();
 
+		testClassPathResourceScanner();
+
+	}
+
+	public static void testClassPathResourceScanner() {
 		ClassPathResourceScanner scanner = new ClassPathResourceScanner(
-				"org/auto/**/*.class");
+				"org/apache/**/*.class");
 
 		scanner.addHandler(new ResourceHandler() {
 
 			@Override
 			public void handle(Resource t) {
 				System.out.println(t.getDescription());
+				count++;
 			}
 		});
-
 		scanner.scan();
-
+		System.out.println("count" + count);
 	}
 
 	public static void testClassLoader() throws InterruptedException,
