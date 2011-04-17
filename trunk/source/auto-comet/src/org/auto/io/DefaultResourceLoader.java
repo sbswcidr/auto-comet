@@ -3,7 +3,7 @@ package org.auto.io;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class DefaultResourceLoader {
+public class DefaultResourceLoader implements ResourceLoader {
 
 	protected Resource getClassPathResource(String location) {
 		String classPathLocation = location
@@ -28,6 +28,12 @@ public class DefaultResourceLoader {
 						+ location + "]", ex);
 			}
 		}
+	}
+
+	@Override
+	public Resource[] getResources(String locationPattern) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

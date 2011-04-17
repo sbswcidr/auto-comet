@@ -12,11 +12,11 @@ import org.auto.io.ResourceUtils;
  *
  * @author XiaohangHu
  */
-public class WebResourceLoader extends DefaultResourceLoader {
+public class WebServerResourceLoader extends DefaultResourceLoader {
 
 	private ServletContext servletContext;
 
-	public WebResourceLoader(ServletContext servletContext) {
+	public WebServerResourceLoader(ServletContext servletContext) {
 		super();
 		this.servletContext = servletContext;
 	}
