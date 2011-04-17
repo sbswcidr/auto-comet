@@ -7,8 +7,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -16,26 +14,20 @@ import org.auto.io.FileResource;
 import org.auto.io.JarEntryResource;
 import org.auto.io.Resource;
 import org.auto.io.ResourceUtils;
-import org.auto.util.AntPathMatcher;
-import org.auto.util.PathMatcher;
 import org.springframework.util.ClassUtils;
 
 /**
- * 文件扫描器
+ * 资源扫描器
  *
  * @author huxh
  * */
-public class ClassPathResourceScanner implements ResourceScanner {
+public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 
 	private String locationPattern;
 
 	private String rootDirPath;
 
 	private String subPattern;
-
-	private PathMatcher pathMatcher = new AntPathMatcher();
-
-	private List<ResourceHandler> handlers = new LinkedList<ResourceHandler>();
 
 	public ClassPathResourceScanner(String locationPattern) {
 		this.locationPattern = locationPattern;
@@ -45,20 +37,6 @@ public class ClassPathResourceScanner implements ResourceScanner {
 
 	public String getLocationPattern() {
 		return locationPattern;
-	}
-
-	protected String determineRootDir(String location) {
-		int prefixEnd = location.indexOf(":") + 1;
-		int rootDirEnd = location.length();
-		while (rootDirEnd > prefixEnd
-				&& pathMatcher.isPattern(location.substring(prefixEnd,
-						rootDirEnd))) {
-			rootDirEnd = location.lastIndexOf('/', rootDirEnd - 2) + 1;
-		}
-		if (rootDirEnd == 0) {
-			rootDirEnd = prefixEnd;
-		}
-		return location.substring(0, rootDirEnd);
 	}
 
 	/**
@@ -149,14 +127,10 @@ public class ClassPathResourceScanner implements ResourceScanner {
 						.length());
 				if (getPathMatcher().match(subPattern, relativePath)) {
 					Resource resource = new JarEntryResource(jarFile, entry);
-					handle(resource);
+					handleResource(resource);
 				}
 			}
 		}
-	}
-
-	private ClassLoader getClassLoader() {
-		return ClassUtils.getDefaultClassLoader();
 	}
 
 	private Enumeration<URL> gerClassPathResources(String location) {
@@ -170,23 +144,7 @@ public class ClassPathResourceScanner implements ResourceScanner {
 		return resourceUrls;
 	}
 
-	protected void handleResource(Resource resource) {
-		for (ResourceHandler handler : handlers) {
-			handler.handle(resource);
-		}
+	private ClassLoader getClassLoader() {
+		return ClassUtils.getDefaultClassLoader();
 	}
-
-	protected void handle(Resource resource) {
-		handleResource(resource);
-	}
-
-	public PathMatcher getPathMatcher() {
-		return pathMatcher;
-	}
-
-	@Override
-	public void addHandler(ResourceHandler handler) {
-		this.handlers.add(handler);
-	}
-
 }
