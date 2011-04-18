@@ -12,11 +12,11 @@ import org.auto.io.Resource;
  * */
 public class FileSystemResourceScanner extends AbstractPatternResourceScanner {
 
-	private PatternFileScanner fileScanner;
+	private DefaultFilePatternScanner fileScanner;
 
 	public FileSystemResourceScanner(String locationPattern) {
 
-		PatternFileScanner scanner = new PatternFileScanner(locationPattern);
+		DefaultFilePatternScanner scanner = new DefaultFilePatternScanner();
 		scanner.addHandler(new FileHandler() {
 
 			@Override
@@ -29,8 +29,8 @@ public class FileSystemResourceScanner extends AbstractPatternResourceScanner {
 	}
 
 	@Override
-	public void scan() {
-		fileScanner.scan();
+	public void scan(String locationPattern) {
+		fileScanner.scan(locationPattern);
 	}
 
 }

@@ -16,7 +16,7 @@ import org.auto.io.Resource;
 import org.auto.io.ResourcePathUtils;
 import org.auto.io.scanner.ClassPathResourceScanner;
 import org.auto.io.scanner.FileHandler;
-import org.auto.io.scanner.PatternFileScanner;
+import org.auto.io.scanner.DefaultFilePatternScanner;
 import org.auto.io.scanner.ResourceHandler;
 import org.auto.util.PropertiesLoaderUtils;
 import org.auto.xml.XmlDocumentLoader;
@@ -38,20 +38,13 @@ public class Test {
 		// testCalendar();
 		// testTimer();
 		// testClassLoader();
-		// testClassPathResourceScanner();
+		testClassPathResourceScanner();
 		// testPatternFileScanner();
-
-		URL url = new URL("http://www.hrtsea.com/down/soft/45.htm");
-
-		System.out.println(ResourcePathUtils
-				.getProtocol("http:/www.hrtsea.com/down/soft/45.htm"));
-		// System.out.println(url.toURI());
 
 	}
 
 	public static void testPatternFileScanner() {
-		PatternFileScanner scanner = new PatternFileScanner(
-				"F:/project/JCY_PRD_BA_dianzijianwu\\40_源码/30_业务组件/commons-np-commands/**/command/*.java");
+		DefaultFilePatternScanner scanner = new DefaultFilePatternScanner();
 
 		scanner.addHandler(new FileHandler() {
 
@@ -62,13 +55,12 @@ public class Test {
 
 			}
 		});
-		scanner.scan();
+		scanner.scan("F:/project/JCY_PRD_BA_dianzijianwu\\40_源码/30_业务组件/commons-np-commands/**/*.java");
 		System.out.println("count" + count);
 	}
 
 	public static void testClassPathResourceScanner() {
-		ClassPathResourceScanner scanner = new ClassPathResourceScanner(
-				"org/apache/**/*.class");
+		ClassPathResourceScanner scanner = new ClassPathResourceScanner();
 
 		scanner.addHandler(new ResourceHandler() {
 
@@ -78,7 +70,7 @@ public class Test {
 				count++;
 			}
 		});
-		scanner.scan();
+		scanner.scan("org/auto/**/*.class");
 		System.out.println("count" + count);
 	}
 
