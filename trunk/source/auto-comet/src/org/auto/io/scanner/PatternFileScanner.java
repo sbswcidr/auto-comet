@@ -4,13 +4,14 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.auto.io.ResourcePathUtils;
 import org.auto.util.AntPathMatcher;
 import org.auto.util.PathMatcher;
 
 /**
  * 文件扫描器
  *
- * @author huxh
+ * @author XiaohangHu
  * */
 public class PatternFileScanner implements FileScanner {
 
@@ -36,18 +37,33 @@ public class PatternFileScanner implements FileScanner {
 		this.fullPattern = this.getFullPattern();
 	}
 
+	/**
+	 * @param rootDir
+	 *            要扫描的路径匹配模式
+	 * */
+	public PatternFileScanner(String locationPattern) {
+		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
+		String rootDirPath = determineRootDir(locationPattern);
+		this.rootDir = new File(rootDirPath);
+		this.fullPattern = locationPattern;
+	}
+
+	protected String determineRootDir(String locationPattern) {
+		return ResourcePathUtils.getRootDir(locationPattern, pathMatcher);
+	}
+
 	private String getFullPattern() {
 
 		if (rootDir.isDirectory()) {
-			String fullPattern = getReallPath(rootDir);
+			String fullPattern = ResourcePathUtils.getReallPath(rootDir);
 			if (!pattern.startsWith("/")) {
 				fullPattern += "/";
 			}
-			fullPattern = fullPattern + this.getReallPath(pattern);
+			fullPattern = fullPattern + ResourcePathUtils.getReallPath(pattern);
 			return fullPattern;
 		}
 
-		return this.getReallPath(pattern);
+		return ResourcePathUtils.getReallPath(pattern);
 	}
 
 	/**
@@ -73,7 +89,7 @@ public class PatternFileScanner implements FileScanner {
 		}
 		for (int i = 0; i < dirContents.length; i++) {
 			File contentFile = dirContents[i];
-			String currPath = getReallPath(contentFile);
+			String currPath = ResourcePathUtils.getReallPath(contentFile);
 			if (contentFile.isDirectory() && matchStart(currPath + "/")) {
 				doRetrieveMatchingFiles(contentFile);
 			} else {
@@ -97,20 +113,6 @@ public class PatternFileScanner implements FileScanner {
 		if (null == fullPattern)
 			return true;
 		return getPathMatcher().match(this.fullPattern, path);
-	}
-
-	/**
-	 * 屏蔽系统差异，获得"/"分割的路径。
-	 * */
-	protected String getReallPath(File file) {
-		return getReallPath(file.getAbsolutePath());
-	}
-
-	/**
-	 * 屏蔽系统差异，获得"/"分割的路径。
-	 * */
-	protected String getReallPath(String path) {
-		return path.replace(File.separator, "/");
 	}
 
 	public void scan() {

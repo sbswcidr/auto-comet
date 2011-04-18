@@ -4,12 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.auto.io.Resource;
+import org.auto.io.ResourcePathUtils;
 import org.auto.util.AntPathMatcher;
 import org.auto.util.PathMatcher;
 
 /**
  *
- * @author huxh
+ * @author XiaohangHu
  * */
 public abstract class AbstractPatternResourceScanner implements ResourceScanner {
 
@@ -17,18 +18,8 @@ public abstract class AbstractPatternResourceScanner implements ResourceScanner 
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 
-	protected String determineRootDir(String location) {
-		int prefixEnd = location.indexOf(":") + 1;
-		int rootDirEnd = location.length();
-		while (rootDirEnd > prefixEnd
-				&& pathMatcher.isPattern(location.substring(prefixEnd,
-						rootDirEnd))) {
-			rootDirEnd = location.lastIndexOf('/', rootDirEnd - 2) + 1;
-		}
-		if (rootDirEnd == 0) {
-			rootDirEnd = prefixEnd;
-		}
-		return location.substring(0, rootDirEnd);
+	protected String determineRootDir(String locationPattern) {
+		return ResourcePathUtils.getRootDir(locationPattern, pathMatcher);
 	}
 
 	protected void handleResource(Resource resource) {
