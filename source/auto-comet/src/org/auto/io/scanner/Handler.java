@@ -1,7 +1,7 @@
 package org.auto.io.scanner;
 
 /**
- * @author huxh
+ * @author XiaohangHu
  * */
 public interface Handler<T> {
 

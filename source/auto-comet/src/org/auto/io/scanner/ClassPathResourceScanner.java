@@ -13,13 +13,14 @@ import java.util.jar.JarFile;
 import org.auto.io.FileResource;
 import org.auto.io.JarEntryResource;
 import org.auto.io.Resource;
+import org.auto.io.ResourcePathUtils;
 import org.auto.io.ResourceUtils;
 import org.springframework.util.ClassUtils;
 
 /**
  * 资源扫描器
  *
- * @author huxh
+ * @author XiaohangHu
  * */
 public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 
@@ -30,8 +31,8 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 	private String subPattern;
 
 	public ClassPathResourceScanner(String locationPattern) {
-		this.locationPattern = locationPattern;
-		rootDirPath = determineRootDir(locationPattern);
+		this.locationPattern = ResourcePathUtils.getReallPath(locationPattern);
+		rootDirPath = determineRootDir(this.locationPattern);
 		subPattern = locationPattern.substring(rootDirPath.length());
 	}
 

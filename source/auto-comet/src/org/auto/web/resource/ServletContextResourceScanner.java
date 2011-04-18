@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 import org.auto.io.Resource;
+import org.auto.io.ResourcePathUtils;
 import org.auto.io.scanner.AbstractPatternResourceScanner;
 
 /**
@@ -23,8 +24,8 @@ public class ServletContextResourceScanner extends
 
 	public ServletContextResourceScanner(String locationPattern,
 			ServletContext servletContext) {
-		this.locationPattern = locationPattern;
-		rootDirPath = determineRootDir(locationPattern);
+		this.locationPattern = ResourcePathUtils.getReallPath(locationPattern);
+		rootDirPath = determineRootDir(this.locationPattern);
 		this.servletContext = servletContext;
 	}
 

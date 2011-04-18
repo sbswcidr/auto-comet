@@ -1,5 +1,6 @@
 package org.auto;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
@@ -12,7 +13,10 @@ import java.util.TimerTask;
 import org.auto.comet.xml.PropertiesXmlDefinitionParser;
 import org.auto.io.ClassPathResource;
 import org.auto.io.Resource;
+import org.auto.io.ResourcePathUtils;
 import org.auto.io.scanner.ClassPathResourceScanner;
+import org.auto.io.scanner.FileHandler;
+import org.auto.io.scanner.PatternFileScanner;
 import org.auto.io.scanner.ResourceHandler;
 import org.auto.util.PropertiesLoaderUtils;
 import org.auto.xml.XmlDocumentLoader;
@@ -34,9 +38,32 @@ public class Test {
 		// testCalendar();
 		// testTimer();
 		// testClassLoader();
+		// testClassPathResourceScanner();
+		// testPatternFileScanner();
 
-		testClassPathResourceScanner();
+		URL url = new URL("http://www.hrtsea.com/down/soft/45.htm");
 
+		System.out.println(ResourcePathUtils
+				.getProtocol("http:/www.hrtsea.com/down/soft/45.htm"));
+		// System.out.println(url.toURI());
+
+	}
+
+	public static void testPatternFileScanner() {
+		PatternFileScanner scanner = new PatternFileScanner(
+				"F:/project/JCY_PRD_BA_dianzijianwu\\40_源码/30_业务组件/commons-np-commands/**/command/*.java");
+
+		scanner.addHandler(new FileHandler() {
+
+			@Override
+			public void handle(File t) {
+				System.out.println(t);
+				count++;
+
+			}
+		});
+		scanner.scan();
+		System.out.println("count" + count);
 	}
 
 	public static void testClassPathResourceScanner() {
