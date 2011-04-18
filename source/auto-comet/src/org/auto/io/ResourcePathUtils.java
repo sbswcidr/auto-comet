@@ -11,6 +11,10 @@ import org.auto.util.PathMatcher;
  * */
 public abstract class ResourcePathUtils {
 
+	public static final String PROTOCOL_SEPARATOR = ":";
+
+	public static final String PATTERN_PROTOCOL_SUFFIX = "*";
+
 	/**
 	 * 屏蔽系统差异，获得"/"分割的路径。
 	 * */
@@ -73,11 +77,27 @@ public abstract class ResourcePathUtils {
 	 *
 	 * */
 	public static String getProtocol(String locationPattern) {
-		int prefixEnd = locationPattern.indexOf(":");
+		int prefixEnd = locationPattern.indexOf(PROTOCOL_SEPARATOR);
 		if (prefixEnd < 1) {
 			return null;
 		}
 		return locationPattern.substring(0, prefixEnd);
+	}
+
+	/**
+	 * 是否是模式协议
+	 *
+	 * */
+	public boolean isPatternProtocol(String patternProtocol) {
+		return patternProtocol.endsWith(PATTERN_PROTOCOL_SUFFIX);
+	}
+
+	/**
+	 * 获得协议名称
+	 *
+	 * */
+	public static String getPatternProtocol(String patternProtocol) {
+		return patternProtocol.substring(0, patternProtocol.length() - 1);
 	}
 
 }

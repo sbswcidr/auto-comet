@@ -20,6 +20,10 @@ public class ServletContextResourceScanner extends
 	private ServletContext servletContext;
 
 	public ServletContextResourceScanner(ServletContext servletContext) {
+		if (null == servletContext) {
+			throw new IllegalArgumentException(
+					"servletContext must not be null!");
+		}
 		this.servletContext = servletContext;
 	}
 
