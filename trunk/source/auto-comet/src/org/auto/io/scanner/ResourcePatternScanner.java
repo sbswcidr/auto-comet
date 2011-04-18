@@ -13,6 +13,9 @@ public interface ResourcePatternScanner {
 	 * */
 	void scan(String locationPattern);
 
+	/**
+	 * 添加处理器
+	 * */
 	void addHandler(ResourceHandler handler);
 
 }
