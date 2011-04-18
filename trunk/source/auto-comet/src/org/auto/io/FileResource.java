@@ -10,6 +10,11 @@ import java.io.InputStream;
  * */
 public class FileResource implements Resource {
 
+	/**
+	 * 协议名
+	 * */
+	public static final String RESOURCE_PROTOCOL_NAME = "file";
+
 	private File file;
 
 	public FileResource(File file) {

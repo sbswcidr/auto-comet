@@ -10,6 +10,11 @@ import org.auto.util.ClassUtils;
  */
 public class ClassPathResource implements Resource {
 
+	/**
+	 * 协议名
+	 * */
+	public static final String RESOURCE_PROTOCOL_NAME = "classpath";
+
 	private String path;
 
 	private ClassLoader classLoader;

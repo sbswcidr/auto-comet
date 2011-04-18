@@ -4,9 +4,14 @@ import java.net.MalformedURLException;
 
 import javax.servlet.ServletContext;
 
+import org.auto.io.ClassPathResource;
 import org.auto.io.DefaultResourceLoader;
+import org.auto.io.FileResource;
 import org.auto.io.Resource;
 import org.auto.io.ResourceUtils;
+import org.auto.io.scanner.ClassPathResourceScanner;
+import org.auto.io.scanner.FileSystemResourceScanner;
+import org.auto.io.scanner.ResourcePatternScannerManager;
 
 /**
  *
@@ -35,9 +40,18 @@ public class WebServerResourceLoader extends DefaultResourceLoader {
 				return getServletContextResource(location);
 			}
 		}
+
 	}
 
-	public Resource[] getResources(String locationPattern) {
+	public Resource[] getResources(String protocolLocationPattern) {
+		ResourcePatternScannerManager scannerManager = new ResourcePatternScannerManager();
+		scannerManager.addScanner(ClassPathResource.RESOURCE_PROTOCOL_NAME,
+				new ClassPathResourceScanner());
+		scannerManager.addScanner(FileResource.RESOURCE_PROTOCOL_NAME,
+				new FileSystemResourceScanner());
+		scannerManager.addScanner(
+				ServletContextResource.RESOURCE_PROTOCOL_NAME,
+				new ServletContextResourceScanner(servletContext));
 		// TODO..
 		return null;
 	}

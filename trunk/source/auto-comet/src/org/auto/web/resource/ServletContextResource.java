@@ -13,6 +13,11 @@ import org.auto.io.Resource;
  */
 public class ServletContextResource implements Resource {
 
+	/**
+	 * 协议名
+	 * */
+	public static final String RESOURCE_PROTOCOL_NAME = "webroot";
+
 	private String path;
 
 	private ServletContext servletContext;

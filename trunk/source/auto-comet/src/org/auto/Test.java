@@ -38,8 +38,10 @@ public class Test {
 		// testCalendar();
 		// testTimer();
 		// testClassLoader();
-		//testClassPathResourceScanner();
+		// testClassPathResourceScanner();
 		testPatternFileScanner();
+
+		URL url = new URL("http://hi.baidu.com/huxiaohang");
 
 	}
 
