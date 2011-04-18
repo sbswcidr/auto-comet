@@ -38,15 +38,14 @@ public class Test {
 		// testCalendar();
 		// testTimer();
 		// testClassLoader();
-		testClassPathResourceScanner();
-		// testPatternFileScanner();
+		//testClassPathResourceScanner();
+		testPatternFileScanner();
 
 	}
 
 	public static void testPatternFileScanner() {
 		DefaultFilePatternScanner scanner = new DefaultFilePatternScanner();
-
-		scanner.addHandler(new FileHandler() {
+		FileHandler handler = new FileHandler() {
 
 			@Override
 			public void handle(File t) {
@@ -54,15 +53,17 @@ public class Test {
 				count++;
 
 			}
-		});
-		scanner.scan("F:/project/JCY_PRD_BA_dianzijianwu\\40_源码/30_业务组件/commons-np-commands/**/*.java");
+		};
+		scanner.scan(
+				"F:/project/JCY_PRD_BA_dianzijianwu\\40_源码/30_业务组件/commons-np-commands/**/*.java",
+				handler);
 		System.out.println("count" + count);
 	}
 
 	public static void testClassPathResourceScanner() {
 		ClassPathResourceScanner scanner = new ClassPathResourceScanner();
 
-		scanner.addHandler(new ResourceHandler() {
+		scanner.scan("org/auto/**/*.class", new ResourceHandler() {
 
 			@Override
 			public void handle(Resource t) {
@@ -70,7 +71,6 @@ public class Test {
 				count++;
 			}
 		});
-		scanner.scan("org/auto/**/*.class");
 		System.out.println("count" + count);
 	}
 

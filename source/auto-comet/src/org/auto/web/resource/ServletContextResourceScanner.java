@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 import org.auto.io.Resource;
 import org.auto.io.ResourcePathUtils;
 import org.auto.io.scanner.AbstractPatternResourceScanner;
+import org.auto.io.scanner.ResourceHandler;
 
 /**
  *
@@ -22,8 +23,8 @@ public class ServletContextResourceScanner extends
 		this.servletContext = servletContext;
 	}
 
-	protected void doRetrieveMatchingServletContextResources(String rootDirPath,
-			String locationPattern) {
+	protected void doRetrieveMatchingServletContextResources(
+			String rootDirPath, String locationPattern, ResourceHandler handler) {
 
 		Set<String> candidates = servletContext.getResourcePaths(rootDirPath);
 		if (candidates != null) {
@@ -46,12 +47,12 @@ public class ServletContextResourceScanner extends
 					// ServletContext.getResourcePaths
 					// only returns entries for one directory level.
 					doRetrieveMatchingServletContextResources(currPath,
-							locationPattern);
+							locationPattern, handler);
 				}
 				if (getPathMatcher().match(locationPattern, currPath)) {
 					Resource resource = new ServletContextResource(
 							servletContext, currPath);
-					this.handleResource(resource);
+					handler.handle(resource);
 				}
 			}
 		}
@@ -79,10 +80,11 @@ public class ServletContextResourceScanner extends
 	}
 
 	@Override
-	public void scan(String locationPattern) {
+	public void scan(String locationPattern, ResourceHandler handler) {
 		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
 		String rootDirPath = determineRootDir(locationPattern);
-		doRetrieveMatchingServletContextResources(rootDirPath, locationPattern);
+		doRetrieveMatchingServletContextResources(rootDirPath, locationPattern,
+				handler);
 	}
 
 }
