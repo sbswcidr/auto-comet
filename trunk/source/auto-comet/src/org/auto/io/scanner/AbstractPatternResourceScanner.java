@@ -1,9 +1,5 @@
 package org.auto.io.scanner;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.auto.io.Resource;
 import org.auto.io.ResourcePathUtils;
 import org.auto.util.AntPathMatcher;
 import org.auto.util.PathMatcher;
@@ -12,9 +8,8 @@ import org.auto.util.PathMatcher;
  *
  * @author XiaohangHu
  * */
-public abstract class AbstractPatternResourceScanner implements ResourcePatternScanner {
-
-	private List<ResourceHandler> handlers = new LinkedList<ResourceHandler>();
+public abstract class AbstractPatternResourceScanner implements
+		ResourcePatternScanner {
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -22,23 +17,8 @@ public abstract class AbstractPatternResourceScanner implements ResourcePatternS
 		return ResourcePathUtils.getRootDir(locationPattern, pathMatcher);
 	}
 
-	protected void handleResource(Resource resource) {
-		for (ResourceHandler handler : getHandlers()) {
-			handler.handle(resource);
-		}
-	}
-
 	public PathMatcher getPathMatcher() {
 		return pathMatcher;
-	}
-
-	@Override
-	public void addHandler(ResourceHandler handler) {
-		this.handlers.add(handler);
-	}
-
-	public List<ResourceHandler> getHandlers() {
-		return handlers;
 	}
 
 }

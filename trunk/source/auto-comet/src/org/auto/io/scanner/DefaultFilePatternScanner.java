@@ -1,8 +1,6 @@
 package org.auto.io.scanner;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.auto.io.ResourcePathUtils;
 import org.auto.util.AntPathMatcher;
@@ -14,8 +12,6 @@ import org.auto.util.PathMatcher;
  * @author XiaohangHu
  * */
 public class DefaultFilePatternScanner implements FilePatternScanner {
-
-	private List<FileHandler> fileHandlers = new LinkedList<FileHandler>();
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -45,18 +41,20 @@ public class DefaultFilePatternScanner implements FilePatternScanner {
 	/**
 	 * 扫描一个目录
 	 * */
-	protected void retrieveMatchingFiles(File rootDir, String fullPattern) {
+	protected void retrieveMatchingFiles(File rootDir, String fullPattern,
+			FileHandler handler) {
 		if (rootDir.isDirectory()) {
-			doRetrieveMatchingFiles(rootDir, fullPattern);
+			doRetrieveMatchingFiles(rootDir, fullPattern, handler);
 		} else {
-			this.handle(rootDir);
+			handler.handle(rootDir);
 		}
 	}
 
 	/**
 	 * 查找所有匹配的文件
 	 * */
-	protected void doRetrieveMatchingFiles(File dir, String fullPattern) {
+	protected void doRetrieveMatchingFiles(File dir, String fullPattern,
+			FileHandler handler) {
 		File[] dirContents = dir.listFiles();
 		if (dirContents == null) {
 			throw new RuntimeException(
@@ -68,10 +66,10 @@ public class DefaultFilePatternScanner implements FilePatternScanner {
 			String currPath = ResourcePathUtils.getReallPath(contentFile);
 			if (contentFile.isDirectory()
 					&& matchStart(currPath + "/", fullPattern)) {
-				doRetrieveMatchingFiles(contentFile, fullPattern);
+				doRetrieveMatchingFiles(contentFile, fullPattern, handler);
 			} else {
 				if (matchPattern(currPath, fullPattern)) {
-					this.handle(contentFile);
+					handler.handle(contentFile);
 				}
 			}
 		}
@@ -92,21 +90,6 @@ public class DefaultFilePatternScanner implements FilePatternScanner {
 		return getPathMatcher().match(fullPattern, path);
 	}
 
-	protected void handle(File file) {
-		List<FileHandler> fileHandlers = this.getHandlers();
-		for (FileHandler fileHandler : fileHandlers) {
-			fileHandler.handle(file);
-		}
-	}
-
-	public List<FileHandler> getHandlers() {
-		return fileHandlers;
-	}
-
-	public void addHandler(FileHandler handler) {
-		this.fileHandlers.add(handler);
-	}
-
 	public PathMatcher getPathMatcher() {
 		return pathMatcher;
 	}
@@ -116,23 +99,23 @@ public class DefaultFilePatternScanner implements FilePatternScanner {
 	}
 
 	@Override
-	public void scan(File rootDir) {
+	public void scan(File rootDir, FileHandler handler) {
 		String fullPattern = this.getFullPattern(rootDir, DEFAULT_PATTERN);
-		retrieveMatchingFiles(rootDir, fullPattern);
+		retrieveMatchingFiles(rootDir, fullPattern, handler);
 	}
 
 	@Override
-	public void scan(File rootDir, String pattern) {
+	public void scan(File rootDir, String pattern, FileHandler handler) {
 		String fullPattern = this.getFullPattern(rootDir, pattern);
-		retrieveMatchingFiles(rootDir, fullPattern);
+		retrieveMatchingFiles(rootDir, fullPattern, handler);
 	}
 
 	@Override
-	public void scan(String locationPattern) {
+	public void scan(String locationPattern, FileHandler handler) {
 		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
 		String rootDirPath = determineRootDir(locationPattern);
 		File rootDir = new File(rootDirPath);
-		retrieveMatchingFiles(rootDir, locationPattern);
+		retrieveMatchingFiles(rootDir, locationPattern, handler);
 	}
 
 }

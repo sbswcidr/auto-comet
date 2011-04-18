@@ -12,25 +12,21 @@ import org.auto.io.Resource;
  * */
 public class FileSystemResourceScanner extends AbstractPatternResourceScanner {
 
-	private DefaultFilePatternScanner fileScanner;
-
-	public FileSystemResourceScanner(String locationPattern) {
-
-		DefaultFilePatternScanner scanner = new DefaultFilePatternScanner();
-		scanner.addHandler(new FileHandler() {
-
-			@Override
-			public void handle(File file) {
-				Resource resource = new FileResource(file);
-				handleResource(resource);
-			}
-
-		});
+	private FilePatternScanner fileScanner;
+	{
+		fileScanner = new DefaultFilePatternScanner();
 	}
 
 	@Override
-	public void scan(String locationPattern) {
-		fileScanner.scan(locationPattern);
+	public void scan(String locationPattern, final ResourceHandler handler) {
+		fileScanner.scan(locationPattern, new FileHandler() {
+			@Override
+			public void handle(File file) {
+				Resource resource = new FileResource(file);
+				handler.handle(resource);
+			}
+
+		});
 	}
 
 }
