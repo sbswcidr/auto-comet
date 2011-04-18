@@ -17,8 +17,7 @@ public class ClassPathResourceLoader implements ResourceLoader {
 
 	@Override
 	public Resource[] getResources(String locationPattern) {
-		ResourceScanner resourceScanner = new ClassPathResourceScanner(
-				locationPattern);
+		ResourceScanner resourceScanner = new ClassPathResourceScanner();
 		return null;
 	}
 

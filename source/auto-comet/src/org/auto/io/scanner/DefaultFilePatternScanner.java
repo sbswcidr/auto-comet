@@ -13,9 +13,7 @@ import org.auto.util.PathMatcher;
  *
  * @author XiaohangHu
  * */
-public class PatternFileScanner implements FileScanner {
-
-	private File rootDir;
+public class DefaultFilePatternScanner implements FilePatternScanner {
 
 	private List<FileHandler> fileHandlers = new LinkedList<FileHandler>();
 
@@ -24,35 +22,13 @@ public class PatternFileScanner implements FileScanner {
 	/**
 	 * 默认扫描路径下的所有文件
 	 * */
-	private String pattern = "**/*";
-
-	private String fullPattern;
-
-	/**
-	 * @param rootDir
-	 *            要扫描的目录或者文件
-	 * */
-	public PatternFileScanner(File rootDir) {
-		this.rootDir = rootDir;
-		this.fullPattern = this.getFullPattern();
-	}
-
-	/**
-	 * @param rootDir
-	 *            要扫描的路径匹配模式
-	 * */
-	public PatternFileScanner(String locationPattern) {
-		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
-		String rootDirPath = determineRootDir(locationPattern);
-		this.rootDir = new File(rootDirPath);
-		this.fullPattern = locationPattern;
-	}
+	private static final String DEFAULT_PATTERN = "**/*";
 
 	protected String determineRootDir(String locationPattern) {
 		return ResourcePathUtils.getRootDir(locationPattern, pathMatcher);
 	}
 
-	private String getFullPattern() {
+	private String getFullPattern(File rootDir, String pattern) {
 
 		if (rootDir.isDirectory()) {
 			String fullPattern = ResourcePathUtils.getReallPath(rootDir);
@@ -69,18 +45,18 @@ public class PatternFileScanner implements FileScanner {
 	/**
 	 * 扫描一个目录
 	 * */
-	protected void retrieveMatchingFiles() {
+	protected void retrieveMatchingFiles(File rootDir, String fullPattern) {
 		if (rootDir.isDirectory()) {
-			doRetrieveMatchingFiles(this.rootDir);
+			doRetrieveMatchingFiles(rootDir, fullPattern);
 		} else {
-			this.handle(this.rootDir);
+			this.handle(rootDir);
 		}
 	}
 
 	/**
 	 * 查找所有匹配的文件
 	 * */
-	protected void doRetrieveMatchingFiles(File dir) {
+	protected void doRetrieveMatchingFiles(File dir, String fullPattern) {
 		File[] dirContents = dir.listFiles();
 		if (dirContents == null) {
 			throw new RuntimeException(
@@ -90,33 +66,30 @@ public class PatternFileScanner implements FileScanner {
 		for (int i = 0; i < dirContents.length; i++) {
 			File contentFile = dirContents[i];
 			String currPath = ResourcePathUtils.getReallPath(contentFile);
-			if (contentFile.isDirectory() && matchStart(currPath + "/")) {
-				doRetrieveMatchingFiles(contentFile);
+			if (contentFile.isDirectory()
+					&& matchStart(currPath + "/", fullPattern)) {
+				doRetrieveMatchingFiles(contentFile, fullPattern);
 			} else {
-				if (matchPattern(currPath)) {
+				if (matchPattern(currPath, fullPattern)) {
 					this.handle(contentFile);
 				}
 			}
 		}
 	}
 
-	protected boolean matchStart(String path) {
+	protected boolean matchStart(String path, String fullPattern) {
 		if (null == fullPattern)
 			return true;
-		return getPathMatcher().matchStart(this.fullPattern, path);
+		return getPathMatcher().matchStart(fullPattern, path);
 	}
 
 	/**
 	 * 匹配路径
 	 * */
-	protected boolean matchPattern(String path) {
+	protected boolean matchPattern(String path, String fullPattern) {
 		if (null == fullPattern)
 			return true;
-		return getPathMatcher().match(this.fullPattern, path);
-	}
-
-	public void scan() {
-		this.retrieveMatchingFiles();
+		return getPathMatcher().match(fullPattern, path);
 	}
 
 	protected void handle(File file) {
@@ -124,18 +97,6 @@ public class PatternFileScanner implements FileScanner {
 		for (FileHandler fileHandler : fileHandlers) {
 			fileHandler.handle(file);
 		}
-	}
-
-	public String getPattern() {
-		return pattern;
-	}
-
-	/**
-	 * 设置匹配模式
-	 * */
-	public void setPattern(String pattern) {
-		this.pattern = pattern;
-		this.fullPattern = this.getFullPattern();
 	}
 
 	public List<FileHandler> getHandlers() {
@@ -152,6 +113,26 @@ public class PatternFileScanner implements FileScanner {
 
 	public void setPathMatcher(PathMatcher pathMatcher) {
 		this.pathMatcher = pathMatcher;
+	}
+
+	@Override
+	public void scan(File rootDir) {
+		String fullPattern = this.getFullPattern(rootDir, DEFAULT_PATTERN);
+		retrieveMatchingFiles(rootDir, fullPattern);
+	}
+
+	@Override
+	public void scan(File rootDir, String pattern) {
+		String fullPattern = this.getFullPattern(rootDir, pattern);
+		retrieveMatchingFiles(rootDir, fullPattern);
+	}
+
+	@Override
+	public void scan(String locationPattern) {
+		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
+		String rootDirPath = determineRootDir(locationPattern);
+		File rootDir = new File(rootDirPath);
+		retrieveMatchingFiles(rootDir, locationPattern);
 	}
 
 }

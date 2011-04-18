@@ -18,22 +18,12 @@ public class ServletContextResourceScanner extends
 
 	private ServletContext servletContext;
 
-	private String locationPattern;
-
-	private String rootDirPath;
-
-	public ServletContextResourceScanner(String locationPattern,
-			ServletContext servletContext) {
-		this.locationPattern = ResourcePathUtils.getReallPath(locationPattern);
-		rootDirPath = determineRootDir(this.locationPattern);
+	public ServletContextResourceScanner(ServletContext servletContext) {
 		this.servletContext = servletContext;
 	}
 
-	public String getLocationPattern() {
-		return locationPattern;
-	}
-
-	protected void doRetrieveMatchingServletContextResources(String dir) {
+	protected void doRetrieveMatchingServletContextResources(String dir,
+			String locationPattern) {
 
 		Set<String> candidates = servletContext.getResourcePaths(dir);
 		if (candidates != null) {
@@ -55,7 +45,8 @@ public class ServletContextResourceScanner extends
 					// Search subdirectories recursively:
 					// ServletContext.getResourcePaths
 					// only returns entries for one directory level.
-					doRetrieveMatchingServletContextResources(currPath);
+					doRetrieveMatchingServletContextResources(currPath,
+							locationPattern);
 				}
 				if (getPathMatcher().match(locationPattern, currPath)) {
 					Resource resource = new ServletContextResource(
@@ -88,8 +79,10 @@ public class ServletContextResourceScanner extends
 	}
 
 	@Override
-	public void scan() {
-		this.determineRootDir(rootDirPath);
+	public void scan(String locationPattern) {
+		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
+		String rootDirPath = determineRootDir(locationPattern);
+		doRetrieveMatchingServletContextResources(rootDirPath, locationPattern);
 	}
 
 }

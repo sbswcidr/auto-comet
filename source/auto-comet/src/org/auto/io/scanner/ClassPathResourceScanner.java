@@ -24,32 +24,16 @@ import org.springframework.util.ClassUtils;
  * */
 public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 
-	private String locationPattern;
-
-	private String rootDirPath;
-
-	private String subPattern;
-
-	public ClassPathResourceScanner(String locationPattern) {
-		this.locationPattern = ResourcePathUtils.getReallPath(locationPattern);
-		rootDirPath = determineRootDir(this.locationPattern);
-		subPattern = locationPattern.substring(rootDirPath.length());
-	}
-
-	public String getLocationPattern() {
-		return locationPattern;
-	}
-
 	/**
 	 * 扫描ClassPath
 	 * */
-	public void scan() {
+	public void scan(String rootDirPath, String subPattern) {
 		Enumeration<URL> urlEnumeration = gerClassPathResources(rootDirPath);
 		while (urlEnumeration.hasMoreElements()) {
 			URL url = (URL) urlEnumeration.nextElement();
 			if (ResourceUtils.isJarURL(url)) {
 				try {
-					scanJarUrl(url);
+					scanJarUrl(url, subPattern);
 				} catch (IOException e) {
 					throw new ScannerException("IOException [" + url.getPath()
 							+ "]!", e);
@@ -57,9 +41,7 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 			} else {
 				try {
 					File file = new File(url.toURI());
-					PatternFileScanner fileScanner = new PatternFileScanner(
-							file);
-					fileScanner.setPattern(subPattern);
+					DefaultFilePatternScanner fileScanner = new DefaultFilePatternScanner();
 					fileScanner.addHandler(new FileHandler() {
 						@Override
 						public void handle(File file) {
@@ -67,7 +49,7 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 							handleResource(resource);
 						}
 					});
-					fileScanner.scan();
+					fileScanner.scan(file, subPattern);
 				} catch (URISyntaxException e) {
 					throw new ScannerException("URISyntaxException [" + url
 							+ "]", e);
@@ -76,7 +58,7 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 		}
 	}
 
-	protected void scanJarUrl(URL url) throws IOException {
+	protected void scanJarUrl(URL url, String subPattern) throws IOException {
 		URLConnection con = url.openConnection();
 		JarFile jarFile = null;
 		String rootEntryPath = "";
@@ -87,7 +69,7 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 			JarEntry jarEntry = jarCon.getJarEntry();
 			if (jarEntry != null)
 				rootEntryPath = jarEntry.getName();
-			scanJarFile(jarFile, rootEntryPath);
+			scanJarFile(jarFile, rootEntryPath, subPattern);
 		} else {
 			try {
 				String urlFilePath = url.getPath();
@@ -102,7 +84,7 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 				} else {
 					jarFile = new JarFile(urlFilePath);
 				}
-				scanJarFile(jarFile, rootEntryPath);
+				scanJarFile(jarFile, rootEntryPath, subPattern);
 			} finally {
 				if (null != jarFile)
 					jarFile.close();
@@ -111,7 +93,8 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 
 	}
 
-	private void scanJarFile(JarFile jarFile, String rootEntryPath) {
+	private void scanJarFile(JarFile jarFile, String rootEntryPath,
+			String subPattern) {
 
 		if (!"".equals(rootEntryPath) && !rootEntryPath.endsWith("/")) {
 			// Root entry path must end with slash to allow for proper matching.
@@ -147,5 +130,13 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 
 	private ClassLoader getClassLoader() {
 		return ClassUtils.getDefaultClassLoader();
+	}
+
+	@Override
+	public void scan(String locationPattern) {
+		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
+		String rootDirPath = determineRootDir(locationPattern);
+		String subPattern = locationPattern.substring(rootDirPath.length());
+		this.scan(rootDirPath, subPattern);
 	}
 }
