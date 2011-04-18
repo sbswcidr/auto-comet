@@ -12,7 +12,7 @@ import org.auto.util.PathMatcher;
  *
  * @author XiaohangHu
  * */
-public abstract class AbstractPatternResourceScanner implements ResourceScanner {
+public abstract class AbstractPatternResourceScanner implements ResourcePatternScanner {
 
 	private List<ResourceHandler> handlers = new LinkedList<ResourceHandler>();
 

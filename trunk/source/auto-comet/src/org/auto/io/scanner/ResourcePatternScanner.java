@@ -4,7 +4,7 @@ package org.auto.io.scanner;
  *
  * @author XiaohangHu
  * */
-public interface ResourceScanner {
+public interface ResourcePatternScanner {
 	/**
 	 * 扫描指定路径匹配模式下的所有资源
 	 *

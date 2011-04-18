@@ -1,7 +1,7 @@
 package org.auto.io;
 
 import org.auto.io.scanner.ClassPathResourceScanner;
-import org.auto.io.scanner.ResourceScanner;
+import org.auto.io.scanner.ResourcePatternScanner;
 
 public class ClassPathResourceLoader implements ResourceLoader {
 
@@ -17,7 +17,7 @@ public class ClassPathResourceLoader implements ResourceLoader {
 
 	@Override
 	public Resource[] getResources(String locationPattern) {
-		ResourceScanner resourceScanner = new ClassPathResourceScanner();
+		ResourcePatternScanner resourceScanner = new ClassPathResourceScanner();
 		return null;
 	}
 
