@@ -22,19 +22,19 @@ public class ServletContextResourceScanner extends
 		this.servletContext = servletContext;
 	}
 
-	protected void doRetrieveMatchingServletContextResources(String dir,
+	protected void doRetrieveMatchingServletContextResources(String rootDirPath,
 			String locationPattern) {
 
-		Set<String> candidates = servletContext.getResourcePaths(dir);
+		Set<String> candidates = servletContext.getResourcePaths(rootDirPath);
 		if (candidates != null) {
 			boolean dirDepthNotFixed = (locationPattern.indexOf("**") != -1);
 			for (Iterator<String> it = candidates.iterator(); it.hasNext();) {
 				String currPath = (String) it.next();
-				if (!currPath.startsWith(dir)) {
+				if (!currPath.startsWith(rootDirPath)) {
 					// Returned resource path does not start with relative
 					// directory:
 					// assuming absolute path returned -> strip absolute path.
-					int dirIndex = currPath.indexOf(dir);
+					int dirIndex = currPath.indexOf(rootDirPath);
 					if (dirIndex != -1) {
 						currPath = currPath.substring(dirIndex);
 					}
