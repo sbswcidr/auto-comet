@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.auto.io.ClassPathResource;
 import org.auto.io.FileResource;
 import org.auto.io.JarEntryResource;
 import org.auto.io.Resource;
@@ -136,9 +137,14 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 	@Override
 	public void scan(String locationPattern, ResourceHandler handler) {
 		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
-		String rootDirPath = determineRootDir(locationPattern);
-		String subPattern = locationPattern.substring(rootDirPath.length());
-		this.scan(rootDirPath, subPattern, handler);
+		if (super.getPathMatcher().isPattern(locationPattern)) {
+			String rootDirPath = determineRootDir(locationPattern);
+			String subPattern = locationPattern.substring(rootDirPath.length());
+			this.scan(rootDirPath, subPattern, handler);
+		} else {
+			Resource resource = new ClassPathResource(locationPattern);
+			handler.handle(resource);
+		}
 	}
 
 }
