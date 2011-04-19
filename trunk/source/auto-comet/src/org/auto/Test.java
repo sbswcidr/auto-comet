@@ -12,6 +12,7 @@ import java.util.TimerTask;
 
 import org.auto.comet.xml.PropertiesXmlDefinitionParser;
 import org.auto.io.ClassPathResource;
+import org.auto.io.FileResource;
 import org.auto.io.Resource;
 import org.auto.io.ResourcePathUtils;
 import org.auto.io.scanner.ClassPathResourceScanner;
@@ -38,10 +39,9 @@ public class Test {
 		// testCalendar();
 		// testTimer();
 		// testClassLoader();
-		// testClassPathResourceScanner();
+		 testClassPathResourceScanner();
 		testPatternFileScanner();
 
-		URL url = new URL("http://hi.baidu.com/huxiaohang");
 
 	}
 
@@ -52,12 +52,14 @@ public class Test {
 			@Override
 			public void handle(File t) {
 				System.out.println(t);
+				Resource resource = new FileResource(t);
+				resource.getInputStream();
 				count++;
 
 			}
 		};
 		scanner.scan(
-				"F:/project/JCY_PRD_BA_dianzijianwu\\40_源码/30_业务组件/commons-np-commands/**/*.java",
+				"F:/download/ckeditor_3.5.2.zip \r\n",
 				handler);
 		System.out.println("count" + count);
 	}
@@ -65,10 +67,11 @@ public class Test {
 	public static void testClassPathResourceScanner() {
 		ClassPathResourceScanner scanner = new ClassPathResourceScanner();
 
-		scanner.scan("org/auto/**/*.class", new ResourceHandler() {
+		scanner.scan("org/apache/commons/logging/LogFactory.class", new ResourceHandler() {
 
 			@Override
 			public void handle(Resource t) {
+				t.getInputStream();
 				System.out.println(t.getDescription());
 				count++;
 			}
