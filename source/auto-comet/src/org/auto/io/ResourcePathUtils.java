@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.lang.StringUtils;
 import org.auto.util.PathMatcher;
 
 /**
@@ -26,6 +27,10 @@ public abstract class ResourcePathUtils {
 	 * 屏蔽系统差异，获得"/"分割的路径。
 	 * */
 	public static String getReallPath(String path) {
+		path = StringUtils.trimToNull(path);
+		if (null == path) {
+			return null;
+		}
 		return path.replace(File.separator, "/");
 	}
 
@@ -76,12 +81,13 @@ public abstract class ResourcePathUtils {
 	 * 获得协议名称
 	 *
 	 * */
-	public static String getProtocol(String locationPattern) {
-		int prefixEnd = locationPattern.indexOf(PROTOCOL_SEPARATOR);
+	public static String getProtocol(String locationUrl) {
+		int prefixEnd = locationUrl.indexOf(PROTOCOL_SEPARATOR);
 		if (prefixEnd < 1) {
 			return null;
 		}
-		return locationPattern.substring(0, prefixEnd);
+		String result = locationUrl.substring(0, prefixEnd);
+		return StringUtils.trimToNull(result);
 	}
 
 	/**
