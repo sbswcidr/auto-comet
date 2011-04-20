@@ -6,17 +6,7 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
 	">
 
-
 	<context:component-scan base-package="org.auto.comet.example.chat" />
-
-	<bean id="cometUrlHandlerMapping" class="org.auto.comet.web.UrlHandlerMapping"
-		init-method="init">
-		<property name="mappings">
-			<props>
-				<prop key="/chat.comet">chatService</prop>
-			</props>
-		</property>
-	</bean>
 
 
 </beans>
