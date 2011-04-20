@@ -9,8 +9,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 /**
  * @author XiaohangHu
  * */
-public class ControllerFactory implements
-		org.auto.comet.web.controller.ControllerFactory {
+public class ObjectFactory implements
+		org.auto.comet.web.controller.ObjectFactory {
 
 	private WebApplicationContext context;
 
@@ -22,10 +22,10 @@ public class ControllerFactory implements
 	}
 
 	@Override
-	public SocketController getController(String controllerName) {
+	public Object getObject(String objectName) {
 
 		Object controller = null;
-		controller = context.getBean(controllerName);
+		controller = context.getBean(objectName);
 		if (controller instanceof SocketController) {
 			return (SocketController) controller;
 		} else {
