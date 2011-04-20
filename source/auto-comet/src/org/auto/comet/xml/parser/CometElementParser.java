@@ -28,14 +28,6 @@ public class CometElementParser {
 
 		setProperty(cometConfig, element);
 
-		// Iterator<Element> iterator = XmlUtil.childElementIterator(element,
-		// TARGET_ELEMENT);
-		// while (iterator.hasNext()) {
-		// Element ele = iterator.next();
-		// Target targetEntity = this.targetParser.parse(ele);
-		// sourc.addTargetEntity(targetEntity);
-		// }
-
 		return cometConfig;
 	}
 
