@@ -16,7 +16,7 @@ import org.auto.io.JarEntryResource;
 import org.auto.io.Resource;
 import org.auto.io.ResourcePathUtils;
 import org.auto.io.ResourceUtils;
-import org.springframework.util.ClassUtils;
+import org.auto.util.ClassUtils;
 
 /**
  * 资源扫描器
