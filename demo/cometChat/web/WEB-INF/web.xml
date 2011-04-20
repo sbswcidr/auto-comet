@@ -24,6 +24,7 @@
 			<param-name>dispatcherConfigLocation</param-name>
 			<param-value>/WEB-INF/dispatcher.comet.xml</param-value>
 		</init-param>
+		<load-on-startup>2</load-on-startup>
 		<async-supported>true</async-supported>
 	</servlet>
 	<servlet-mapping>
