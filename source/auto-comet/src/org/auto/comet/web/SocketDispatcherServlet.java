@@ -38,6 +38,9 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	private SocketManager socketManager;
 
 	public final void init() throws ServletException {
+		getServletContext().log(
+				"Initializing Auto comet SocketDispatcherServlet '"
+						+ getServletName() + "'");
 		super.init();
 		initHandlerMapping();
 		initSocketManager();

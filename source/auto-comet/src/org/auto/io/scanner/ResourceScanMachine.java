@@ -41,7 +41,9 @@ public class ResourceScanMachine {
 	 *
 	 * @param resourceLocation资源路径
 	 *
-	 *  资源路径支持格式： "classpath:com/auto/*.xml,file:C:\ProgramFiles\Java\jdk1.6 .0_14\register.html"
+	 *            资源路径支持格式：
+	 *            "classpath:com/auto/*.xml,file:C:\ProgramFiles\Java\jdk1.6
+	 *            .0_14\register.html"
 	 *
 	 * @param handler
 	 *            处理器

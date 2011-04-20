@@ -24,6 +24,7 @@ public class WebResourceScanMachine extends ResourceScanMachine {
 		}
 		this.servletContext = servletContext;
 		init();
+		super.setDefaultProtocol(ServletContextResource.RESOURCE_PROTOCOL_NAME);
 	}
 
 	private void init() {
