@@ -85,10 +85,17 @@ public class ServletContextResourceScanner extends
 
 	@Override
 	public void scan(String locationPattern, ResourceHandler handler) {
-		locationPattern = ResourcePathUtils.getReallPath(locationPattern);
-		String rootDirPath = determineRootDir(locationPattern);
-		doRetrieveMatchingServletContextResources(rootDirPath, locationPattern,
-				handler);
+		if (getPathMatcher().isPattern(locationPattern)) {
+			locationPattern = ResourcePathUtils.getReallPath(locationPattern);
+			String rootDirPath = determineRootDir(locationPattern);
+			doRetrieveMatchingServletContextResources(rootDirPath,
+					locationPattern, handler);
+		} else {
+			Resource resource = new ServletContextResource(servletContext,
+					locationPattern);
+			handler.handle(resource);
+		}
+
 	}
 
 }
