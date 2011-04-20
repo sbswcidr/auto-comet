@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,12 @@ import org.auto.comet.Protocol;
 import org.auto.comet.PushSocket;
 import org.auto.comet.SocketManager;
 import org.auto.comet.SocketStore;
+import org.auto.comet.config.CometConfigMetadata;
+import org.auto.comet.web.controller.ObjectFactory;
+import org.auto.comet.web.controller.ObjectFactoryBuilder;
 import org.auto.comet.web.controller.SocketController;
+import org.auto.comet.xml.XmlConfigResourceHandler;
+import org.auto.web.resource.WebResourceScanMachine;
 import org.auto.web.util.RequestUtils;
 
 /**
@@ -40,12 +44,29 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	}
 
 	protected void initHandlerMapping() {
+
 		ServletConfig config = getServletConfig();
 		String dispatcherConfigLocation = config
 				.getInitParameter(INIT_PARAMETER_CONFIG_LOCATION);
 		if (StringUtils.isBlank(dispatcherConfigLocation)) {
 			dispatcherConfigLocation = getDefaultDispatcherConfigLocation();
 		}
+		WebResourceScanMachine webResourceScanMachine = new WebResourceScanMachine(
+				this.getServletContext());
+		CometConfigMetadata cometConfig = new CometConfigMetadata();
+
+		// 扫描将配置元数据放入cometConfig中
+		webResourceScanMachine.scanLocations(dispatcherConfigLocation,
+				new XmlConfigResourceHandler(cometConfig));
+
+		ObjectFactory objectFactory = ObjectFactoryBuilder.creatObjectFactory(
+				cometConfig, getServletContext());
+
+		UrlHandlerMappingBuilder mappingBuilder = new UrlHandlerMappingBuilder(
+				objectFactory);
+
+		urlHandlerMapping = mappingBuilder.buildHandlerMapping(cometConfig);
+
 	}
 
 	protected void initSocketManager() throws ServletException {
@@ -82,7 +103,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		socketManager.receiveMessage(connectionId, request, response);
 	}
 
-	private static void creatConnection(SocketManager socketManager,
+	private void creatConnection(SocketManager socketManager,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		SocketController service = getCometController(request);
@@ -103,7 +124,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	/**
 	 * 断开链接
 	 * */
-	private static void disconnect(SocketManager socketManager,
+	private void disconnect(SocketManager socketManager,
 			HttpServletRequest request) {
 		SocketController service = getCometController(request);
 		if (null == service) {
@@ -113,6 +134,11 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		}
 		String connectionId = getConnectionId(request);
 		socketManager.disconnect(connectionId, service, request);
+	}
+
+	protected SocketController getCometController(HttpServletRequest request) {
+		String uri = RequestUtils.getServletPath(request);
+		return urlHandlerMapping.getHandler(uri);
 	}
 
 	private static String getSynchronizValue(HttpServletRequest request) {

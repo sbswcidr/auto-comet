@@ -12,23 +12,17 @@ import org.auto.xml.XmlDefinitionManager;
 import org.auto.xml.XmlDefinitionResolver;
 import org.auto.xml.XmlDocumentLoader;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * @author XiaohangHu
  * */
-public class SimpleDocumentReader {
+public class DocumentResourceReader {
 
 	private String xmlDefinitionMappingsLocation = "META-INF/auto.comet.scehmas";
 
 	private DocumentLoader documentLoader;
 
 	{
-		initDocumentLoader();
-	}
-
-	public SimpleDocumentReader(String xmlDefinitionMappingsLocation) {
-		this.xmlDefinitionMappingsLocation = xmlDefinitionMappingsLocation;
 		initDocumentLoader();
 	}
 
@@ -53,23 +47,22 @@ public class SimpleDocumentReader {
 		this.documentLoader = documentLoader;
 	}
 
-	public Element read(Resource resource) {
+	public Document read(Resource resource) {
 		InputStream in;
 		in = resource.getInputStream();
 		Document document = documentLoader.loadDocument(in);
-		Element element = document.getDocumentElement();
-		return element;
+		return document;
 	}
 
-	public Set<Element> read(Set<Resource> resources) {
-		Set<Element> elements = new TreeSet<Element>();
+	public Set<Document> read(Set<Resource> resources) {
+		Set<Document> documents = new TreeSet<Document>();
 		for (Resource resource : resources) {
-			Element e = read(resource);
-			if (null != e) {
-				elements.add(e);
+			Document d = read(resource);
+			if (null != d) {
+				documents.add(d);
 			}
 		}
-		return elements;
+		return documents;
 	}
 
 }

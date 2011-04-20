@@ -8,10 +8,10 @@ import javax.servlet.ServletContext;
  *
  * @author XiaohangHu
  * */
-public interface ControllerFactory {
+public interface ObjectFactory {
 
 	void init(ServletContext servletContext);
 
-	SocketController getController(String controllerName);
+	Object getObject(String objectName);
 
 }
