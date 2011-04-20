@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.auto.org/schema/comet http://www.auto.org/schema/comet/auto-comet-1.0.xsd
 	http://www.auto.org/schema/comet/spring http://www.auto.org/schema/comet/auto-comet-spring-1.0.xsd">
 
-	<property name="objectFactory" value="org.auto.comet.spring.ControllerFactory" />
+	<property name="objectFactory" value="org.auto.comet.spring.ObjectFactory" />
 
 	<comet request="/chat.comet" controller="chatService" />
 
