@@ -22,7 +22,7 @@
 		<servlet-class>org.auto.comet.web.SocketDispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>dispatcherConfigLocation</param-name>
-			<param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
+			<param-value>/WEB-INF/dispatcher.comet.xml</param-value>
 		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>
