@@ -3,7 +3,7 @@ package org.auto.comet.xml.parser;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auto.comet.config.CometConfig;
+import org.auto.comet.config.CometMetadata;
 import org.auto.xml.XmlUtil;
 import org.w3c.dom.Element;
 
@@ -12,9 +12,9 @@ import org.w3c.dom.Element;
  * @author huxh
  * @version 1.0
  */
-public class CometParser {
+public class CometElementParser {
 
-	private static final Log logger = LogFactory.getLog(CometParser.class);
+	private static final Log logger = LogFactory.getLog(CometElementParser.class);
 
 	public static final String REQUEST_ATTRIBUTE = "request";
 
@@ -22,9 +22,9 @@ public class CometParser {
 
 	/**
 	 * */
-	public CometConfig parse(Element element) {
+	public CometMetadata parse(Element element) {
 
-		CometConfig cometConfig = new CometConfig();
+		CometMetadata cometConfig = new CometMetadata();
 
 		setProperty(cometConfig, element);
 
@@ -39,7 +39,7 @@ public class CometParser {
 		return cometConfig;
 	}
 
-	private void setProperty(CometConfig cometConfig, Element element) {
+	private void setProperty(CometMetadata cometConfig, Element element) {
 		String controller = XmlUtil.getElementAttributeTrim(
 				CONTROLLER_ATTRIBUTE, element);
 		String request = XmlUtil.getElementAttributeTrim(REQUEST_ATTRIBUTE,

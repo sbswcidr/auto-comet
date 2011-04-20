@@ -3,7 +3,7 @@ package org.auto.comet.config;
 /**
  * @author XiaohangHu
  * */
-public class CometConfig {
+public class CometMetadata {
 
 	private String request;
 

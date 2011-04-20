@@ -5,13 +5,13 @@ package org.auto.comet.config;
  * */
 public class ConfigManager {
 
-	private AutoCometConfig config = null;
+	private CometConfigMetadata config = null;
 
-	public ConfigManager(AutoCometConfig config) {
+	public ConfigManager(CometConfigMetadata config) {
 		this.config = config;
 	}
 
-	public AutoCometConfig getConfig() {
+	public CometConfigMetadata getConfig() {
 		return this.config;
 	}
 

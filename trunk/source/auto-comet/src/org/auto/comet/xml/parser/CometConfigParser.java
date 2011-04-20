@@ -2,8 +2,8 @@ package org.auto.comet.xml.parser;
 
 import java.util.Iterator;
 
-import org.auto.comet.config.AutoCometConfig;
-import org.auto.comet.config.CometConfig;
+import org.auto.comet.config.CometConfigMetadata;
+import org.auto.comet.config.CometMetadata;
 import org.auto.xml.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,22 +13,25 @@ import org.w3c.dom.Element;
  * @author huxh
  * @version 1.0
  */
-public class AutoCometParser {
+public class CometConfigParser {
 
 	public static final String COMET_ELEMENT = "comet";
 	public static final String PROPERTY_ELEMENT = "property";
 	public static final String NAME_ATTRIBUTE = "name";
 	public static final String VALUE_ATTRIBUTE = "value";
 
-	private CometParser cometParser = new CometParser();
+	private CometElementParser cometParser = new CometElementParser();
 
 	/**
 	 * 读取document加入到配置中
 	 *
 	 * @param document
 	 * */
-	public void addConfig(AutoCometConfig config, Document document) {
+	public void addConfig(CometConfigMetadata config, Document document) {
 		Element root = document.getDocumentElement();
+		if (null == root) {
+			return;
+		}
 		Iterator<Element> iterator = XmlUtil.childElementIterator(root);
 		while (iterator.hasNext()) {
 			Element element = iterator.next();
@@ -36,13 +39,13 @@ public class AutoCometParser {
 			if (PROPERTY_ELEMENT.equals(name)) {
 				parseProperty(config, element);
 			} else if (COMET_ELEMENT.equals(name)) {
-				CometConfig cometConfig = this.cometParser.parse(element);
-				config.addCometConfig(cometConfig);
+				CometMetadata cometConfig = this.cometParser.parse(element);
+				config.addCometMetadata(cometConfig);
 			}
 		}
 	}
 
-	protected void parseProperty(AutoCometConfig config, Element element) {
+	protected void parseProperty(CometConfigMetadata config, Element element) {
 		String name = XmlUtil.getElementAttributeTrim(NAME_ATTRIBUTE, element);
 		String value = XmlUtil
 				.getElementAttributeTrim(VALUE_ATTRIBUTE, element);
@@ -53,8 +56,8 @@ public class AutoCometParser {
 	 * 读取document转化为配置
 	 *
 	 * */
-	public AutoCometConfig parse(Document document) {
-		AutoCometConfig config = new AutoCometConfig();
+	public CometConfigMetadata parse(Document document) {
+		CometConfigMetadata config = new CometConfigMetadata();
 		addConfig(config, document);
 		return config;
 	}
@@ -63,8 +66,8 @@ public class AutoCometParser {
 	 * 读取多个document转化为配置
 	 *
 	 * */
-	public AutoCometConfig parse(Document[] documents) {
-		AutoCometConfig config = new AutoCometConfig();
+	public CometConfigMetadata parse(Document[] documents) {
+		CometConfigMetadata config = new CometConfigMetadata();
 		for (Document document : documents) {
 			addConfig(config, document);
 		}
