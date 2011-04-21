@@ -1,0 +1,67 @@
+@CHARSET "UTF-8";
+
+#right {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 218px;
+	overflow: auto;
+	background: red;
+	background: #00CCFF;
+	border: solid 3px red;
+	margin: 3px;
+}
+
+#left_bottom {
+	position: absolute;
+	right: 230px;
+	left: 0;
+	bottom: 0;
+	height: 260px;
+}
+
+#main {
+	position: absolute;
+	bottom: 260px;
+	top: 0;
+	left: 0;
+	right: 230px;
+}
+
+/*IE6*/
+html,body {
+	_height: 100%;
+}
+
+html {
+	_padding: 0 0 78px 230px;
+	_overflow: hidden;
+}
+
+#right_ie6 {
+	_position: relative;
+	_height: 100%;
+	_float: left;
+	_margin-left: -230px;
+	_padding-top: 78px;
+	_width: 230px;
+}
+
+#right {
+	_position: absolute;
+	_top: 0;
+	_height: 100%;
+	_width: 100%;
+}
+
+#right_top {
+	_width: 100%;
+}
+
+#main {
+	_position: relative;
+	_left: 0;
+	_height: 100%;
+	_background: yellow;
+}
