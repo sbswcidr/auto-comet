@@ -13,8 +13,8 @@ import net.sf.json.JSONObject;
 import org.auto.comet.ErrorHandler;
 import org.auto.comet.PushException;
 import org.auto.comet.Socket;
+import org.auto.comet.SocketHandler;
 import org.auto.comet.example.chat.service.IChatService;
-import org.auto.comet.web.controller.SocketController;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
  * @author XiaohangHu
  */
 @Service
-public class ChatService implements IChatService, SocketController {
+public class ChatService implements IChatService, SocketHandler {
 
 	public static final String COMMAND_KEY = "command";
 	public static final String COMMAND_LOGIN = "login";
