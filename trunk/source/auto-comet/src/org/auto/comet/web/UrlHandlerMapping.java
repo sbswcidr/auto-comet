@@ -3,20 +3,20 @@ package org.auto.comet.web;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.auto.comet.web.controller.SocketController;
+import org.auto.comet.SocketHandler;
 
 /**
  * @author XiaohangHu
  * */
 public class UrlHandlerMapping {
 
-	private final Map<String, SocketController> urlMap = new HashMap<String, SocketController>();
+	private final Map<String, SocketHandler> urlMap = new HashMap<String, SocketHandler>();
 
-	public SocketController getHandler(String uri) {
+	public SocketHandler getHandler(String uri) {
 		return urlMap.get(uri);
 	}
 
-	public void putHandler(String uri, SocketController controller) {
+	public void putHandler(String uri, SocketHandler controller) {
 		this.urlMap.put(uri, controller);
 	}
 

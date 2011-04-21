@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.auto.comet.JsonProtocolUtils;
 import org.auto.comet.LocalSocketStore;
+import org.auto.comet.ObjectFactory;
+import org.auto.comet.ObjectFactoryBuilder;
 import org.auto.comet.Protocol;
 import org.auto.comet.PushSocket;
+import org.auto.comet.SocketHandler;
 import org.auto.comet.SocketManager;
 import org.auto.comet.SocketStore;
 import org.auto.comet.config.CometConfigMetadata;
-import org.auto.comet.web.controller.ObjectFactory;
-import org.auto.comet.web.controller.ObjectFactoryBuilder;
-import org.auto.comet.web.controller.SocketController;
 import org.auto.comet.xml.XmlConfigResourceHandler;
 import org.auto.web.resource.WebResourceScanMachine;
 import org.auto.web.util.RequestUtils;
@@ -109,10 +109,10 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	private void creatConnection(SocketManager socketManager,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		SocketController service = getCometController(request);
+		SocketHandler service = getSocketHandler(request);
 		if (null == service) {
 			String uri = RequestUtils.getServletPath(request);
-			throw new DispatchException("Cant find comet controller by [" + uri
+			throw new DispatchException("Cant find comet handler by [" + uri
 					+ "]. Did you registered it?");
 		}
 		PushSocket socket = socketManager.creatConnection();
@@ -129,17 +129,17 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 * */
 	private void disconnect(SocketManager socketManager,
 			HttpServletRequest request) {
-		SocketController service = getCometController(request);
+		SocketHandler service = getSocketHandler(request);
 		if (null == service) {
 			String uri = RequestUtils.getServletPath(request);
-			throw new DispatchException("Cant find comet controller by [" + uri
+			throw new DispatchException("Cant find comet handler by [" + uri
 					+ "]. Did you registered it?");
 		}
 		String connectionId = getConnectionId(request);
 		socketManager.disconnect(connectionId, service, request);
 	}
 
-	protected SocketController getCometController(HttpServletRequest request) {
+	protected SocketHandler getSocketHandler(HttpServletRequest request) {
 		String uri = RequestUtils.getServletPath(request);
 		return urlHandlerMapping.getHandler(uri);
 	}
