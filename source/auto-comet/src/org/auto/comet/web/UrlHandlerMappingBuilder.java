@@ -2,10 +2,10 @@ package org.auto.comet.web;
 
 import java.util.Collection;
 
+import org.auto.comet.ObjectFactory;
+import org.auto.comet.SocketHandler;
 import org.auto.comet.config.CometConfigMetadata;
 import org.auto.comet.config.CometMetadata;
-import org.auto.comet.web.controller.ObjectFactory;
-import org.auto.comet.web.controller.SocketController;
 
 /**
  * @author XiaohangHu
@@ -41,13 +41,13 @@ public class UrlHandlerMappingBuilder {
 	public void addMapping(CometMetadata cometMetadata,
 			UrlHandlerMapping handlerMapping) {
 		String uri = cometMetadata.getRequest();
-		String controllerName = cometMetadata.getController();
-		Object obj = objectFactory.getObject(controllerName);
-		if (obj instanceof SocketController) {
-			handlerMapping.putHandler(uri, (SocketController) obj);
+		String name = cometMetadata.getHandler();
+		Object obj = objectFactory.getObject(name);
+		if (obj instanceof SocketHandler) {
+			handlerMapping.putHandler(uri, (SocketHandler) obj);
 		} else {
-			throw new IllegalStateException("controller must implements ["
-					+ SocketController.class.getName() + "]");
+			throw new IllegalStateException("Handler must implements ["
+					+ SocketHandler.class.getName() + "]");
 		}
 	}
 }
