@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.auto.comet.listener.SocketEvent;
 import org.auto.comet.listener.SocketListener;
 import org.auto.comet.web.DispatchException;
-import org.auto.comet.web.controller.SocketController;
 
 /**
  * 该类用于处理各种通信请求
@@ -141,7 +140,7 @@ public class SocketManager {
 			HttpServletResponse response) {
 		PushSocket socket = this.getSocket(connectionId);
 		if (null == socket) {
-			throw new PushException("没有找到socket！");
+			throw new PushException("Cant't find socket！");
 		}
 		socket.receiveRequest(request, response);
 	}
@@ -159,13 +158,13 @@ public class SocketManager {
 	/**
 	 * 断开链接
 	 * */
-	public void disconnect(String connectionId, SocketController service,
+	public void disconnect(String connectionId, SocketHandler controller,
 			HttpServletRequest request) {
-		if (null == service) {
-			throw new DispatchException("没有找到service");
+		if (null == controller) {
+			throw new DispatchException("Cant't find controller");
 		}
 		PushSocket socket = getSocket(connectionId);
-		service.quit(socket, request);
+		controller.quit(socket, request);
 		socket.close();
 	}
 }
