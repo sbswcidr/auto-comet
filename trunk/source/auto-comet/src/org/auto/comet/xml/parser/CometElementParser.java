@@ -14,11 +14,12 @@ import org.w3c.dom.Element;
  */
 public class CometElementParser {
 
-	private static final Log logger = LogFactory.getLog(CometElementParser.class);
+	private static final Log logger = LogFactory
+			.getLog(CometElementParser.class);
 
 	public static final String REQUEST_ATTRIBUTE = "request";
 
-	public static final String CONTROLLER_ATTRIBUTE = "controller";
+	public static final String HANDLER_ATTRIBUTE = "handler";
 
 	/**
 	 * */
@@ -32,19 +33,19 @@ public class CometElementParser {
 	}
 
 	private void setProperty(CometMetadata cometConfig, Element element) {
-		String controller = XmlUtil.getElementAttributeTrim(
-				CONTROLLER_ATTRIBUTE, element);
+		String handler = XmlUtil.getElementAttributeTrim(HANDLER_ATTRIBUTE,
+				element);
 		String request = XmlUtil.getElementAttributeTrim(REQUEST_ATTRIBUTE,
 				element);
 		if (StringUtils.isNotBlank(request)) {
 			cometConfig.setRequest(request);
 		}
-		if (StringUtils.isNotBlank(controller)) {
-			cometConfig.setController((controller));
+		if (StringUtils.isNotBlank(handler)) {
+			cometConfig.setHandler((handler));
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("读取配置[request:" + request + ",controller:"
-					+ controller + "]");
+			logger.debug("读取配置[request:" + request + ",handler:" + handler
+					+ "]");
 		}
 	}
 }
