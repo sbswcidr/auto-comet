@@ -17,7 +17,7 @@ public class ObjectFactoryBuilder {
 				.getProperty(CometConfigMetadata.OBJECT_FACTORY_PROPERTY_NAME);
 
 		if (StringUtils.isBlank(className)) {
-			return creatDefaultObjectFactory();
+			return creatDefaultObjectFactory(servletContext);
 		}
 		return creatObjectFactory(className, servletContext);
 	}
@@ -63,7 +63,10 @@ public class ObjectFactoryBuilder {
 		}
 	}
 
-	protected static ObjectFactory creatDefaultObjectFactory() {
-		return null;
+	protected static ObjectFactory creatDefaultObjectFactory(
+			ServletContext servletContext) {
+		ObjectFactory objectFactory = new ClassNameObjectFactory();
+		objectFactory.init(servletContext);
+		return objectFactory;
 	}
 }
