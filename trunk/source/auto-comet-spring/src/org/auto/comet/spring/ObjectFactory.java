@@ -2,15 +2,14 @@ package org.auto.comet.spring;
 
 import javax.servlet.ServletContext;
 
-import org.auto.comet.web.controller.SocketController;
+import org.auto.comet.SocketHandler;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * @author XiaohangHu
  * */
-public class ObjectFactory implements
-		org.auto.comet.web.controller.ObjectFactory {
+public class ObjectFactory implements org.auto.comet.ObjectFactory {
 
 	private WebApplicationContext context;
 
@@ -26,11 +25,11 @@ public class ObjectFactory implements
 
 		Object controller = null;
 		controller = context.getBean(objectName);
-		if (controller instanceof SocketController) {
-			return (SocketController) controller;
+		if (controller instanceof SocketHandler) {
+			return (SocketHandler) controller;
 		} else {
 			throw new ClassCastException("controller must implements ["
-					+ SocketController.class.getName() + "]!");
+					+ SocketHandler.class.getName() + "]!");
 		}
 	}
 
