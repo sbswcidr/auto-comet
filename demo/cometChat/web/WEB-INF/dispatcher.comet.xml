@@ -6,6 +6,6 @@
 
 	<property name="objectFactory" value="org.auto.comet.spring.ObjectFactory" />
 
-	<comet request="/chat.comet" controller="chatService" />
+	<comet request="/chat.comet" handler="chatService" />
 
 </auto-comet>

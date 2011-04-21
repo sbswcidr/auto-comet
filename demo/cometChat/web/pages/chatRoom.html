@@ -2,15 +2,237 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Chat Room</title>
+<title>chat room</title>
+<script type="text/javascript" src="../unJs/core.js"></script>
+<script type="text/javascript" src="../unJs/window.js"></script>
+<script type="text/javascript" src="../unJs/comet.js"></script>
+<script type="text/javascript" src="../unJs/spinner.js"></script>
+<script type="text/javascript" src="../unJs/editor.js"></script>
+<script type="text/javascript" src="chatRoom.js"></script>
+<link href="../unJs/style/grey/css/reset.css" type="text/css"
+	rel="stylesheet" />
+<link href="../unJs/style/grey/css/window.css" type="text/css"
+	rel="stylesheet" />
+<link href="../unJs/style/grey/css/editor.css" type="text/css"
+	rel="stylesheet" />
+<link href="style/css/chat.css" type="text/css" rel="stylesheet" />
+<link href="style/css/chatRoom.css" type="text/css" rel="stylesheet" />
 
-<link rel="stylesheet" type="text/css"
-	href="../common/script/ext/resources/css/ext-all.css" />
+<script type="text/javascript">
+	Un.ready(function() {
+		COMMAND_KEY = "command";
+		COMMAND_LOGIN = "login";
+		COMMAND_RECEIVE = "receive";
 
-<script type="text/javascript" src="../common/script/ext/ext-base.js"></script>
-<script type="text/javascript" src="../common/script/ext/ext-all.js"></script>
+		var userId = null;
+
+		//loginWindow.show();
+
+		var sender = {
+			url : "/cometChat/chat.do?method=sendMessage",
+			send : function(o) {
+				Un.Ajax.request({
+					url : this.url,
+					param : o.param,
+					caller : o.caller,
+					success : o.success
+				});
+			}
+		}
+
+		var comet = new Un.Comet({
+			url : "/cometChat/chat.comet",
+			accept : function(data) {
+				var command = data[COMMAND_KEY];
+				if (command == COMMAND_LOGIN) {
+					var friend = data.userId;
+					menuWindow.addUser(friend);
+				} else if (command == COMMAND_RECEIVE) {
+					var time = data.time;
+					for ( var i in time) {
+						alert(i);
+					}
+					var text = data.text;
+					var friend = data.userId;
+					var content = new Un.Element();
+					content.appendChild(new Un.Element("div", null, friend
+							+ ": " + time));
+					content.appendChild(new Un.Element("div", null, "&emsp;"
+							+ text));
+
+					chatRoomWindow.receive(friend, content);
+				}
+			}
+		});
+
+		var chatRoomWindow = new ChatRoomWindow({
+			title : "Chat Room Window",
+			borderWidth : 10,
+			height : Un.body.getScrollHeight() - 60,
+			width : Un.body.getScrollWidth() - 60,
+			closable : false
+		// hasShadow : false,
+		});
+		chatRoomWindow.show();
+
+		var loginWindow = new Un.Window({
+			title : "Welcome to comet chat Room",
+			closable : false,
+			resizable : false,
+			width : 430,
+			height : 210,
+			modal : true,
+			//hasShadow : false,
+			maximizable : false
+		});
+		loginWindow.background.addClass("login_window_bg");
+
+		loginWindow.closeAction = loginWindow.hide;
+		loginWindow.emailInput = Un.Input.Text.get("userEmail");
+		loginWindow.erroeMsgSpan = Un.Element.get("erroeMsg");
+		loginWindow.submitBtn = Un.Element.get("loginButton");
+		loginWindow.loginLayout = Un.Element.get('loginLayout');
+		loginWindow.addContent(loginWindow.loginLayout);
+		loginWindow.showErrorMessage = function(msg) {
+			if (msg) {
+				this.erroeMsgSpan.setAttribute("value", msg);
+			}
+			this.erroeMsgSpan.show();
+		}
+		loginWindow.hideErrorMessage = function() {
+			this.erroeMsgSpan.hide();
+		}
+		loginWindow.hideWindow = function() {
+			loginWindow.hideShadow();
+			loginWindow.fadeOut(500, function() {
+				this.close();
+			});
+		}
+		loginWindow.submit = function() {
+			var email = this.emailInput.getValue();
+
+			if (!email) {
+				this.showErrorMessage("Please enter your email!");
+				return;
+			} else {
+				this.hideErrorMessage();
+			}
+			userId = email;
+			menuWindow.userId = userId;
+			this.hideWindow();
+			comet.connection({
+				userId : email
+			});
+		}
+		loginWindow.submitBtn.addEventListener('click', loginWindow.submit,
+				loginWindow);
+		loginWindow.erroeMsgSpan.hide();
+		loginWindow.show();
+		loginWindow.moveToCenter();
+
+	});
+</script>
+<style type="text/css">
+body {
+	background-color: #c0c0c0;
+	background: url(style/images/chat_bg.gif);
+}
+
+.button {
+	font-size: 16px;
+	padding: 5px 7px 5px 7px !important;
+	padding: 3px 2px 0 2px;
+	border: solid 1px #E1E1E1;
+	cursor: pointer;
+}
+
+.login_window_bg {
+}
+
+.login_layout {
+	padding: 0 0 0 0;
+}
+
+.login_layout p {
+	margin: 20px;
+}
+
+.login_layout  legend {
+	margin: 0 0 0 10px !important /*Non-IE*/;
+	margin: 0 0 15px 5px /*IE6*/;
+	padding: 0 2px 0 2px;
+	color: #666;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.login_layout  p {
+	padding: 0px 50px;
+	font-size: 16px;
+}
+
+.login_layout  p.message_layout {
+	margin-top: 15px;
+	height: 10px;
+	text-align: center;
+}
+
+.login_layout  p .message {
+	color: red;
+	font-size: 12px;
+}
+
+.login_layout  .left {
+	float: left;
+	text-align: right;
+	padding: 4px 10px 0 0 !important;
+	padding: 6px 10px 0 0;
+	color: #535353;
+}
+
+.login_layout  .field {
+	font-size: 16px;
+	width: 168px;
+	padding: 3px;
+	border: solid 1px #ccc;
+	padding: 3px;
+}
+
+.login_layout  .button {
+	margin: 0 0 0 180px;
+	color: #bd3939;
+}
+
+.editor_layout {
+	border: solid 1px #333;
+	background: #fff;
+	height: 200px;
+}
+
+.reader_layout {
+	border: solid 1px #333;
+	background: #fff;
+	height: 100%;
+	color: #bd3939;
+}
+</style>
 
 </head>
 <body>
+	<div class="login_layout" id="loginLayout">
+		<form id="loginForm">
+			<p class="message_layout">
+				<span class="message" id="erroeMsg">Please enter your email!</span>
+			</p>
+			<p>
+				<label for="userEmail" class="left"> email: </label> <input
+					type="text" name="userEmail" id="userEmail" class="field"
+					maxlength="20" size="20" />
+			</p>
+			<p>
+				<input id="loginButton" class="button" value="login" type="button" />
+			</p>
+		</form>
+	</div>
 </body>
 </html>
