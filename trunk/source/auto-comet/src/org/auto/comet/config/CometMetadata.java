@@ -7,7 +7,7 @@ public class CometMetadata {
 
 	private String request;
 
-	private String controller;
+	private String handler;
 
 	public String getRequest() {
 		return request;
@@ -17,12 +17,12 @@ public class CometMetadata {
 		this.request = request;
 	}
 
-	public String getController() {
-		return controller;
+	public String getHandler() {
+		return handler;
 	}
 
-	public void setController(String controller) {
-		this.controller = controller;
+	public void setHandler(String handler) {
+		this.handler = handler;
 	}
 
 }
