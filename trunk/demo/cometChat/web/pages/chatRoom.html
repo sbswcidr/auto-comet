@@ -29,7 +29,7 @@
 		//loginWindow.show();
 
 		var sender = {
-			url : "/cometChat/chat.do?method=sendMessage",
+			url : "/cometChat/chatRoom.do?method=sendMessage",
 			send : function(o) {
 				Un.Ajax.request({
 					url : this.url,
@@ -41,12 +41,12 @@
 		}
 
 		var comet = new Un.Comet({
-			url : "/cometChat/chat.comet",
+			url : "/cometChat/chatRoom.comet",
 			accept : function(data) {
 				var command = data[COMMAND_KEY];
 				if (command == COMMAND_LOGIN) {
 					var friend = data.userId;
-					menuWindow.addUser(friend);
+					chatRoomWindow.addUser(friend);
 				} else if (command == COMMAND_RECEIVE) {
 					var time = data.time;
 					for ( var i in time) {
@@ -54,13 +54,17 @@
 					}
 					var text = data.text;
 					var friend = data.userId;
-					var content = new Un.Element();
-					content.appendChild(new Un.Element("div", null, friend
-							+ ": " + time));
-					content.appendChild(new Un.Element("div", null, "&emsp;"
-							+ text));
-
-					chatRoomWindow.receive(friend, content);
+					var contentLayout = new Un.Element();
+					contentLayout.addClass("text_layout");
+					var userDiv = new Un.Element("div", null, friend + "  "
+							+ time);
+					userDiv.addClass("text_user_layout");
+					contentLayout.appendChild(userDiv);
+					var textDiv = new Un.Element("div");
+					textDiv.setInnerHtml(text);
+					textDiv.addClass("text_content_layout");
+					contentLayout.appendChild(textDiv);
+					chatRoomWindow.receive(contentLayout);
 				}
 			}
 		});
@@ -70,9 +74,27 @@
 			borderWidth : 10,
 			height : Un.body.getScrollHeight() - 60,
 			width : Un.body.getScrollWidth() - 60,
+			sender : sender,
 			closable : false
 		// hasShadow : false,
 		});
+		chatRoomWindow.userList.refresh = function(callback) {
+			this.removeAllUser();
+			Un.Ajax.request({
+				url : "/cometChat/chatRoom.do?method=getUserList",
+				caller : this,
+				success : function(text) {
+					var result = eval("(" + text + ")");
+					var us = result.users
+					for ( var i = 0, len = us.length; i < len; i++) {
+						this.addUser(us[i]);
+					}
+					if (callback) {
+						callback();
+					}
+				}
+			});
+		}
 		chatRoomWindow.show();
 
 		var loginWindow = new Un.Window({
@@ -95,7 +117,7 @@
 		loginWindow.addContent(loginWindow.loginLayout);
 		loginWindow.showErrorMessage = function(msg) {
 			if (msg) {
-				this.erroeMsgSpan.setAttribute("value", msg);
+				this.erroeMsgSpan.setInnerHtml(msg);
 			}
 			this.erroeMsgSpan.show();
 		}
@@ -118,18 +140,37 @@
 				this.hideErrorMessage();
 			}
 			userId = email;
-			menuWindow.userId = userId;
-			this.hideWindow();
-			comet.connection({
-				userId : email
+
+			Un.Ajax.request({
+				url : "/cometChat/chatRoom.do?method=login",
+				param : {
+					userId : email
+				},
+				success : function(result) {
+					var success = eval("(" + result + ")");
+					if (success.success != "false") {
+						comet.connection({
+							userId : email
+						});
+						chatRoomWindow.setTitle(email + "'s Chat Room Window");
+						chatRoomWindow.userList.refresh(function() {
+							chatRoomWindow.userId = email;
+							chatRoomWindow.addUser(email);
+							chatRoomWindow.userList.setFirstUser(email);
+							loginWindow.hideWindow();
+						});
+					} else {
+						loginWindow.showErrorMessage("User name repeat!");
+					}
+				}
 			});
+
 		}
 		loginWindow.submitBtn.addEventListener('click', loginWindow.submit,
 				loginWindow);
 		loginWindow.erroeMsgSpan.hide();
 		loginWindow.show();
 		loginWindow.moveToCenter();
-
 	});
 </script>
 <style type="text/css">
@@ -147,6 +188,7 @@ body {
 }
 
 .login_window_bg {
+
 }
 
 .login_layout {
@@ -215,6 +257,18 @@ body {
 	height: 100%;
 	color: #bd3939;
 }
+
+.text_user_layout {
+	color: blue;
+}
+
+.text_layout {
+	padding: 5px 5px 5px 5px;
+}
+
+.text_content_layout {
+	padding: 5px 5px 5px 5px;
+}
 </style>
 
 </head>
@@ -222,7 +276,7 @@ body {
 	<div class="login_layout" id="loginLayout">
 		<form id="loginForm">
 			<p class="message_layout">
-				<span class="message" id="erroeMsg">Please enter your email!</span>
+				<span class="message" id="erroeMsg"></span>
 			</p>
 			<p>
 				<label for="userEmail" class="left"> email: </label> <input

@@ -456,8 +456,13 @@ Un.Element = {
 		removeChild : function(ele) {
 			this.e.removeChild(Un.Element.getHtmlElement(ele));
 		},
+		removeAllChild : function() {
+			while (this.e.childNodes.length !== 0) {
+				this.e.removeChild(this.e.childNodes[0]);
+			}
+		},
 		getChildren : function() {
-			return this.e.getchildnodes();
+			return this.e.childNodes;
 		},
 		appendChildren : function(eles) {
 			if (eles)
