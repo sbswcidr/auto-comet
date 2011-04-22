@@ -1,3 +1,54 @@
+var UserList = {
+	extend : Un.Element,
+	public : {
+		users : null,
+		sender : null,
+		setFirstUser : function(userId) {
+			var obj = this.users[userId];
+			if (!obj) {
+				return;
+			}
+			var panel = obj.panel;
+			if (panel) {
+				Un.Element.insertBefore(panel, this.getChildren()[0]);
+			}
+		},
+		addUser : function(userId) {
+			if (this.users[userId]) {
+				return;
+			}
+			var userPanel = new Un.Element({
+				className : "menu_btn_user"
+			});
+			userPanel.setInnerHtml(userId);
+			this.appendChild(userPanel);
+			this.users[userId] = {
+				panel : userPanel
+			};
+		},
+		removeAllUser : function() {
+			this.removeAllChild();
+			this.users = {};
+		},
+		removeUser : function(userId) {
+			var obj = this.users[userId];
+			if (!obj) {
+				return;
+			}
+			var btn = obj.panel;
+			if (btn) {
+				this.users[userId] = null;
+				this.removeChild(btn);
+			}
+		}
+	},
+	constructor : function() {
+		this.users = {};
+	}
+};
+
+UserList = Un.newClass(UserList);
+
 var ChatRoomWindow = {
 	extend : Un.Window,
 	public : {
@@ -14,12 +65,14 @@ var ChatRoomWindow = {
 			this.reader.appendChild(node);
 			this.reader.setScrollTop(this.reader.getScrollHeight());
 		},
+		addUser : function(userId) {
+			this.userList.addUser(userId);
+		},
 		send : function() {
 			var text = this.editor.getValue();
 			this.sender.send({
 				param : {
 					userId : this.userId,
-					targetUserId : this.targetUserId,
 					message : text
 				},
 				caller : this,
@@ -52,9 +105,9 @@ var ChatRoomWindow = {
 		this.addContent(this.reader);
 		this.addContent(this.editorArea);
 
-		this.userArea = new Un.Component({});
-		this.userArea.addClass("chat_users_layout");
-		this.addContent(this.userArea);
+		this.userList = new UserList({});
+		this.userList.addClass("chat_users_layout");
+		this.addContent(this.userList);
 
 		this.body.setStyle("backgroundColor", "#f7f7f5");
 		this.body.setStyle("border", "none");
