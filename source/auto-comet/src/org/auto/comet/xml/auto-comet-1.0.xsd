@@ -84,7 +84,7 @@
 			<xsd:attribute name="handler" type="xsd:string" use="required">
 				<xsd:annotation>
 					<xsd:documentation source="java:java.lang.Class">
-						<![CDATA[comet must implements org.auto.comet.SocketHandler]]>
+						<![CDATA[Handler must implements org.auto.comet.SocketHandler]]>
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>

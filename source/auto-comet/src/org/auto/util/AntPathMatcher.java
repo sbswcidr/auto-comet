@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
  * 蚂蚁路径匹配器
  *
  * @see org.springframework.util.AntPathMatcher
- * @author huxh
  * */
 public class AntPathMatcher implements PathMatcher {
 

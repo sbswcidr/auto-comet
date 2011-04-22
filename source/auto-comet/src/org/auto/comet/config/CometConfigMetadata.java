@@ -1,8 +1,8 @@
 package org.auto.comet.config;
 
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * @author XiaohangHu
@@ -13,7 +13,7 @@ public class CometConfigMetadata {
 
 	private Properties properties = new Properties();
 
-	private Set<CometMetadata> cometMetadatas = new TreeSet<CometMetadata>();
+	private Set<CometMetadata> cometMetadatas = new HashSet<CometMetadata>();
 
 	public void addProperty(String name, String value) {
 		this.properties.put(name, value);
