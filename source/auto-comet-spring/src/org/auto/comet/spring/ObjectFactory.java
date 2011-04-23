@@ -2,7 +2,6 @@ package org.auto.comet.spring;
 
 import javax.servlet.ServletContext;
 
-import org.auto.comet.SocketHandler;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -22,15 +21,7 @@ public class ObjectFactory implements org.auto.comet.ObjectFactory {
 
 	@Override
 	public Object getObject(String objectName) {
-
-		Object controller = null;
-		controller = context.getBean(objectName);
-		if (controller instanceof SocketHandler) {
-			return (SocketHandler) controller;
-		} else {
-			throw new ClassCastException("controller must implements ["
-					+ SocketHandler.class.getName() + "]!");
-		}
+		return context.getBean(objectName);
 	}
 
 }
