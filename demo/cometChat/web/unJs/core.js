@@ -228,7 +228,7 @@ Un.WindowUtils = {
 		var op = this.getOpener(win);
 		if (op) {
 			fun.call(cal, op);
-			this.iteratorParent(op);
+			this.iteratorOpener(op);
 		}
 	}
 };

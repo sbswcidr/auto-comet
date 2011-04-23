@@ -2,27 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>chat room</title>
-<script type="text/javascript" src="../unJs/core.js"></script>
-<script type="text/javascript" src="../unJs/window.js"></script>
-<script type="text/javascript" src="../unJs/comet.js"></script>
-<script type="text/javascript" src="../unJs/spinner.js"></script>
-<script type="text/javascript" src="../unJs/editor.js"></script>
-<script type="text/javascript" src="chatRoom.js"></script>
-<link href="../unJs/style/grey/css/reset.css" type="text/css"
+<title>comet example</title>
+<script type="text/javascript" src="unJs/core.js"></script>
+<script type="text/javascript" src="unJs/window.js"></script>
+<script type="text/javascript" src="unJs/comet.js"></script>
+<script type="text/javascript" src="unJs/spinner.js"></script>
+<script type="text/javascript" src="unJs/editor.js"></script>
+<script type="text/javascript" src="pages/chat.js"></script>
+<link href="unJs/style/grey/css/reset.css" type="text/css"
 	rel="stylesheet" />
-<link href="../unJs/style/grey/css/window.css" type="text/css"
+<link href="unJs/style/grey/css/window.css" type="text/css"
 	rel="stylesheet" />
-<link href="../unJs/style/grey/css/editor.css" type="text/css"
+<link href="unJs/style/grey/css/editor.css" type="text/css"
 	rel="stylesheet" />
-<link href="style/css/chat.css" type="text/css" rel="stylesheet" />
-<link href="style/css/chatRoom.css" type="text/css" rel="stylesheet" />
+<link href="pages/style/css/chat.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
 	Un.ready(function() {
 		COMMAND_KEY = "command";
 		COMMAND_LOGIN = "login";
-		COMMAND_LOGINOUT = "loginout";
 		COMMAND_RECEIVE = "receive";
 
 		var userId = null;
@@ -30,7 +28,7 @@
 		//loginWindow.show();
 
 		var sender = {
-			url : "/cometChat/chatRoom.do?method=sendMessage",
+			url : "/cometChat/chat.do?method=sendMessage",
 			send : function(o) {
 				Un.Ajax.request({
 					url : this.url,
@@ -41,64 +39,49 @@
 			}
 		}
 
+		//好友菜单
+		var menuWindow = new MenuWindow({
+			title : "friends",
+			// 			resizable : false,
+			borderWidth : 5,
+			height : 660,
+			width : 280,
+			maximizable : false,
+			userId : userId,
+			sender : sender
+		});
+		menuWindow.moveTo(20, 20);
+		menuWindow.show();
+
+		//menuWindow.removeUser("huhang1986@126.com");
+
 		var comet = new Un.Comet({
-			url : "/cometChat/chatRoom.comet",
+			url : "/cometChat/chat.comet",
 			accept : function(data) {
 				var command = data[COMMAND_KEY];
-				if (command == COMMAND_LOGIN) {//用户上线
+				if (command == COMMAND_LOGIN) {
 					var friend = data.userId;
-					chatRoomWindow.addUser(friend);
-				} else if (command == COMMAND_LOGINOUT) {//用户下线
-					chatRoomWindow.removeUser(data.userId);
+					menuWindow.addUser(friend);
 				} else if (command == COMMAND_RECEIVE) {
 					var time = data.time;
+					for ( var i in time) {
+						alert(i);
+					}
 					var text = data.text;
 					var friend = data.userId;
-					var contentLayout = new Un.Element();
-					contentLayout.addClass("text_layout");
-					var userDiv = new Un.Element("div", null, friend + "  "
-							+ time);
-					userDiv.addClass("text_user_layout");
-					contentLayout.appendChild(userDiv);
-					var textDiv = new Un.Element("div");
-					textDiv.setInnerHtml(text);
-					textDiv.addClass("text_content_layout");
-					contentLayout.appendChild(textDiv);
-					chatRoomWindow.receive(contentLayout);
+					var content = new Un.Element();
+					content.appendChild(new Un.Element("div", null, friend
+							+ ": " + time));
+					content.appendChild(new Un.Element("div", null, "&emsp;"
+							+ text));
+
+					menuWindow.receiveMessage(friend, content);
 				}
 			}
 		});
 
-		var chatRoomWindow = new ChatRoomWindow({
-			title : "Chat Room Window",
-			borderWidth : 10,
-			height : Un.body.getScrollHeight() - 60,
-			width : Un.body.getScrollWidth() - 60,
-			sender : sender,
-			closable : false
-		// hasShadow : false,
-		});
-		chatRoomWindow.userList.refresh = function(callback) {
-			this.removeAllUser();
-			Un.Ajax.request({
-				url : "/cometChat/chatRoom.do?method=getUserList",
-				caller : this,
-				success : function(text) {
-					var result = eval("(" + text + ")");
-					var us = result.users
-					for ( var i = 0, len = us.length; i < len; i++) {
-						this.addUser(us[i]);
-					}
-					if (callback) {
-						callback();
-					}
-				}
-			});
-		}
-		chatRoomWindow.show();
-
 		var loginWindow = new Un.Window({
-			title : "Welcome to comet chat Room",
+			title : "Welcome to comet chat",
 			closable : false,
 			resizable : false,
 			width : 430,
@@ -107,7 +90,6 @@
 			//hasShadow : false,
 			maximizable : false
 		});
-		loginWindow.background.addClass("login_window_bg");
 
 		loginWindow.closeAction = loginWindow.hide;
 		loginWindow.emailInput = Un.Input.Text.get("userEmail");
@@ -117,7 +99,7 @@
 		loginWindow.addContent(loginWindow.loginLayout);
 		loginWindow.showErrorMessage = function(msg) {
 			if (msg) {
-				this.erroeMsgSpan.setInnerHtml(msg);
+				this.erroeMsgSpan.setAttribute("value", msg);
 			}
 			this.erroeMsgSpan.show();
 		}
@@ -132,7 +114,6 @@
 		}
 		loginWindow.submit = function() {
 			var email = this.emailInput.getValue();
-
 			if (!email) {
 				this.showErrorMessage("Please enter your email!");
 				return;
@@ -140,53 +121,22 @@
 				this.hideErrorMessage();
 			}
 			userId = email;
-
-			Un.Ajax.request({
-				url : "/cometChat/chatRoom.do?method=login",
-				param : {
-					userId : email
-				},
-				success : function(result) {
-					var success = eval("(" + result + ")");
-					if (success.success == true || success.success == "true") {
-						comet.connection({
-							userId : email
-						}, function() {
-							chatRoomWindow.setTitle(email
-									+ "'s Chat Room Window");
-							chatRoomWindow.userList.refresh(function() {
-								chatRoomWindow.userId = email;
-								chatRoomWindow.addUser(email);
-								chatRoomWindow.userList.setFirstUser(email);
-								loginWindow.hideWindow();
-							});
-							Un.window.addListener("beforeunload", function() {
-								comet.disconnect({
-									userId : email
-								});
-							});
-						}, function() {
-							alert("连接失败！");
-						});
-
-					} else {
-						loginWindow.showErrorMessage("User name repeat!");
-					}
-				}
+			menuWindow.userId = userId;
+			this.hideWindow();
+			comet.connection({
+				userId : email
 			});
-
 		}
 		loginWindow.submitBtn.addEventListener('click', loginWindow.submit,
 				loginWindow);
 		loginWindow.erroeMsgSpan.hide();
 		loginWindow.show();
-		loginWindow.moveToCenter();
 	});
 </script>
 <style type="text/css">
 body {
 	background-color: #c0c0c0;
-	background: url(style/images/chat_bg.gif);
+	background: url(pages/style/images/chat_bg.gif);
 }
 
 .button {
@@ -195,10 +145,6 @@ body {
 	padding: 3px 2px 0 2px;
 	border: solid 1px #E1E1E1;
 	cursor: pointer;
-}
-
-.login_window_bg {
-
 }
 
 .login_layout {
@@ -258,26 +204,14 @@ body {
 .editor_layout {
 	border: solid 1px #333;
 	background: #fff;
-	height: 200px;
+	height: 100px;
 }
 
 .reader_layout {
 	border: solid 1px #333;
 	background: #fff;
-	height: 100%;
+	height: 100px;
 	color: #bd3939;
-}
-
-.text_user_layout {
-	color: blue;
-}
-
-.text_layout {
-	padding: 5px 5px 5px 5px;
-}
-
-.text_content_layout {
-	padding: 5px 5px 5px 5px;
 }
 </style>
 
@@ -286,7 +220,7 @@ body {
 	<div class="login_layout" id="loginLayout">
 		<form id="loginForm">
 			<p class="message_layout">
-				<span class="message" id="erroeMsg"></span>
+				<span class="message" id="erroeMsg">Please enter your email!</span>
 			</p>
 			<p>
 				<label for="userEmail" class="left"> email: </label> <input
@@ -298,5 +232,10 @@ body {
 			</p>
 		</form>
 	</div>
+	<!-- <div class="chat_layout">
+		<div class="reader_layout"></div>
+		<div class="editor_layout" contentEditable="true"></div>
+		<input id="" sendButton" class="button" value="send" type="button" />
+	</div> -->
 </body>
 </html>
