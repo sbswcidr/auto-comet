@@ -15,7 +15,7 @@ import org.auto.comet.listener.SocketListener;
 import org.auto.comet.web.DispatchException;
 
 /**
- * 该类用于处理各种通信请求
+ * 该类用于处理各种通信请求，并管理socket
  *
  * @author XiaohangHu
  * */
