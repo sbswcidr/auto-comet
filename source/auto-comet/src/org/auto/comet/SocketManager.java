@@ -156,15 +156,29 @@ public class SocketManager {
 	}
 
 	/**
+	 * 创建新链接
+	 * */
+	public void creatConnection(PushSocket socket) {
+		String id = this.getConnectionId();
+		socket.setId(id);
+		socket.addListener(socketListener);
+		this.addSocket(socket);
+	}
+
+	/**
 	 * 断开链接
 	 * */
-	public void disconnect(String connectionId, SocketHandler controller,
+	public void disconnect(String connectionId, SocketHandler handler,
 			HttpServletRequest request) {
-		if (null == controller) {
-			throw new DispatchException("Cant't find controller");
+		if (null == connectionId) {
+			throw new IllegalArgumentException(
+					"disconnect connectionId must not be null!");
+		}
+		if (null == handler) {
+			throw new DispatchException("Cant't find handler");
 		}
 		PushSocket socket = getSocket(connectionId);
-		controller.quit(socket, request);
+		handler.quit(socket, request);
 		socket.close();
 	}
 }

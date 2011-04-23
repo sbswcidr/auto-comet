@@ -63,12 +63,19 @@ public class PushSocket implements Socket {
 		messages = new LinkedList<String>();
 	}
 
+	public PushSocket() {
+	}
+
 	public PushSocket(Serializable id) {
 		this.id = id;
 	}
 
 	public Serializable getId() {
 		return id;
+	}
+
+	public void setId(Serializable id) {
+		this.id = id;
 	}
 
 	private long getNowTimeInMillis() {
