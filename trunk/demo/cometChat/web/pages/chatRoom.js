@@ -68,6 +68,9 @@ var ChatRoomWindow = {
 		addUser : function(userId) {
 			this.userList.addUser(userId);
 		},
+		removeUser : function(userId) {
+			this.userList.removeUser(userId);
+		},
 		send : function() {
 			var text = this.editor.getValue();
 			this.sender.send({
