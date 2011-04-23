@@ -29,30 +29,28 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
 
 	@Override
-	public void accept(Socket socket, HttpServletRequest request) {
+	public boolean accept(Socket socket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
+
 		if (socketMapping.get(userId) != null) {
-			return;
+			return false;
 		}
 		socket.setErrorHandler(new ErrorHandler() {
 			@Override
 			public void error(Socket socket, PushException e) {
-				// TODO Auto-generated method stub
-
+				throw e;
 			}
 		});
 		socketMapping.put(userId, socket);
+		return true;
+		// return false;
 	}
 
 	@Override
 	public void quit(Socket socket, HttpServletRequest request) {
-		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
-			Socket value = entry.getValue();
-			if (value.equals(socket)) {
-				Serializable key = entry.getKey();
-				socketMapping.remove(key);
-			}
-		}
+		String userId = request.getParameter("userId");
+		socketMapping.remove(userId);
+		this.chatRoomService.loginOut(userId);
 	}
 
 	public void sendMessage(Serializable id, String msg) {
