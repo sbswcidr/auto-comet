@@ -24,6 +24,12 @@ import org.auto.web.resource.WebResourceScanMachine;
 import org.auto.web.util.RequestUtils;
 
 /**
+ * <p>
+ * 连接转发servlet
+ * </p>
+ * 该类用于处理所有的连接请求
+ *
+ *
  * @author XiaohangHu
  * */
 public class SocketDispatcherServlet extends AbstractDispatcherServlet {
@@ -115,13 +121,20 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 			throw new DispatchException("Cant find comet handler by [" + uri
 					+ "]. Did you registered it?");
 		}
-		PushSocket socket = socketManager.creatConnection();
+
+		PushSocket socket = new PushSocket();
+		boolean accept = service.accept(socket, request);
 		PrintWriter write = response.getWriter();
-		String commend = JsonProtocolUtils.getConnectionCommend(socket.getId());
+		String commend = null;
+		if (accept) {// 如果接受连接请求则创建连接
+			socketManager.creatConnection(socket);
+			commend = JsonProtocolUtils.getConnectionCommend(socket.getId());
+		} else {// 如果拒绝连接请求
+			commend = JsonProtocolUtils.getConnectionCommend(null);
+		}
 		// 返回生成的链接id
 		write.write(commend);
 		write.flush();
-		service.accept(socket, request);
 	}
 
 	/**
