@@ -1,4 +1,4 @@
-package org.auto.comet.example.chat;
+package org.auto.comet.example.chat.test;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class Test {
+public class TestComet {
 	private static String xmlDefinitionMappingsLocation = "META-INF/auto.schemas";
 
 	public static int count = 0;

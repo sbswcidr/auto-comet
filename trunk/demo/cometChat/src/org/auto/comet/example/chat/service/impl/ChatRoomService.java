@@ -7,7 +7,6 @@ import java.util.Set;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.auto.comet.example.chat.service.ChatRoomSocketHandler;
 import org.auto.comet.example.chat.service.IChatRoomService;
 import org.auto.comet.example.chat.service.UserIdRepeatException;
