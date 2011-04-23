@@ -27,6 +27,7 @@ public class ChatRoomService implements IChatRoomService {
 
 	public static final String COMMAND_KEY = "command";
 	public static final String COMMAND_LOGIN = "login";
+	public static final String COMMAND_LOGINOUT = "loginout";
 	public static final String COMMAND_RECEIVE = "receive";
 
 	@Autowired
@@ -55,6 +56,14 @@ public class ChatRoomService implements IChatRoomService {
 
 	public Set<Serializable> getUserList() {
 		return this.socketHandler.getAllId();
+	}
+
+	public void loginOut(Serializable userId) {
+		// 登录了给所有在线的人发广播
+		JSONObject message = new JSONObject();
+		message.put(COMMAND_KEY, COMMAND_LOGINOUT);
+		message.put("userId", userId);
+		this.socketHandler.sendMessageExcept(userId, message.toString());
 	}
 
 }

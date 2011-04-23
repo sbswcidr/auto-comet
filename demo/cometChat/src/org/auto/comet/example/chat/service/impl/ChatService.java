@@ -35,7 +35,7 @@ public class ChatService implements IChatService, SocketHandler {
 	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
 
 	@Override
-	public void accept(Socket pushSocket, HttpServletRequest request) {
+	public boolean accept(Socket pushSocket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		pushSocket.setErrorHandler(new ErrorHandler() {
 
@@ -47,6 +47,7 @@ public class ChatService implements IChatService, SocketHandler {
 		});
 		socketMapping.put(userId, pushSocket);
 		this.login(userId);
+		return true;
 	}
 
 	@Override

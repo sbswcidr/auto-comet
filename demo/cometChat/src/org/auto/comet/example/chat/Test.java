@@ -6,10 +6,16 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import net.sf.json.JSONObject;
+import net.sf.json.util.JSONUtils;
+
+import org.auto.comet.JsonProtocolUtils;
 import org.auto.comet.xml.PropertiesXmlDefinitionParser;
 import org.auto.io.ClassPathResource;
 import org.auto.io.FileResource;
@@ -23,6 +29,7 @@ import org.auto.util.PropertiesLoaderUtils;
 import org.auto.xml.XmlDefinitionManager;
 import org.auto.xml.XmlDefinitionResolver;
 import org.auto.xml.XmlDocumentLoader;
+import org.springframework.ui.ModelMap;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,9 +45,15 @@ public class Test {
 		// testCalendar();
 		// testTimer();
 		// testClassLoader();
-		 testClassPathResourceScanner();
-		testPatternFileScanner();
+		// testClassPathResourceScanner();
+		// testPatternFileScanner();
 
+		ModelMap modelMap = new ModelMap();
+		modelMap.addAttribute("success", "true");
+		JSONObject obj = JSONObject.fromObject(modelMap);
+		List linkedList = new LinkedList();
+		// JSONObject obj = JSONObject.fromObject(linkedList);
+		System.out.println(JsonProtocolUtils.getConnectionCommend(null));
 
 	}
 
@@ -57,24 +70,23 @@ public class Test {
 
 			}
 		};
-		scanner.scan(
-				"F:/download/ckeditor_3.5.2.zip \r\n",
-				handler);
+		scanner.scan("F:/download/ckeditor_3.5.2.zip \r\n", handler);
 		System.out.println("count" + count);
 	}
 
 	public static void testClassPathResourceScanner() {
 		ClassPathResourceScanner scanner = new ClassPathResourceScanner();
 
-		scanner.scan("org/apache/commons/logging/LogFactory.class", new ResourceHandler() {
+		scanner.scan("org/apache/commons/logging/LogFactory.class",
+				new ResourceHandler() {
 
-			@Override
-			public void handle(Resource t) {
-				t.getInputStream();
-				System.out.println(t.getDescription());
-				count++;
-			}
-		});
+					@Override
+					public void handle(Resource t) {
+						t.getInputStream();
+						System.out.println(t.getDescription());
+						count++;
+					}
+				});
 		System.out.println("count" + count);
 	}
 
