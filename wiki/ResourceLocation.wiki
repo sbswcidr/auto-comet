@@ -13,7 +13,7 @@ web资源路径，支持逗号分隔的路径，例如：
 classpath:/**/*.comet.xml
 }}}
 分为2部分，协议:模式。
-"classpath:"代表路径协议为classpath。classpath协议路径，会从classpath中查找对应资源。
+"classpath:"代表路径协议为classpath。协议为classpath，会从classpath中查找对应资源。
 
 "file":代表路径协议为文件系统。
 
