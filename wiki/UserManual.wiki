@@ -3,7 +3,7 @@
 AtutoComet1.0
 
  * *Comet分发器配置*
-    SocketDispatcherServlet是!AutoComet的核心控制器。
+    !SocketDispatcherServlet是!AutoComet的核心控制器。
 需要在web.xml中添加配置：
 {{{ 
 	<servlet>
