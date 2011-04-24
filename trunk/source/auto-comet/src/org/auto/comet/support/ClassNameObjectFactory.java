@@ -1,8 +1,9 @@
-package org.auto.comet;
+package org.auto.comet.support;
 
 import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.ClassUtils;
+import org.auto.comet.ObjectFactory;
 import org.auto.web.ServletContextSetter;
 
 /**

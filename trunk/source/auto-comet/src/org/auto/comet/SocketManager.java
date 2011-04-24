@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.auto.comet.listener.SocketEvent;
 import org.auto.comet.listener.SocketListener;
+import org.auto.comet.support.SocketStore;
 import org.auto.comet.web.DispatchException;
 
 /**

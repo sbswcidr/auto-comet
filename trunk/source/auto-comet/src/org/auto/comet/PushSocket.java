@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.auto.comet.listener.SocketEvent;
 import org.auto.comet.listener.SocketListener;
+import org.auto.comet.support.JsonProtocolUtils;
 import org.auto.comet.web.listener.AsyncAdapter;
 import org.auto.json.JsonArray;
 
@@ -121,7 +122,7 @@ public class PushSocket implements Socket {
 				@Override
 				public void onTimeout(AsyncEvent asyncevent) throws IOException {
 					close();
-					PushException e = new PushException(
+					PushException e = new ServerTimeoutException(
 							"Async context timeout! wait message more then ["
 									+ asyncTimeout + "]ms");
 					fireError(e);
@@ -322,8 +323,8 @@ public class PushSocket implements Socket {
 			long sent = now - lastTime;
 			if (sent > pushTimeout) {
 				this.close = true;// 关闭连接
-				PushException e = new PushException(
-						"Push timeout! The client has no connection more than["
+				PushException e = new ClientTimeoutException(
+						"Client timeout! The client has no connection more than["
 								+ pushTimeout + "]ms");
 				fireError(e);
 				return true;

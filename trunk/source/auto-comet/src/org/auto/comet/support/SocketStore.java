@@ -1,7 +1,9 @@
-package org.auto.comet;
+package org.auto.comet.support;
 
 import java.io.Serializable;
 import java.util.Collection;
+
+import org.auto.comet.PushSocket;
 
 /**
  *
