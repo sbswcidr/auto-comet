@@ -2,4 +2,4 @@
 
 cuttent version:1.0bate
 
-用户手册：[userMaun]
+用户手册：[UserManual]
