@@ -1,7 +1,8 @@
-package org.auto.comet;
+package org.auto.comet.support;
 
 import java.io.Serializable;
 
+import org.auto.comet.Protocol;
 import org.auto.json.JsonObject;
 
 /**

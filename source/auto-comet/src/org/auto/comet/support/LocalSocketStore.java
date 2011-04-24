@@ -1,9 +1,12 @@
-package org.auto.comet;
+package org.auto.comet.support;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.auto.comet.PushSocket;
+import org.auto.comet.Socket;
 
 /**
  * @author XiaohangHu
