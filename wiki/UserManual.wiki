@@ -105,7 +105,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 
 	private ChatRoomService chatRoomService;
 
-	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
+	private Map<Serializable, Socket> socketMapping = new Hashtable<Serializable, Socket>();
 
 	public boolean accept(Socket socket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
