@@ -13,8 +13,8 @@
 {{{
 classpath:/**/*.comet.xml
 }}}
-一个路径分为2部分，协议{{{"classpath"}}}和模式{{{"\/**/*.comet.xml"
-}}}，之间用":"分隔。
+一个路径分为2部分，协议{{{"classpath"}}}和模式"\/**/*.comet.xml"
+，之间用":"分隔。
 
 "classpath:"代表路径协议为classpath。协议为classpath，则会从classpath中查找对应资源。
 
