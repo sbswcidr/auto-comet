@@ -15,7 +15,7 @@ import java.util.TimerTask;
 import net.sf.json.JSONObject;
 import net.sf.json.util.JSONUtils;
 
-import org.auto.comet.JsonProtocolUtils;
+import org.auto.comet.support.JsonProtocolUtils;
 import org.auto.comet.xml.PropertiesXmlDefinitionParser;
 import org.auto.io.ClassPathResource;
 import org.auto.io.FileResource;
