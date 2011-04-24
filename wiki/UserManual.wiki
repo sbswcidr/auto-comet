@@ -1,4 +1,4 @@
-= 用户手册 =
+= 快速开始 =
 
 !AtutoComet1.0
 
@@ -179,3 +179,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	 */
 	List<String> getUserMessages();
 }}}
+
+*参考*
+
+[推送协议 AutoCometPush]
