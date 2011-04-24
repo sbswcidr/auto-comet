@@ -18,7 +18,7 @@ classpath:/**/*.comet.xml
 "file":代表路径协议为文件系统。
 
 如果省略路径协议，则使用默认的协议。
-如果默认路径协议为"webroot"。则"/WEB-INF/**/*.comet.xml"可简写为为"webroot:/WEB-INF/**/*.comet.xml"。
+如果默认路径协议为"webroot"。则{{{"/WEB-INF/**/*.comet.xml"}}}可简写为为"webroot:/WEB-INF/**/*.comet.xml"。
 
 目前支持的路径协议：
 classpath,file,webroot(如果为servlet容器)
