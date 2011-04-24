@@ -7,7 +7,7 @@ import org.auto.comet.listener.SocketListener;
 /**
  * PushSocket：单向推送消息
  *
- * 该接口提供给controller
+ * 该接口提供给handle
  *
  * @author XiaohangHu
  * */
