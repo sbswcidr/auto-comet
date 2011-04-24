@@ -19,14 +19,23 @@
 		</listener> -->
 	<servlet>
 		<servlet-name>cometDispatcher</servlet-name>
+
+		<!--comet分发器 -->
 		<servlet-class>org.auto.comet.web.SocketDispatcherServlet</servlet-class>
+
 		<init-param>
+			<!--comet服务配置文件路径，默认路径为 "/WEB-INF/dispatcher.comet.xml" -->
 			<param-name>dispatcherConfigLocation</param-name>
-			<param-value>/WEB-INF/dispatcher.comet.xml</param-value>
+			<param-value>/WEB-INF/dispatcher.spring.comet.xml</param-value>
 		</init-param>
+
+		<!--让comet服务在servlet容器启动时初始化，可以尽早发现配置错误 -->
 		<load-on-startup>2</load-on-startup>
+
+		<!--必须将DispatcherServlet配置为异步servlet -->
 		<async-supported>true</async-supported>
 	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>cometDispatcher</servlet-name>
 		<url-pattern>*.comet</url-pattern>
