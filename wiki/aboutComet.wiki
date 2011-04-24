@@ -37,6 +37,7 @@ dispatcherConfigLocation支持逗号分隔的匹配格式路径,例如：
 
 dispatcher.comet.xml配置
 
+{{{ 
 <?xml version="1.0" encoding="UTF-8"?>
 <auto-comet xmlns="http://www.auto.org/schema/comet"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -57,9 +58,11 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 		handler="org.auto.comet.example.chat.service.ChatRoomSocketHandler" />
 
 </auto-comet>
+}}}
 
 与spring整合的dispatcher.spring.comet.xml配置
 
+{{{
 <?xml version="1.0" encoding="UTF-8"?>
 <auto-comet xmlns="http://www.auto.org/schema/comet"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -84,6 +87,7 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 	<comet request="/chatRoom.comet" handler="chatRoomSocketHandler" />
 
 </auto-comet>
+}}}
 
 SocketHandler接口
 
@@ -100,6 +104,7 @@ SocketHandler中申明了2个方法。
 
 一个典型的SocketHandler接口的实现如下：
 
+{{{
 public class ChatRoomSocketHandler implements SocketHandler {
 
 
@@ -141,10 +146,11 @@ public class ChatRoomSocketHandler implements SocketHandler {
 
 	//...
 }
+}}}
 
 
 可以通过Socket接口给客户端推送消息。Socket接口提供了如下的方法：
-
+{{{
 	/**
 	 * 发送消息
 	 *
@@ -176,3 +182,4 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	 *
 	 */
 	List<String> getUserMessages();
+}}}
