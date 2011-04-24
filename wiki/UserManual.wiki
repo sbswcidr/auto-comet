@@ -1,4 +1,6 @@
-= 用户手册 =(AtutoComet1.0)
+= 用户手册 =
+
+AtutoComet1.0
 
 web.xml配置：
 {{{ 
