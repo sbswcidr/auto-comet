@@ -10,4 +10,6 @@
  * *通信异常*
  除去底层的servlet,IO异常，主要有2类超时异常:
   # 客户端超时。比如用户直接关闭浏览器，则大约在1分钟后，服务端会发生一个异常。
+  java异常{{{ClientTimeoutException}}}
   # 服务器端超时，服务器端如果较长时间没有使用一个socket也会发生一个异常，这个时间相对客户端超时较长，大约为1个小时。
+  java异常{{{ServerTimeoutException}}}
