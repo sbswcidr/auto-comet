@@ -6,3 +6,4 @@
  * 支持文本格式
     基于http协议的!AutoComet还不支持二进制格式.
  * 基于服务
+    与http类似，你可以从url映射到comet服务。一个servelt可以提供多个comet服务。服务不与session绑定，同一个浏览器可以同时访问多个相同或不同的服务。
