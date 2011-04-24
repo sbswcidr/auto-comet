@@ -3,3 +3,5 @@
 = Auto Comet =
 
 current version:1.0Alpha
+
+快速开发手册：[aboutComet]
