@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
 
-= About Resource Location =
+= 关于资源路径的配置 =
 
 Add your content here.
 
