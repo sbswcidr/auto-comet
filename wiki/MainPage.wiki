@@ -1,5 +1,3 @@
-#wiki 主页.
-
 = Auto Comet =
 
 current version:1.0Alpha
