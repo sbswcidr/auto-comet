@@ -89,7 +89,7 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 </auto-comet>
 }}}
 
-SocketHandler接口
+*SocketHandler接口*
 
 SocketHandler中申明了2个方法。
 接受连接请求方法：boolean accept(Socket socket, HttpServletRequest request);
