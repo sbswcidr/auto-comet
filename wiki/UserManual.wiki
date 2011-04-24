@@ -57,8 +57,7 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 </auto-comet>
 }}}
 
-与spring整合的dispatcher.spring.comet.xml配置
-
+如果你想与Spring整合，你需要配置一个Spring的objectFactory。dispatcher.spring.comet.xml配置
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 <auto-comet xmlns="http://www.auto.org/schema/comet"
