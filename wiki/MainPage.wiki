@@ -2,4 +2,8 @@
 
 cuttent version:1.0bate
 
+*特性*
+#支持单向推送
+#支持文本格式数据
+
 [UserManual 快速开始]
