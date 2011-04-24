@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
 
-= 关于资源路径的配置 =
+= 资源路径的配置 =
 
 *多个资源路径*
 
