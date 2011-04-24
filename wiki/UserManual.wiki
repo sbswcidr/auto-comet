@@ -105,9 +105,9 @@ public class ChatRoomSocketHandler implements SocketHandler {
 
 	private ChatRoomService chatRoomService;
 
-	private Map<Serializable, Socket> socketMapping = new Hashtable<Serializable, Socket>();
+	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
 
-	public boolean accept(Socket socket, HttpServletRequest request) {
+	public synchronized boolean accept(Socket socket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 
 		if (socketMapping.get(userId) != null) {
@@ -125,13 +125,13 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		// return false;
 	}
 
-	public void quit(Socket socket, HttpServletRequest request) {
+	public synchronized void quit(Socket socket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		socketMapping.remove(userId);
 		this.chatRoomService.loginOut(userId);
 	}
 
-	private void romveSocket(Socket socket) {
+	private synchronized void romveSocket(Socket socket) {
 		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
 			Socket value = entry.getValue();
 			if (value.equals(socket)) {
