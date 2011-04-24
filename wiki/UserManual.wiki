@@ -98,7 +98,7 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 
  断开接口与接受接口类似。
 
- 一个典型的SocketHandler接口的实现如下：
+ 一个典型的!SocketHandler接口的实现如下：
 {{{
 public class ChatRoomSocketHandler implements SocketHandler {
 
