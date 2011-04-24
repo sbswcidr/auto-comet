@@ -2,7 +2,7 @@
 
 = 关于资源路径的配置 =
 
-通常auto支持逗号分隔的路径，例如：
+通常auto支持逗号分隔的资源路径，例如：
 
 {{{
 /WEB-INF/**/*.comet.xml,classpath:/**/*.comet.xml,file:D:\comet\dispatcher.comet.xml
