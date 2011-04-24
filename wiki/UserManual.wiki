@@ -103,6 +103,7 @@ SocketHandler中申明了2个方法。
 {{{
 public class ChatRoomSocketHandler implements SocketHandler {
 
+	private ChatRoomService chatRoomService;
 
 	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
 
