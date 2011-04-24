@@ -1,7 +1,7 @@
 #labels Phase-Requirements
 ==Auto Comet==
 
-cuttent version:1.0bate
+current version:1.0bate
 
 *特性*
 
