@@ -182,4 +182,4 @@ public class ChatRoomSocketHandler implements SocketHandler {
 
 *参考*
 
-[推送协议 AutoCometPush]
+[AutoCometPushProtocol 推送协议]
