@@ -94,7 +94,7 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
  断开连接请求方法：{{{void quit(Socket socket, HttpServletRequest request);}}}
 
 
- 接受连接请求方法，可以处理一个客户端(浏览器)发送的连接请求。处理器可以通过传入的socket完成给客户端发送消息等操作。可以从request中获取，客户端连接请求时发送的参数。返回值表示是否愿意接受该连接请求。
+ 接受连接请求方法，可以处理一个客户端(浏览器)发送的连接请求。处理器可以通过传入的socket完成给客户端发送消息等操作。你可以从request中获取客户端连接请求时发送的参数。返回的boolean值表示是否愿意接受该连接请求。
 
  断开接口与接受接口类似。
 
@@ -144,8 +144,8 @@ public class ChatRoomSocketHandler implements SocketHandler {
 }
 }}}
 
-
-可以通过Socket接口给客户端推送消息。Socket接口提供了如下的方法：
+ * *使用socket*
+ 可以通过Socket接口给客户端推送消息。Socket接口提供了如下的方法：
 {{{
 	/**
 	 * 发送消息
