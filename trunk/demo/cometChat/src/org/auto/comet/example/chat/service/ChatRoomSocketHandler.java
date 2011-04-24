@@ -29,7 +29,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
 
 	@Override
-	public boolean accept(Socket socket, HttpServletRequest request) {
+	public synchronized boolean accept(Socket socket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 
 		if (socketMapping.get(userId) != null) {
@@ -48,13 +48,13 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	}
 
 	@Override
-	public void quit(Socket socket, HttpServletRequest request) {
+	public synchronized void quit(Socket socket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 		socketMapping.remove(userId);
 		this.chatRoomService.loginOut(userId);
 	}
 
-	private void romveSocket(Socket socket) {
+	private synchronized void romveSocket(Socket socket) {
 		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
 			Socket value = entry.getValue();
 			if (value.equals(socket)) {
@@ -64,7 +64,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		}
 	}
 
-	public void sendMessage(Serializable id, String msg) {
+	public synchronized void sendMessage(Serializable id, String msg) {
 		Socket socket = this.socketMapping.get(id);
 		if (null != socket) {
 			socket.sendMessage(msg);
@@ -73,7 +73,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		}
 	}
 
-	public void sendMessageExcept(Serializable exceptId, String msg) {
+	public synchronized void sendMessageExcept(Serializable exceptId, String msg) {
 		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
 			Serializable id = entry.getKey();
 			Socket socket = entry.getValue();
@@ -84,14 +84,14 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		}
 	}
 
-	public void sendMessageAll(String msg) {
+	public synchronized void sendMessageAll(String msg) {
 		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
 			Socket socket = entry.getValue();
 			socket.sendMessage(msg);
 		}
 	}
 
-	public Set<Serializable> getAllId() {
+	public synchronized Set<Serializable> getAllId() {
 		Set<Serializable> result = new HashSet<Serializable>();
 		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
 			result.add(entry.getKey());
@@ -100,7 +100,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 
 	}
 
-	public boolean hasId(Serializable id) {
+	public synchronized boolean hasId(Serializable id) {
 		return null != this.socketMapping.get(id);
 	}
 }
