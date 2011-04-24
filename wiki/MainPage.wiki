@@ -10,4 +10,6 @@ current version:1.0bate
  * 可以用XML配置comet服务
  * 可以与Spring整合
 
-[UserManual 快速开始]
+*[UserManual 快速开始]*
+
+*[CometDemo 演示工程]*
