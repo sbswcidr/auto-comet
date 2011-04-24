@@ -33,7 +33,7 @@ AtutoComet1.0
 dispatcherConfigLocation支持模式路径，请参考：[ResourceLocation 资源路径的配置]
 
  * *Comet服务配置*
-  dispatcher.comet.xml配置
+  每一个comet标签配置了一个comet服务，comet服务以url到handle的映射方式提供。dispatcher.comet.xml配置:
 
 {{{ 
 <?xml version="1.0" encoding="UTF-8"?>
