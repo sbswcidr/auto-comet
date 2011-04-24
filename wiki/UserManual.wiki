@@ -32,7 +32,7 @@ AtutoComet1.0
 
 dispatcherConfigLocation支持模式路径，请参考：[ResourceLocation 资源路径的配置]
 
- * Comet服务配置
+ * *Comet服务配置*
   dispatcher.comet.xml配置
 
 {{{ 
