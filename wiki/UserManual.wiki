@@ -29,7 +29,7 @@ web.xml配置：
 	</servlet-mapping>
 }}}
 
-dispatcherConfigLocation支持模式路径，请参考：[ResourceLocation reindeer AAA]
+dispatcherConfigLocation支持模式路径，请参考：[ResourceLocation AAA]
 
 dispatcher.comet.xml配置
 
