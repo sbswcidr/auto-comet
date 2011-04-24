@@ -179,7 +179,9 @@ public class SocketManager {
 			throw new DispatchException("Cant't find handler");
 		}
 		PushSocket socket = getSocket(connectionId);
-		handler.quit(socket, request);
-		socket.close();
+		if (null != socket) {
+			handler.quit(socket, request);
+			socket.close();
+		}
 	}
 }
