@@ -38,6 +38,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		socket.setErrorHandler(new ErrorHandler() {
 			@Override
 			public void error(Socket socket, PushException e) {
+				romveSocket(socket);
 				throw e;
 			}
 		});
@@ -51,6 +52,16 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		String userId = request.getParameter("userId");
 		socketMapping.remove(userId);
 		this.chatRoomService.loginOut(userId);
+	}
+
+	private void romveSocket(Socket socket) {
+		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
+			Socket value = entry.getValue();
+			if (value.equals(socket)) {
+				Serializable key = entry.getKey();
+				socketMapping.remove(key);
+			}
+		}
 	}
 
 	public void sendMessage(Serializable id, String msg) {
