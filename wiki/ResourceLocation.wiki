@@ -2,13 +2,13 @@
 
 = 关于资源路径的配置 =
 
-#多个资源路径#
+*多个资源路径*
 多个路径间用逗号分隔。
 {{{
 /WEB-INF/**/*.comet.xml,classpath:/**/*.comet.xml,file:D:\comet\dispatcher.comet.xml
 }}}
 
-每一个一个路径，如：
+*一个资源路径*
 {{{
 classpath:/**/*.comet.xml
 }}}
