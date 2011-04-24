@@ -1,5 +1,5 @@
 web.xml配置：
-
+{{{ 
 	<servlet>
 		<servlet-name>cometDispatcher</servlet-name>
 
@@ -23,6 +23,7 @@ web.xml配置：
 		<servlet-name>cometDispatcher</servlet-name>
 		<url-pattern>*.comet</url-pattern>
 	</servlet-mapping>
+}}}
 
 dispatcherConfigLocation支持逗号分隔的匹配格式路径,例如：
 
