@@ -2,4 +2,6 @@
 
 = Comet聊天室示例 =
 
+[http://static.oschina.net/uploads/space/2011/0424/164409_qeok_112254.gif]
+
 ...正在整理war包
