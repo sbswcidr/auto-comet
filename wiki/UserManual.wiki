@@ -85,21 +85,18 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 </auto-comet>
 }}}
 
-*SocketHandler接口*
+ * *实现!SocketHandler接口*
 
-SocketHandler中申明了2个方法。
-接受连接请求方法：boolean accept(Socket socket, HttpServletRequest request);
-断开连接请求方法：void quit(Socket socket, HttpServletRequest request);
+ SocketHandler中申明了2个方法。
+ 接受连接请求方法：boolean accept(Socket socket, HttpServletRequest request);
+ 断开连接请求方法：void quit(Socket socket, HttpServletRequest request);
 
 
-接受连接请求方法，可以处理一个客户端(浏览器)发送的连接请求。处理器可以通过传入的socket完成给客户端发送消息
+ 接受连接请求方法，可以处理一个客户端(浏览器)发送的连接请求。处理器可以通过传入的socket完成给客户端发送消息等操作。可以从request中获取，客户端连接请求时发送的参数。返回值表示是否愿意接受该连接请求。
 
-等操作。可以从request中获取，客户端连接请求时发送的参数。返回值表示是否愿意接受该连接请求。
+ 断开接口与接受接口类似。
 
-断开接口与接受接口类似。
-
-一个典型的SocketHandler接口的实现如下：
-
+ 一个典型的SocketHandler接口的实现如下：
 {{{
 public class ChatRoomSocketHandler implements SocketHandler {
 
