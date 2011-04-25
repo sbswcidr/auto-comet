@@ -79,12 +79,12 @@ public class ChatService implements IChatService, SocketHandler {
 			JSONObject message = new JSONObject();
 			message.put(COMMAND_KEY, COMMAND_LOGIN);
 			message.put("userId", userId);
-			socket.sendMessage(message.toString());
+			socket.send(message.toString());
 
 			JSONObject message2 = new JSONObject();
 			message2.put(COMMAND_KEY, COMMAND_LOGIN);
 			message2.put("userId", id);
-			userSocket.sendMessage(message2.toString());
+			userSocket.send(message2.toString());
 		}
 
 	}
@@ -97,14 +97,14 @@ public class ChatService implements IChatService, SocketHandler {
 		result.put("userId", userId);
 		result.put("text", message);
 		result.put("time", new Date().toString());
-		socket.sendMessage(result.toString());
+		socket.send(result.toString());
 	}
 
 	@Override
 	public void sendMessage(Serializable[] userIds, String message) {
 		for (Serializable userId : userIds) {
 			Socket socket = socketMapping.get(userId);
-			socket.sendMessage(message);
+			socket.send(message);
 		}
 	}
 
