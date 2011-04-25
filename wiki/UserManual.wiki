@@ -47,7 +47,8 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 	http://www.auto.org/schema/comet/spring http://www.auto.org/schema/comet/auto-comet-spring-
 
 1.0.xsd">
-
+	<!--连接超时配置，单位为分钟。 -->
+	<timeout value="120" />
 
 	<!--配置一个comet服务，你也可以将它理解为一个通道。 -->
 	<!--request:请求uri -->
@@ -148,7 +149,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	 * 发送消息
 	 *
 	 */
-	void sendMessage(String message);
+	void send(String message);
 
 	/**
 	 * 关闭连接
