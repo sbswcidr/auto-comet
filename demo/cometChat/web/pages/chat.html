@@ -30,7 +30,7 @@
 		var sender = {
 			url : "/cometChat/chat.do?method=sendMessage",
 			send : function(o) {
-				Un.Ajax.request({
+				Un.AjaxUtils.request({
 					url : this.url,
 					param : o.param,
 					caller : o.caller,

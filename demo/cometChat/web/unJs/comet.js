@@ -3,6 +3,7 @@
  *            连接地址
  * @param accept[Function]
  *            接受数据处理方法
+ * @param o.async[boolean]异步接受数据？默认false
  */
 Un.Comet = {
 	extend : Un.Observable,
@@ -20,7 +21,7 @@ Un.Comet = {
 		url : null,
 		cid : null,
 		accept : Un.emptyFunciton,
-
+		async : false,
 		/**
 		 * 开始链接
 		 *
@@ -57,7 +58,40 @@ Un.Comet = {
 					}
 				}
 			};
-			Un.Ajax.request(req);
+			Un.AjaxUtils.request(req);
+		},
+		isDisconnectObj : function(o) {
+			return o[Un.Comet.SYNCHRONIZE_KEY] == Un.Comet.DISCONNECT_VALUE;
+		},
+		/**
+		 * 处理数组中指定长度的数据
+		 */
+		acceptDatasByLength : function(datas, len, disconnect) {
+			for ( var i = 0; i < len; i++) {
+				var data = datas[i];
+				this.accept(data);
+			}
+		},
+		acceptDatas : function(datas) {
+			// 接受的最后一个消息
+			var lastData = datas[datas.length - 1];
+			// 如果是断开连接
+			var disconnect = this.isDisconnectObj(lastData);
+			var len = datas.length;
+			if (disconnect) {
+				len--;
+			}
+			if (!disconnect) {// 如果不是断开连接，继续轮询
+				if (this.async) {// 如果是异步处理
+					this.polling(cid);
+					this.acceptDatasByLength(datas, len);
+				} else {
+					this.acceptDatasByLength(datas, len);
+					this.polling(cid);
+				}
+			} else {
+				this.acceptDatasByLength(datas, len);
+			}
 		},
 		/** 轮询 */
 		polling : function(cid) {
@@ -70,22 +104,10 @@ Un.Comet = {
 				caller : this,
 				success : function(result) {
 					var datas = eval("(" + result + ")");
-					for ( var i = 0, len = datas.length; i < len; i++) {
-						var data = datas[i];
-						if (data[Un.Comet.SYNCHRONIZE_KEY] == Un.Comet.DISCONNECT_VALUE) {
-							// 断开链接,停止轮询
-							return;
-						}
-						this.accept(data);
-					}
-					this.polling(cid);
+					this.acceptDatas(datas);
 				}
 			};
-
-			Un.Ajax.request(req);
-		},
-		handleData : function(d) {
-
+			Un.AjaxUtils.request(req);
 		},
 		/** 断开连接 */
 		disconnect : function(userParam, callback, caller) {
@@ -104,7 +126,7 @@ Un.Comet = {
 					}
 				}
 			};
-			Un.Ajax.request(req);
+			Un.AjaxUtils.request(req);
 		}
 	},
 	constructor : function() {

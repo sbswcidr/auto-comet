@@ -32,7 +32,7 @@
 		var sender = {
 			url : "/cometChat/chatRoom.do?method=sendMessage",
 			send : function(o) {
-				Un.Ajax.request({
+				Un.AjaxUtils.request({
 					url : this.url,
 					param : o.param,
 					caller : o.caller,
@@ -43,6 +43,7 @@
 
 		var comet = new Un.Comet({
 			url : "/cometChat/chatRoom.comet",
+			async : true,
 			accept : function(data) {
 				var command = data[COMMAND_KEY];
 				if (command == COMMAND_LOGIN) {//用户上线
@@ -61,6 +62,7 @@
 					userDiv.addClass("text_user_layout");
 					contentLayout.appendChild(userDiv);
 					var textDiv = new Un.Element("div");
+					text = text ? text : "";
 					textDiv.setInnerHtml(text);
 					textDiv.addClass("text_content_layout");
 					contentLayout.appendChild(textDiv);
@@ -80,7 +82,7 @@
 		});
 		chatRoomWindow.userList.refresh = function(callback) {
 			this.removeAllUser();
-			Un.Ajax.request({
+			Un.AjaxUtils.request({
 				url : "/cometChat/chatRoom.do?method=getUserList",
 				caller : this,
 				success : function(text) {
@@ -141,7 +143,7 @@
 			}
 			userId = email;
 
-			Un.Ajax.request({
+			Un.AjaxUtils.request({
 				url : "/cometChat/chatRoom.do?method=login",
 				param : {
 					userId : email
