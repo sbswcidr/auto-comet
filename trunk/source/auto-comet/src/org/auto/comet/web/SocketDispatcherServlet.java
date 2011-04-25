@@ -47,6 +47,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	private UrlHandlerMapping urlHandlerMapping;
 	private SocketManager socketManager;
+	private CometConfigMetadata cometConfig;
 
 	public final void init() throws ServletException {
 		getServletContext().log(
@@ -70,7 +71,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		}
 		WebResourceScanMachine webResourceScanMachine = new WebResourceScanMachine(
 				this.getServletContext());
-		CometConfigMetadata cometConfig = new CometConfigMetadata();
+		cometConfig = new CometConfigMetadata();
 
 		// 扫描将配置元数据放入cometConfig中
 		webResourceScanMachine.scanLocations(dispatcherConfigLocation,
@@ -89,6 +90,11 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	protected void initSocketManager() throws ServletException {
 		SocketManager socketManager = creatSocketManager();
 		socketManager.startTimer();
+		Integer timeout = cometConfig.getTimeout();
+		if (null != timeout) {
+			long asyncTimeout = (long) (60000l * timeout);
+			socketManager.setAsyncTimeout(asyncTimeout);
+		}
 		this.socketManager = socketManager;
 	}
 

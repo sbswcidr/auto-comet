@@ -11,6 +11,8 @@ public class CometConfigMetadata {
 
 	public static final String OBJECT_FACTORY_PROPERTY_NAME = "objectFactory";
 
+	private Integer timeout;
+
 	private Properties properties = new Properties();
 
 	private Set<CometMetadata> cometMetadatas = new HashSet<CometMetadata>();
@@ -31,6 +33,14 @@ public class CometConfigMetadata {
 		if (null != cometMetadata) {
 			this.cometMetadatas.add(cometMetadata);
 		}
+	}
+
+	public Integer getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(Integer timeout) {
+		this.timeout = timeout;
 	}
 
 }

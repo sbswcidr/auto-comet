@@ -2,6 +2,7 @@ package org.auto.comet.xml.parser;
 
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringUtils;
 import org.auto.comet.config.CometConfigMetadata;
 import org.auto.comet.config.CometMetadata;
 import org.auto.xml.XmlUtil;
@@ -17,6 +18,7 @@ public class CometConfigParser {
 
 	public static final String COMET_ELEMENT = "comet";
 	public static final String PROPERTY_ELEMENT = "property";
+	public static final String TIMEOUT_ELEMENT = "timeout";
 	public static final String NAME_ATTRIBUTE = "name";
 	public static final String VALUE_ATTRIBUTE = "value";
 
@@ -41,7 +43,18 @@ public class CometConfigParser {
 			} else if (COMET_ELEMENT.equals(name)) {
 				CometMetadata cometConfig = this.cometParser.parse(element);
 				config.addCometMetadata(cometConfig);
+			} else if (TIMEOUT_ELEMENT.equals(name)) {
+				parseTimeout(config, element);
 			}
+		}
+	}
+
+	protected void parseTimeout(CometConfigMetadata config, Element element) {
+		String value = XmlUtil
+				.getElementAttributeTrim(VALUE_ATTRIBUTE, element);
+		if (StringUtils.isNotBlank(value)) {
+			Integer time = Integer.valueOf(value);
+			config.setTimeout(time);
 		}
 	}
 
