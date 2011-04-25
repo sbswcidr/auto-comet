@@ -77,7 +77,6 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 	<property name="objectFactory" value="org.auto.comet.spring.ObjectFactory" />
 
 	<!--与spring整合后handler的配置为bean的名字 -->
-	<comet request="/chat.comet" handler="chatService" />
 	<comet request="/chatRoom.comet" handler="chatRoomSocketHandler" />
 
 </auto-comet>
