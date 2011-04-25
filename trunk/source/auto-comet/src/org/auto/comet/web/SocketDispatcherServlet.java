@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.auto.comet.ObjectFactory;
 import org.auto.comet.Protocol;
 import org.auto.comet.PushSocket;
@@ -38,6 +40,9 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 */
 	private static final long serialVersionUID = -3671690949937300581L;
 
+	/** Logger available to subclasses */
+	protected final Log logger = LogFactory.getLog(getClass());
+
 	public static final String INIT_PARAMETER_CONFIG_LOCATION = "dispatcherConfigLocation";
 
 	private UrlHandlerMapping urlHandlerMapping;
@@ -45,11 +50,14 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	public final void init() throws ServletException {
 		getServletContext().log(
-				"Initializing Auto comet SocketDispatcherServlet '"
-						+ getServletName() + "'");
+				"Initializing " + getClass() + "'" + getServletName() + "'");
 		super.init();
 		initHandlerMapping();
 		initSocketManager();
+		if (this.logger.isInfoEnabled()) {
+			this.logger.info("SocketDispatcherServlet '" + getServletName()
+					+ "': initialization started");
+		}
 	}
 
 	protected void initHandlerMapping() {
