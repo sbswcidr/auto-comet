@@ -67,7 +67,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	public synchronized void sendMessage(Serializable id, String msg) {
 		Socket socket = this.socketMapping.get(id);
 		if (null != socket) {
-			socket.sendMessage(msg);
+			socket.send(msg);
 		} else {
 			throw new RuntimeException("Can't find socket!");
 		}
@@ -80,14 +80,14 @@ public class ChatRoomSocketHandler implements SocketHandler {
 			if (id.equals(exceptId)) {
 				continue;
 			}
-			socket.sendMessage(msg);
+			socket.send(msg);
 		}
 	}
 
 	public synchronized void sendMessageAll(String msg) {
 		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
 			Socket socket = entry.getValue();
-			socket.sendMessage(msg);
+			socket.send(msg);
 		}
 	}
 
