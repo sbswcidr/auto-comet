@@ -21,12 +21,36 @@
 				<xsd:choice minOccurs="0" maxOccurs="unbounded">
 					<xsd:element ref="comet" minOccurs="0" maxOccurs="unbounded" />
 					<xsd:element ref="property" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element ref="timeout" minOccurs="0" maxOccurs="unbounded" />
 					<xsd:any namespace="##other" processContents="strict"
 						minOccurs="0" maxOccurs="unbounded" />
 				</xsd:choice>
 			</xsd:sequence>
 			<xsd:anyAttribute namespace="##other"
 				processContents="lax" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="timeout">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[If a connection is not used for a long time, will be out!]]>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:choice minOccurs="0" maxOccurs="unbounded">
+					<xsd:any namespace="##other" processContents="strict"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xsd:choice>
+			</xsd:sequence>
+			<xsd:attribute name="value" type="xsd:int" use="required">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[the minute with timeout!]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 

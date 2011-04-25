@@ -79,6 +79,14 @@ public class PushSocket implements Socket {
 		this.id = id;
 	}
 
+	public long getTimeout() {
+		return asyncTimeout;
+	}
+
+	public void setTimeout(long timeout) {
+		this.asyncTimeout = timeout;
+	}
+
 	private long getNowTimeInMillis() {
 		return System.currentTimeMillis();
 	}

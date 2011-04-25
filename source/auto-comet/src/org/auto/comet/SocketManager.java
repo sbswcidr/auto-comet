@@ -34,6 +34,9 @@ public class SocketManager {
 	/** 默认为1分钟 */
 	private long pushTimeout = 60000l;
 
+	/** 异步超时时间，默认一小时 */
+	private long asyncTimeout = 3600000;
+
 	private SocketListener socketListener = new SocketListener() {
 		@Override
 		public void onReallyClose(SocketEvent event) {
@@ -93,6 +96,14 @@ public class SocketManager {
 
 	public void setPushTimeout(long pushTimeout) {
 		this.pushTimeout = pushTimeout;
+	}
+
+	public long getAsyncTimeout() {
+		return asyncTimeout;
+	}
+
+	public void setAsyncTimeout(long asyncTimeout) {
+		this.asyncTimeout = asyncTimeout;
 	}
 
 	public PushSocket getSocket(Serializable id) {
@@ -161,6 +172,7 @@ public class SocketManager {
 		String id = this.getConnectionId();
 		socket.setId(id);
 		socket.addListener(socketListener);
+		socket.setTimeout(this.asyncTimeout);
 		this.addSocket(socket);
 	}
 
