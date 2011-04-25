@@ -76,9 +76,6 @@ xmlns:spring="http://www.auto.org/schema/comet/spring"
 	<!--指定为objectFactory为org.auto.comet.spring.ObjectFactory，则comet会从spring容器中获取bean -->
 	<property name="objectFactory" value="org.auto.comet.spring.ObjectFactory" />
 
-	<!--配置一个comet服务，你也可以将它理解为一个通道。 -->
-	<!--request:请求uri -->
-	<!--handler:socket处理器，socket处理器必须实现org.auto.comet.SocketHandler接口 -->
 	<!--与spring整合后handler的配置为bean的名字 -->
 	<comet request="/chat.comet" handler="chatService" />
 	<comet request="/chatRoom.comet" handler="chatRoomSocketHandler" />
