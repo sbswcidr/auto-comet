@@ -10,6 +10,8 @@ import java.util.TimerTask;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.auto.comet.listener.SocketEvent;
 import org.auto.comet.listener.SocketListener;
 import org.auto.comet.support.SocketStore;
@@ -23,6 +25,9 @@ import org.auto.comet.web.DispatchException;
 public class SocketManager {
 
 	private static final String RANDOM_ALGORITHM = "SHA1PRNG";
+
+	/** Logger available to subclasses */
+	protected final Log logger = LogFactory.getLog(getClass());
 
 	private SocketStore socketStore;
 
@@ -111,12 +116,6 @@ public class SocketManager {
 		return socketStore.hasSocket(id);
 	}
 
-	private PushSocket createSocket() {
-		Serializable id = getConnectionId();
-		PushSocket socket = new PushSocket(id);
-		return socket;
-	}
-
 	private void processPushTimeOut(PushSocket socket) {
 		boolean timetOut = socket.processPushTimeOut(this.pushTimeout);
 		if (timetOut) {// 超时将socket移除
@@ -150,9 +149,8 @@ public class SocketManager {
 	 * 创建新链接
 	 * */
 	public PushSocket creatConnection() {
-		PushSocket socket = createSocket();
-		socket.addListener(socketListener);
-		this.addSocket(socket);
+		PushSocket socket = new PushSocket();
+		creatConnection(socket);
 		return socket;
 	}
 
@@ -173,7 +171,7 @@ public class SocketManager {
 			HttpServletRequest request) {
 		if (null == connectionId) {
 			throw new IllegalArgumentException(
-					"disconnect connectionId must not be null!");
+					"Disconnect. ConnectionId must not be null!");
 		}
 		if (null == handler) {
 			throw new DispatchException("Cant't find handler");
@@ -182,6 +180,12 @@ public class SocketManager {
 		if (null != socket) {
 			handler.quit(socket, request);
 			socket.close();
+		} else {
+			if (this.logger.isWarnEnabled()) {
+				this.logger
+						.warn("Disconnect. Can't find socket by connectionId ["
+								+ connectionId + "]");
+			}
 		}
 	}
 }

@@ -17,7 +17,7 @@ public interface Socket {
 	 * 发送消息
 	 *
 	 */
-	void sendMessage(String message);
+	void send(String message);
 
 	/**
 	 * 关闭连接

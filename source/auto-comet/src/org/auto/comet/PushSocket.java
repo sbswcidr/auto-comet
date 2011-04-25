@@ -276,7 +276,7 @@ public class PushSocket implements Socket {
 		}
 	}
 
-	public synchronized void sendMessage(String message) {
+	public synchronized void send(String message) {
 		if (isClosed()) {
 			PushException e = new PushException("Use a closed pushSocked!");
 			this.fireError(e);
@@ -301,7 +301,7 @@ public class PushSocket implements Socket {
 	 * 关闭连接
 	 * */
 	public synchronized void close() {
-		this.sendMessage(CLOSE_MESSAGE);
+		this.send(CLOSE_MESSAGE);
 		this.close = true;
 	}
 
