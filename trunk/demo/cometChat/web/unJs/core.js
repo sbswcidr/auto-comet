@@ -1113,7 +1113,7 @@ Un.AnimateGroup = Un.newClass({
 /** Animate ******************************************************************** */
 
 /** Ajax ******************************************************************** */
-Un.Ajax = {
+Un.AjaxUtils = {
 
 	/**
 	 * @param param[object]
@@ -1151,48 +1151,6 @@ Un.Ajax = {
 			}
 		}
 	},
-
-	/**
-	 * 无参数时自动调用GET方式
-	 *
-	 * @method Un.Ajax.request
-	 * @param o.url[string]
-	 * @param o.method[string]("GET","get","POST","post"..)
-	 * @param o.param[object]
-	 * @param o.caller[object]
-	 * @param o.success[function]
-	 * @param o.failure[function]
-	 * @param o.header[object]
-	 * @param o.sync[boolean]异步请求？默认true
-	 */
-	request : function(o) {
-		o.paramStr = this.parseParam(o.param);
-
-		if (!o.method)
-			o.method = o.paramStr ? "POST" : "GET";
-
-		function back(req) {
-			if (req.readyState == 4) {
-				var s = req.status;
-				if (Un.Ajax.isSuccess(s)) {
-					if (o.success)
-						o.success.call(this, req.responseText);
-				} else {
-					if (o.failure) {
-						o.failure.call(this, req.responseText, s);
-					} else {
-						throw new Error("ajax http status [ " + s + " : "
-								+ req.statusText + " ].\r\n" + "url [ " + o.url
-								+ " ] " + req.responseText);
-					}
-				}
-			}
-		}
-
-		o.callback = back;
-		this.sendRequest(o);
-	},
-
 	/**
 	 * @param o.url[string]
 	 * @param o.method[string]("GET","get",other)
@@ -1200,7 +1158,7 @@ Un.Ajax = {
 	 * @param o.caller[object]
 	 * @param o.callback[function]
 	 * @param o.header[object]
-	 * @param o.sync[boolean]异步请求？默认true
+	 * @param o.async[boolean]异步请求？默认true
 	 */
 	sendRequest : function(o) {
 		switch (o.method) {
@@ -1218,9 +1176,9 @@ Un.Ajax = {
 		 * 单例的XMLHttpRequest对象，会有“请求覆盖”的问题，所以这里每次都创建新的对象。
 		 */
 		var req = this.createRequest();
-		if (o.sync != false)
+		if (o.async != false)
 			req.onreadystatechange = back;
-		req.open(o.method, o.url, o.sync);
+		req.open(o.method, o.url, o.async);
 		o.header = o.header || {
 			"Content-Type" : "application/x-www-form-urlencoded",
 			"X-Requested-With" : "XMLHttpRequest",
@@ -1236,6 +1194,47 @@ Un.Ajax = {
 		}
 		if (o.sync == false)
 			back();
+	},
+	/**
+	 * 无参数时自动调用GET方式
+	 *
+	 * @method Un.AjaxUtils.request
+	 * @param o.url[string]
+	 * @param o.method[string]("GET","get","POST","post"..)
+	 * @param o.param[object]
+	 * @param o.caller[object]
+	 * @param o.success[function]
+	 * @param o.failure[function]
+	 * @param o.header[object]
+	 * @param o.async[boolean]异步请求？默认true
+	 */
+	request : function(o) {
+		o.paramStr = this.parseParam(o.param);
+
+		if (!o.method)
+			o.method = o.paramStr ? "POST" : "GET";
+
+		function back(req) {
+			if (req.readyState == 4) {
+				var s = req.status;
+				if (Un.AjaxUtils.isSuccess(s)) {
+					if (o.success)
+						o.success.call(this, req.responseText);
+				} else {
+					if (o.failure) {
+						o.failure.call(this, req.responseText, s);
+					} else {
+						throw new Error("ajax http status [ " + s + " : "
+								+ req.statusText + " ].\r\n" + "url [ " + o.url
+								+ " ] " + req.responseText);
+					}
+				}
+			}
+		}
+
+		o.callback = back;
+		this.sendRequest(o);
 	}
+
 };
 /** ********************************************************************** Ajax */
