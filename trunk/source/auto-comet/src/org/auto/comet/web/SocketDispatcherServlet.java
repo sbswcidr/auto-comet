@@ -50,7 +50,8 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	public final void init() throws ServletException {
 		getServletContext().log(
-				"Initializing " + getClass() + "'" + getServletName() + "'");
+				"Initializing " + getClass().getSimpleName() + " '"
+						+ getServletName() + "'");
 		super.init();
 		CometConfigMetadata cometConfig = readCometConfig();
 		initHandlerMapping(cometConfig);

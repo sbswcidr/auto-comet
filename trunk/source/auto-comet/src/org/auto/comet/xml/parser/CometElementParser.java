@@ -44,8 +44,8 @@ public class CometElementParser {
 			cometConfig.setHandler((handler));
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("读取配置[request:" + request + ",handler:" + handler
-					+ "]");
+			logger.debug("Read comet config [request:\"" + request
+					+ "\", handler:\"" + handler + "\"]");
 		}
 	}
 }
