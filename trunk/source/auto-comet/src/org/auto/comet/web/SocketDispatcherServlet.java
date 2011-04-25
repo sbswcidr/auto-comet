@@ -47,22 +47,21 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	private UrlHandlerMapping urlHandlerMapping;
 	private SocketManager socketManager;
-	private CometConfigMetadata cometConfig;
 
 	public final void init() throws ServletException {
 		getServletContext().log(
 				"Initializing " + getClass() + "'" + getServletName() + "'");
 		super.init();
-		initHandlerMapping();
-		initSocketManager();
+		CometConfigMetadata cometConfig = readCometConfig();
+		initHandlerMapping(cometConfig);
+		initSocketManager(cometConfig);
 		if (this.logger.isInfoEnabled()) {
 			this.logger.info("SocketDispatcherServlet '" + getServletName()
 					+ "': initialization started");
 		}
 	}
 
-	protected void initHandlerMapping() {
-
+	protected CometConfigMetadata readCometConfig() {
 		ServletConfig config = getServletConfig();
 		String dispatcherConfigLocation = config
 				.getInitParameter(INIT_PARAMETER_CONFIG_LOCATION);
@@ -71,12 +70,16 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		}
 		WebResourceScanMachine webResourceScanMachine = new WebResourceScanMachine(
 				this.getServletContext());
-		cometConfig = new CometConfigMetadata();
+		CometConfigMetadata cometConfig = new CometConfigMetadata();
 
 		// 扫描将配置元数据放入cometConfig中
 		webResourceScanMachine.scanLocations(dispatcherConfigLocation,
 				new XmlConfigResourceHandler(cometConfig));
 
+		return cometConfig;
+	}
+
+	protected void initHandlerMapping(CometConfigMetadata cometConfig) {
 		ObjectFactory objectFactory = ObjectFactoryBuilder.creatObjectFactory(
 				cometConfig, getServletContext());
 
@@ -87,7 +90,8 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	}
 
-	protected void initSocketManager() throws ServletException {
+	protected void initSocketManager(CometConfigMetadata cometConfig)
+			throws ServletException {
 		SocketManager socketManager = creatSocketManager();
 		socketManager.startTimer();
 		Integer timeout = cometConfig.getTimeout();
