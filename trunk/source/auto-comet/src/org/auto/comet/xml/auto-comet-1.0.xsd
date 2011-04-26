@@ -21,7 +21,7 @@
 				<xsd:choice minOccurs="0" maxOccurs="unbounded">
 					<xsd:element ref="comet" minOccurs="0" maxOccurs="unbounded" />
 					<xsd:element ref="property" minOccurs="0" maxOccurs="unbounded" />
-					<xsd:element ref="timeout" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element ref="timeout" minOccurs="0" maxOccurs="1" />
 					<xsd:any namespace="##other" processContents="strict"
 						minOccurs="0" maxOccurs="unbounded" />
 				</xsd:choice>
