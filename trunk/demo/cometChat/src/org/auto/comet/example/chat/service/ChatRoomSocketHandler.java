@@ -143,6 +143,11 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	}
 
 	public synchronized boolean hasId(Serializable id) {
-		return null != this.socketMapping.get(id);
+		readLock.lock();
+		try {
+			return null != this.socketMapping.get(id);
+		} finally {
+			readLock.unlock();
+		}
 	}
 }
