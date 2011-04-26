@@ -195,6 +195,9 @@ public class SocketManager {
 		socket.setId(id);
 		socket.addListener(socketListener);
 		socket.setTimeout(this.asyncTimeout);
+		if (this.logger.isDebugEnabled()) {
+			this.logger.debug("creatConnection [" + id + "]");
+		}
 		this.addSocket(socket);
 	}
 
@@ -214,6 +217,9 @@ public class SocketManager {
 		if (null != socket) {
 			handler.quit(socket, request);
 			socket.close();
+			if (this.logger.isDebugEnabled()) {
+				this.logger.debug("disconnect [" + connectionId + "]");
+			}
 		} else {
 			if (this.logger.isWarnEnabled()) {
 				this.logger
