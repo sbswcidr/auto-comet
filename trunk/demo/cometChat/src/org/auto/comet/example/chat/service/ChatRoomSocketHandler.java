@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,8 +30,13 @@ public class ChatRoomSocketHandler implements SocketHandler {
 
 	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
 
+	/** rwLock为ChatRoomSocketHandler的锁 */
+	private ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
+	private Lock readLock = rwLock.readLock();
+	private Lock writeLock = rwLock.writeLock();
+
 	@Override
-	public synchronized boolean accept(Socket socket, HttpServletRequest request) {
+	public boolean accept(Socket socket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
 
 		if (socketMapping.get(userId) != null) {
@@ -42,61 +49,96 @@ public class ChatRoomSocketHandler implements SocketHandler {
 				throw e;
 			}
 		});
-		socketMapping.put(userId, socket);
+		writeLock.lock();
+		try {
+			socketMapping.put(userId, socket);
+		} finally {
+			writeLock.unlock();
+		}
 		return true;
 		// return false;
 	}
 
 	@Override
-	public synchronized void quit(Socket socket, HttpServletRequest request) {
+	public void quit(Socket socket, HttpServletRequest request) {
 		String userId = request.getParameter("userId");
-		socketMapping.remove(userId);
-		this.chatRoomService.loginOut(userId);
+		writeLock.lock();
+		try {
+			socketMapping.remove(userId);
+			this.chatRoomService.loginOut(userId);
+		} finally {
+			writeLock.unlock();
+		}
 	}
 
-	private synchronized void romveSocket(Socket socket) {
-		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
-			Socket value = entry.getValue();
-			if (value.equals(socket)) {
-				Serializable key = entry.getKey();
-				socketMapping.remove(key);
+	private void romveSocket(Socket socket) {
+		writeLock.lock();
+		try {
+			for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
+				Socket value = entry.getValue();
+				if (value.equals(socket)) {
+					Serializable key = entry.getKey();
+					socketMapping.remove(key);
+				}
 			}
+		} finally {
+			writeLock.unlock();
 		}
 	}
 
-	public synchronized void sendMessage(Serializable id, String msg) {
-		Socket socket = this.socketMapping.get(id);
-		if (null != socket) {
-			socket.send(msg);
-		} else {
-			throw new RuntimeException("Can't find socket!");
-		}
-	}
-
-	public synchronized void sendMessageExcept(Serializable exceptId, String msg) {
-		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
-			Serializable id = entry.getKey();
-			Socket socket = entry.getValue();
-			if (id.equals(exceptId)) {
-				continue;
+	public void sendMessage(Serializable id, String msg) {
+		readLock.lock();
+		try {
+			Socket socket = this.socketMapping.get(id);
+			if (null != socket) {
+				socket.send(msg);
+			} else {
+				throw new RuntimeException("Can't find socket!");
 			}
-			socket.send(msg);
+		} finally {
+			readLock.unlock();
 		}
 	}
 
-	public synchronized void sendMessageAll(String msg) {
-		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
-			Socket socket = entry.getValue();
-			socket.send(msg);
+	public void sendMessageExcept(Serializable exceptId, String msg) {
+		readLock.lock();
+		try {
+			for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
+				Serializable id = entry.getKey();
+				Socket socket = entry.getValue();
+				if (id.equals(exceptId)) {
+					continue;
+				}
+				socket.send(msg);
+			}
+		} finally {
+			readLock.unlock();
 		}
 	}
 
-	public synchronized Set<Serializable> getAllId() {
+	public void sendMessageAll(String msg) {
+		readLock.lock();
+		try {
+			for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
+				Socket socket = entry.getValue();
+				socket.send(msg);
+			}
+		} finally {
+			readLock.unlock();
+		}
+	}
+
+	public Set<Serializable> getAllId() {
 		Set<Serializable> result = new HashSet<Serializable>();
-		for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
-			result.add(entry.getKey());
+		readLock.lock();
+		try {
+			for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
+				result.add(entry.getKey());
+			}
+			return result;
+		} finally {
+			readLock.unlock();
 		}
-		return result;
 
 	}
 
