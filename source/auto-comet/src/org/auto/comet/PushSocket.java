@@ -130,7 +130,7 @@ public class PushSocket implements Socket {
 				@Override
 				public void onTimeout(AsyncEvent asyncevent) throws IOException {
 					close();
-					PushException e = new ServerTimeoutException(
+					PushException e = new AsyncTimeoutException(
 							"Async context timeout! wait message more then ["
 									+ asyncTimeout + "]ms");
 					fireError(e);
@@ -331,8 +331,8 @@ public class PushSocket implements Socket {
 		long sent = now - lastTime;
 		if (sent > pushTimeout) {
 			this.close = true;// 关闭连接
-			PushException e = new ClientTimeoutException(
-					"Client timeout! The client has no connection more than["
+			PushException e = new PushTimeoutException(
+					"Push timeout! The client has no connection more than["
 							+ pushTimeout + "]ms");
 			fireError(e);
 			return true;
