@@ -8,7 +8,7 @@ import java.util.EventListener;
 public interface SocketListener extends EventListener {
 
 	/**
-	 * 当真正关闭链接时触发
+	 * 当真正关闭连接时触发
 	 * */
 	void onReallyClose(SocketEvent event);
 
