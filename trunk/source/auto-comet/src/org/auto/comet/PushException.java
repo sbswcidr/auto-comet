@@ -1,6 +1,10 @@
 package org.auto.comet;
 
 /**
+ * 推送异常
+ *
+ * comet会将推送时的所有底层异常包装为运行时的PushException
+ *
  * @author XiaohangHu
  * */
 public class PushException extends RuntimeException {
