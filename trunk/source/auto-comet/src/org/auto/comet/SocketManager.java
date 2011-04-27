@@ -79,9 +79,7 @@ public class SocketManager {
 				try {
 					processPushTimeout();
 				} catch (Throwable e) {
-					if (logger.isErrorEnabled()) {
-						logger.error("Push timeout Exception!", e);
-					}
+					logger.error("Push timeout Exception!", e);
 				}
 			}
 		}, pushTimeout, period);
