@@ -1,6 +1,11 @@
 package org.auto.comet;
 
 /**
+ *
+ * 推送超时异常
+ *
+ * 代表客户端长时间没有轮询。大约为1分钟，会发生一个异常。
+ *
  * @author XiaohangHu
  * */
 public class PushTimeoutException extends PushException {
