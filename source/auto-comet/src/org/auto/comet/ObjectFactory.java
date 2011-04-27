@@ -4,7 +4,9 @@ import javax.servlet.ServletContext;
 
 /**
  *
- * ControllerFactory
+ * ObjectFactory
+ *
+ * 用于获取SocketHandler等对象。
  *
  * @author XiaohangHu
  * */

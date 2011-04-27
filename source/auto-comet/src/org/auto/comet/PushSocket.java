@@ -227,7 +227,7 @@ public class PushSocket implements Socket {
 		pushMessage(msgs, response);
 	}
 
-	public List<String> getUserMessages() {
+	public List<String> getCachedData() {
 		List<String> userMessages = new LinkedList<String>();
 		for (String message : messages) {
 			if (!this.isCloseMessage(message)) {
