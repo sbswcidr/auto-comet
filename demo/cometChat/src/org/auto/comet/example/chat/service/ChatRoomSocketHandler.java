@@ -5,14 +5,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.auto.comet.AsyncTimeoutException;
 import org.auto.comet.ErrorHandler;
 import org.auto.comet.PushException;
+import org.auto.comet.PushTimeoutException;
 import org.auto.comet.Socket;
 import org.auto.comet.SocketHandler;
 import org.auto.comet.example.chat.service.impl.ChatRoomService;
@@ -24,6 +28,9 @@ import org.springframework.stereotype.Controller;
  * */
 @Controller
 public class ChatRoomSocketHandler implements SocketHandler {
+
+	/** Logger available to subclasses */
+	protected final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private ChatRoomService chatRoomService;
@@ -46,7 +53,13 @@ public class ChatRoomSocketHandler implements SocketHandler {
 			@Override
 			public void error(Socket socket, PushException e) {
 				romveSocket(socket);
-				throw e;
+				if (e instanceof AsyncTimeoutException) {
+					logger.debug("AsyncTimeoutException", e);
+				} else if (e instanceof PushTimeoutException) {
+					logger.debug("PushTimeoutException", e);
+				} else {
+					logger.error("PushException!", e);
+				}
 			}
 		});
 		writeLock.lock();
@@ -86,7 +99,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		}
 	}
 
-	public void sendMessage(Serializable id, String msg) {
+	public void send(Serializable id, String msg) {
 		readLock.lock();
 		try {
 			Socket socket = this.socketMapping.get(id);
@@ -100,7 +113,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		}
 	}
 
-	public void sendMessageExcept(Serializable exceptId, String msg) {
+	public void sendExcept(Serializable exceptId, String msg) {
 		readLock.lock();
 		try {
 			for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
@@ -116,7 +129,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		}
 	}
 
-	public void sendMessageAll(String msg) {
+	public void sendToAll(String msg) {
 		readLock.lock();
 		try {
 			for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
