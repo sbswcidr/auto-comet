@@ -323,20 +323,19 @@ public class PushSocket implements Socket {
 	 * @return 是否超时
 	 */
 	public synchronized boolean processPushTimeOut(long pushTimeout) {
-		Long lastTime = this.getLastPushTime();
 		if (this.isWaiting()) {
 			return false;
-		} else {
-			long now = this.getNowTimeInMillis();
-			long sent = now - lastTime;
-			if (sent > pushTimeout) {
-				this.close = true;// 关闭连接
-				PushException e = new ClientTimeoutException(
-						"Client timeout! The client has no connection more than["
-								+ pushTimeout + "]ms");
-				fireError(e);
-				return true;
-			}
+		}
+		Long lastTime = this.getLastPushTime();
+		long now = this.getNowTimeInMillis();
+		long sent = now - lastTime;
+		if (sent > pushTimeout) {
+			this.close = true;// 关闭连接
+			PushException e = new ClientTimeoutException(
+					"Client timeout! The client has no connection more than["
+							+ pushTimeout + "]ms");
+			fireError(e);
+			return true;
 		}
 		return false;
 	}

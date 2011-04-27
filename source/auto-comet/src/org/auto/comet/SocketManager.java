@@ -75,7 +75,14 @@ public class SocketManager {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				processPushTimeOut();
+				// 异常处理，防止守护线程死亡！
+				try {
+					processPushTimeOut();
+				} catch (Throwable e) {
+					if (logger.isErrorEnabled()) {
+						logger.error("Push timeout Exception!", e);
+					}
+				}
 			}
 		}, pushTimeout, period);
 	}
