@@ -77,7 +77,7 @@ public class SocketManager {
 			public void run() {
 				// 异常处理，防止守护线程死亡！
 				try {
-					processPushTimeOut();
+					processPushTimeout();
 				} catch (Throwable e) {
 					if (logger.isErrorEnabled()) {
 						logger.error("Push timeout Exception!", e);
@@ -170,7 +170,7 @@ public class SocketManager {
 	/**
 	 * 推送超时处理
 	 * */
-	private void processPushTimeOut() {
+	private void processPushTimeout() {
 		readLock.lock();
 		try {
 			Collection<PushSocket> sockets = this.socketStore.getAllSocket();
