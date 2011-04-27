@@ -175,7 +175,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	 * 当发生异常时，可以尝试获取没有发送成功的消息
 	 *
 	 */
-	List<String> getUserMessages();
+	List<String> getCachedData();
 }}}
 
 *参考*
