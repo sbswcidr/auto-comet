@@ -40,7 +40,7 @@ public class ChatRoomService implements IChatRoomService {
 		JSONObject message = new JSONObject();
 		message.put(COMMAND_KEY, COMMAND_LOGIN);
 		message.put("userId", userId);
-		this.socketHandler.sendMessageExcept(userId, message.toString());
+		this.socketHandler.sendExcept(userId, message.toString());
 	}
 
 	public void sendMessage(Serializable userId, String message) {
@@ -50,7 +50,7 @@ public class ChatRoomService implements IChatRoomService {
 		result.put("text", message);
 		String now = DateFormatUtils.format(new Date(), "HH:mm:ss");
 		result.put("time", now);
-		socketHandler.sendMessageAll(result.toString());
+		socketHandler.sendToAll(result.toString());
 	}
 
 	public Set<Serializable> getUserList() {
@@ -62,7 +62,7 @@ public class ChatRoomService implements IChatRoomService {
 		JSONObject message = new JSONObject();
 		message.put(COMMAND_KEY, COMMAND_LOGINOUT);
 		message.put("userId", userId);
-		this.socketHandler.sendMessageExcept(userId, message.toString());
+		this.socketHandler.sendExcept(userId, message.toString());
 	}
 
 }
