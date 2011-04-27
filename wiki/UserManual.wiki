@@ -172,7 +172,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	/**
 	 * 获得缓存的数据
 	 *
-	 * 当发生异常时，可以尝试获取没有发送成功的
+	 * 当发生异常时，可以尝试获取没有发送成功的数据
 	 *
 	 */
 	List<String> getCachedData();
