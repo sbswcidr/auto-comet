@@ -165,6 +165,6 @@ public class ChatRoomSocketHandler implements SocketHandler {
 
  [AutoCometSpring 与Spring整合]
 
- [AutoCometSpringConcurrent 关于并发性能的建议]
+ [AutoCometSpringConcurrent 提升并发性能]
 
  [AutoCometPushProtocol 推送协议]
