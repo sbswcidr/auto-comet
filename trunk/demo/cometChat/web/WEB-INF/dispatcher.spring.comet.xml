@@ -15,5 +15,6 @@
 	<!--与spring整合后handler的配置为bean的名字 -->
 	<comet request="/chat.comet" handler="chatService" />
 	<comet request="/chatRoom.comet" handler="chatRoomSocketHandler" />
+	<comet request="/testConcurrentHandler.comet" handler="testConcurrentHandler" />
 
 </auto-comet>
