@@ -19,14 +19,24 @@ public class JsonArray extends ArrayList<Object> {
 
 		Iterator<Object> iterator = this.iterator();
 		if (iterator.hasNext()) {
-			buffer.append(iterator.next());
+			appendValue(buffer, iterator.next());
 		}
 		while (iterator.hasNext()) {
 			buffer.append(",");
-			buffer.append(iterator.next());
+			appendValue(buffer, iterator.next());
 		}
 		buffer.append("]");
 		return buffer.toString();
+	}
+
+	private void appendValue(StringBuffer buffer, Object value) {
+		if (value instanceof String) {
+			buffer.append("\"");
+			buffer.append(value);
+			buffer.append("\"");
+		} else {
+			buffer.append(value);
+		}
 	}
 
 }
