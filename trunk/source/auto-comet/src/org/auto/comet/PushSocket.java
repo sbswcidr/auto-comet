@@ -49,7 +49,7 @@ public class PushSocket implements Socket {
 	/**
 	 * 记录上一次推送的时间。客户端长时间没有轮询，应该发生一个异常。
 	 * */
-	private Long lastPushTime;
+	private Long lastPushTime = getNowTimeInMillis();
 
 	private AsyncContext asyncContext;
 
