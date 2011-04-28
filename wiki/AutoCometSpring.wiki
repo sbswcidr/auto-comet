@@ -3,7 +3,7 @@
 
 = !AutoComet与Spring的整合 =
 
- 如果你想与Spring整合，你需要指定一个Spring的objectFactory。这样就可以将comet的handler配置为Spring的bean的名字。
+ 如果你想与Spring整合，需要包含auto-comet-spring.jar。在comet服务配置中需要指定一个Spring的objectFactory。这样就可以将comet的handler配置为Spring的bean的名字。
 
 dispatcher.spring.comet.xml配置
 {{{
