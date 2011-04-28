@@ -161,6 +161,10 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	List<String> getCachedData();
 }}}
 
+*[AutoCometSpring 与Spring整合]*
+*[AutoCometSpringConcurrent 关于并发性能的建议]*
+
+
 *参考*
 
 [AutoCometPushProtocol 推送协议]
