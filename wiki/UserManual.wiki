@@ -3,6 +3,11 @@
 
 !AtutoComet1.0
 
+ * *需要的资源*
+ # 在你的javaEE web工程中需要包含auto-comet.jar。如果你想与Spring整合，还需要包含auto-comet-spring.jar。
+ # web页面中需要引入comet.js
+
+
  * *Comet分发器配置*
  !SocketDispatcherServlet是!AutoComet的核心控制器。你需要在web.xml中添加配置：
 {{{ 
