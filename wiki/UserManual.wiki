@@ -8,6 +8,7 @@
   # web页面中需要引入comet.js
 
 
+
  * *Comet分发器配置*
  !SocketDispatcherServlet是!AutoComet的核心控制器。你需要在web.xml中添加配置：
 {{{ 
