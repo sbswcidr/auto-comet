@@ -161,14 +161,21 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	 * */
 	private void disconnect(SocketManager socketManager,
 			HttpServletRequest request) {
-		SocketHandler service = getSocketHandler(request);
-		if (null == service) {
+		SocketHandler handler = getSocketHandler(request);
+		if (null == handler) {
 			String uri = RequestUtils.getServletPath(request);
 			throw new DispatchException("Cant find comet handler by [" + uri
 					+ "]. Did you registered it?");
 		}
 		String connectionId = getConnectionId(request);
-		socketManager.disconnect(connectionId, service, request);
+		if (StringUtils.isBlank(connectionId)) {
+			if (logger.isWarnEnabled()) {
+				logger.warn("Null connectionId from[ip:"
+						+ request.getRemoteAddr() + "]");
+			}
+			return;
+		}
+		socketManager.disconnect(connectionId, handler, request);
 	}
 
 	protected SocketHandler getSocketHandler(HttpServletRequest request) {
