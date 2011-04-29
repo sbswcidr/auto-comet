@@ -87,14 +87,6 @@ public class JsonSerializer {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void appendEntrySet(StringBuilder builder, java.util.Map.Entry entry) {
-		Object key = entry.getKey();
-		appendValue(builder, key);
-		builder.append(JsonProtocol.PAIR_SEPARATOR);
-		appendValue(builder, entry.getValue());
-	}
-
-	@SuppressWarnings("rawtypes")
 	private void appendValue(StringBuilder builder, Object value) {
 		if (null == value) {
 			builder.append(JsonProtocol.NULL);
@@ -186,6 +178,14 @@ public class JsonSerializer {
 			appendEntrySet(builder, iterator.next());
 		}
 		builder.append(JsonProtocol.OBJECT_END);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void appendEntrySet(StringBuilder builder, java.util.Map.Entry entry) {
+		Object key = entry.getKey();
+		appendValue(builder, key);
+		builder.append(JsonProtocol.PAIR_SEPARATOR);
+		appendValue(builder, entry.getValue());
 	}
 
 	/**

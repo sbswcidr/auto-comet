@@ -7,6 +7,8 @@ package org.auto.json;
  *
  * @author XiaohangHu
  * */
-public class JsontDerializer {
+public class JsonDeserializer {
+	
+	
 
 }
