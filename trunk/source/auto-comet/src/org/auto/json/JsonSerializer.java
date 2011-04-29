@@ -19,31 +19,15 @@ public class JsonSerializer {
 	/**
 	 * javaBeans to jsonString
 	 *
-	 * @param javaBeans
+	 * @param collection
 	 *
 	 * @return jsonString
 	 *
 	 * */
 	@SuppressWarnings("rawtypes")
-	public String toJsonString(Collection javaBeans) {
-		if (null == javaBeans) {
-			return JsonProtocol.NULL;
-		}
+	public String toJsonString(Collection collection) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(JsonProtocol.ARRAY_BEGIN);
-		Iterator iterator = javaBeans.iterator();
-		if (iterator.hasNext()) {
-			String elementString = toJsonString(iterator.next());
-			builder.append(elementString);
-		}
-		while (iterator.hasNext()) {
-			builder.append(JsonProtocol.ARRAY_ELEMENTS_SEPARATOR);
-			String elementString = toJsonString(iterator.next());
-			builder.append(elementString);
-		}
-
-		builder.append(JsonProtocol.ARRAY_END);
-
+		appendValue(builder, collection);
 		return builder.toString();
 	}
 
@@ -55,85 +39,14 @@ public class JsonSerializer {
 	 * @return jsonString
 	 *
 	 * */
-	@SuppressWarnings("rawtypes")
 	public String toJsonString(Object object) {
-		if (null == object) {
-			return JsonProtocol.NULL;
-		}
-		if (object instanceof Map) {
-			return toJsonString((Map) object);
-		}
-		if (object instanceof String) {
-			return toJsonString((String) object);
-		}
-		if (object instanceof Boolean) {
-			return toJsonString((Boolean) object);
-		}
-		if (object instanceof Number) {
-			return toJsonString((Number) object);
-		}
-		if (object instanceof Character) {
-			return toJsonString((Character) object);
-		}
-
-		return javaBeanToJsontString(object);
-	}
-
-	/**
-	 * @param value
-	 *            must not be null
-	 * */
-	private String toJsonString(String value) {
 		StringBuilder builder = new StringBuilder();
-		appendValue(builder, value);
+		appendValue(builder, object);
 		return builder.toString();
 	}
 
 	/**
-	 * @param value
-	 *            must not be null
-	 * */
-	private String toJsonString(Boolean value) {
-		return value.toString();
-	}
-
-	/**
-	 * @param value
-	 *            must not be null
-	 * */
-	private String toJsonString(Number value) {
-		return value.toString();
-	}
-
-	/**
-	 * @param value
-	 *            must not be null
-	 * */
-	private String toJsonString(Character value) {
-		StringBuilder builder = new StringBuilder();
-		appendValue(builder, value);
-		return builder.toString();
-	}
-
-	/**
-	 * @param javaBean
-	 *            must not be null
-	 * */
-	@SuppressWarnings("rawtypes")
-	private String javaBeanToJsontString(Object javaBean) {
-		try {
-			Map map = PropertyUtils.describe(javaBean);
-			map.remove("class");
-			return toJsonString(map);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("object ["
-					+ javaBean.getClass().getName() + ":" + javaBean
-					+ "] can't be described!");
-		}
-	}
-
-	/**
-	 * javaBean to jsonString
+	 * map to jsonString
 	 *
 	 * @param map
 	 *            map like a javaBean
@@ -141,22 +54,10 @@ public class JsonSerializer {
 	 * @return jsonString
 	 *
 	 * */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	public String toJsonString(Map map) {
-		if (null == map) {
-			return JsonProtocol.NULL;
-		}
-		StringBuilder builder = new StringBuilder(JsonProtocol.OBJECT_BEGIN);
-		Set<java.util.Map.Entry> entrySet = map.entrySet();
-		Iterator<java.util.Map.Entry> iterator = entrySet.iterator();
-		if (iterator.hasNext()) {
-			appendEntrySet(builder, iterator.next());
-		}
-		while (iterator.hasNext()) {
-			builder.append(JsonProtocol.OBJECT_MEMBERS_SEPARATOR);
-			appendEntrySet(builder, iterator.next());
-		}
-		builder.append(JsonProtocol.OBJECT_END);
+		StringBuilder builder = new StringBuilder();
+		appendValue(builder, map);
 		return builder.toString();
 	}
 
@@ -193,6 +94,7 @@ public class JsonSerializer {
 		appendValue(builder, entry.getValue());
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void appendValue(StringBuilder builder, Object value) {
 		if (null == value) {
 			builder.append(JsonProtocol.NULL);
@@ -214,8 +116,15 @@ public class JsonSerializer {
 			appendValue(builder, (Character) value);
 			return;
 		}
-		builder.append(toJsonString(value));
-		return;
+		if (value instanceof Map) {
+			appendValue(builder, (Map) value);
+			return;
+		}
+		if (value instanceof Collection) {
+			appendValue(builder, (Collection) value);
+			return;
+		}
+		appendJavaBeanValue(builder, value);
 
 	}
 
@@ -237,6 +146,63 @@ public class JsonSerializer {
 		builder.append(JsonProtocol.CHAR_BEGIN);
 		builder.append(value);
 		builder.append(JsonProtocol.CHAR_END);
+	}
+
+	/**
+	 * @param value
+	 *            must not be null
+	 * */
+	@SuppressWarnings("rawtypes")
+	private void appendValue(StringBuilder builder, Collection value) {
+		builder.append(JsonProtocol.ARRAY_BEGIN);
+		Iterator iterator = value.iterator();
+		if (iterator.hasNext()) {
+			String elementString = toJsonString(iterator.next());
+			builder.append(elementString);
+		}
+		while (iterator.hasNext()) {
+			builder.append(JsonProtocol.ARRAY_ELEMENTS_SEPARATOR);
+			String elementString = toJsonString(iterator.next());
+			builder.append(elementString);
+		}
+
+		builder.append(JsonProtocol.ARRAY_END);
+	}
+
+	/**
+	 * @param value
+	 *            must not be null
+	 * */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void appendValue(StringBuilder builder, Map value) {
+		builder.append(JsonProtocol.OBJECT_BEGIN);
+		Set<java.util.Map.Entry> entrySet = value.entrySet();
+		Iterator<java.util.Map.Entry> iterator = entrySet.iterator();
+		if (iterator.hasNext()) {
+			appendEntrySet(builder, iterator.next());
+		}
+		while (iterator.hasNext()) {
+			builder.append(JsonProtocol.OBJECT_MEMBERS_SEPARATOR);
+			appendEntrySet(builder, iterator.next());
+		}
+		builder.append(JsonProtocol.OBJECT_END);
+	}
+
+	/**
+	 * @param value
+	 *            must not be null
+	 * */
+	@SuppressWarnings("rawtypes")
+	private void appendJavaBeanValue(StringBuilder builder, Object value) {
+		try {
+			Map map = PropertyUtils.describe(value);
+			map.remove("class");
+			appendValue(builder, map);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("object ["
+					+ value.getClass().getName() + ":" + value
+					+ "] can't be described!");
+		}
 	}
 
 }
