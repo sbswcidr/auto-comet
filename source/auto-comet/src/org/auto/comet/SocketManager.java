@@ -219,18 +219,18 @@ public class SocketManager {
 			throw new DispatchException("Cant't find handler");
 		}
 		PushSocket socket = getSocket(connectionId);
-		if (null != socket) {
-			handler.quit(socket, request);
-			socket.close();
-			if (this.logger.isDebugEnabled()) {
-				this.logger.debug("disconnect [" + connectionId + "]");
-			}
-		} else {
+		if (null == socket) {
 			if (this.logger.isWarnEnabled()) {
 				this.logger
 						.warn("Disconnect. Can't find socket by connectionId ["
 								+ connectionId + "]");
 			}
+			return;
+		}
+		handler.quit(socket, request);
+		socket.close();
+		if (this.logger.isDebugEnabled()) {
+			this.logger.debug("disconnect [" + connectionId + "]");
 		}
 	}
 }
