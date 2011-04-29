@@ -14,6 +14,14 @@ public class JsonObject extends HashMap<Object, Object> {
 	 */
 	private static final long serialVersionUID = -1493269365377697547L;
 
+	@Override
+	public Object put(Object name, Object value) {
+		if (null == name) {
+			throw new IllegalArgumentException("name must not be null!");
+		}
+		return super.put(name, value);
+	}
+
 	/**
 	 * 转化为json格式字符串
 	 * */
@@ -42,7 +50,7 @@ public class JsonObject extends HashMap<Object, Object> {
 		buffer.append(key);
 		buffer.append("\"");
 		buffer.append(":");
-		appendValue(buffer,value);
+		appendValue(buffer, value);
 	}
 
 	private void appendValue(StringBuffer buffer, Object value) {
