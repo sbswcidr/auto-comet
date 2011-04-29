@@ -20,6 +20,7 @@ public class Test {
 	public static void testJson() {
 		JSONObject obj = new JSONObject();
 		obj.put("asdf", "{\"a\":\"n\"}");
+		obj.put("date", new Date());
 
 		JsonObject jsonObject = new JsonObject();
 
@@ -27,7 +28,7 @@ public class Test {
 
 		System.out.println(obj.toString());
 		System.out.println(obj.get("asdf"));
-		System.out.println(JSONUtils.valueToString("{\"a\":\"n\"}"));
+		System.out.println(JSONUtils.valueToString(new Date()));
 		System.out.println(new Date().toString());
 
 	}
