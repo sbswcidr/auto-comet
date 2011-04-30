@@ -7,6 +7,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -24,8 +25,20 @@ public class Test {
 	 */
 	public static void main(String[] args) throws Exception {
 
+		String pair = "\"asdfasdf\"  :";
+		int endOfNameInext = pair.indexOf(JsonProtocol.STRING_END, 1);
+		int separatorInext = pair.indexOf(JsonProtocol.PAIR_SEPARATOR,
+				endOfNameInext);
+		String name = pair.substring(1, endOfNameInext);
+		String value = pair.substring(separatorInext + 1, pair.length());
+		Person p = new Person();
+
+		JSONArray arr = JSONArray.fromObject("[,,]");
+		// System.out.println(JSONObject.fromObject("{name: }"));
+		Class c = PropertyUtils.getPropertyEditorClass(p, "name");
+		System.out.println(c);
 		// testJavaBean();
-		testJson();
+		// testJson();
 	}
 
 	public static void testJavaBean() throws NoSuchMethodException,
@@ -76,6 +89,9 @@ public class Test {
 		JsonArray array = new JsonArray();
 		Person person = new Person();
 		person.setAge(23);
+		Person person1 = new Person();
+		person1.setName("haha");
+		person.setPerson(person1);
 
 		array.add(person);
 		array.add(4);
@@ -86,26 +102,10 @@ public class Test {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.put("name", "hehe");
 		jsonObject.put("sdf", new JsonObject());
-		jsonObject.put(null, null);
+		jsonObject.put("khiyiu", null);
 		array.add(jsonObject);
 		array.add(new JsonObject());
 
-		System.out.println(jsonSerializer.toJsonString(array));
-	}
-
-	private static void appendValue(StringBuffer buffer, Object value) {
-		buffer.append(value);
-	}
-
-	private static void appendValue(StringBuffer buffer, String value) {
-		buffer.append(JsonProtocol.STRING_BEGIN);
-		buffer.append(value);
-		buffer.append(JsonProtocol.STRING_END);
-	}
-
-	private static void appendValue(StringBuffer buffer, Character value) {
-		buffer.append(JsonProtocol.CHAR_BEGIN);
-		buffer.append(value);
-		buffer.append(JsonProtocol.CHAR_END);
+		System.out.println(jsonSerializer.toJsonString(person));
 	}
 }
