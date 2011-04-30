@@ -59,5 +59,7 @@ public interface JsonProtocol {
 	public static final String CHAR_END = "'";
 
 	public static final String NULL = "null";
+	public static final String TRUE = "true";
+	public static final String FALSE = "false";
 
 }
