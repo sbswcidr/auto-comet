@@ -1,6 +1,7 @@
 package org.auto.json;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -108,6 +109,10 @@ public class JsonSerializer {
 			appendValue(builder, (Character) value);
 			return;
 		}
+		if (value instanceof Date) {
+			appendValue(builder, (Date) value);
+			return;
+		}
 		if (value instanceof Map) {
 			appendValue(builder, (Map) value);
 			return;
@@ -138,6 +143,14 @@ public class JsonSerializer {
 		builder.append(JsonProtocol.CHAR_BEGIN);
 		builder.append(value);
 		builder.append(JsonProtocol.CHAR_END);
+	}
+
+	/**
+	 * @param value
+	 *            must not be null
+	 * */
+	private void appendValue(StringBuilder builder, Date value) {
+		builder.append(value.getTime());
 	}
 
 	/**
