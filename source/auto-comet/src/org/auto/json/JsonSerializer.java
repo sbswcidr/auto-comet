@@ -131,6 +131,7 @@ public class JsonSerializer {
 	 * */
 	private void appendValue(StringBuilder builder, String value) {
 		builder.append(JsonProtocol.STRING_BEGIN);
+		value = value.replace("\"", "\\\"");
 		builder.append(value);
 		builder.append(JsonProtocol.STRING_END);
 	}
@@ -196,7 +197,7 @@ public class JsonSerializer {
 	@SuppressWarnings("rawtypes")
 	private void appendEntrySet(StringBuilder builder, java.util.Map.Entry entry) {
 		Object key = entry.getKey();
-		appendValue(builder, key);
+		appendValue(builder, key.toString());
 		builder.append(JsonProtocol.PAIR_SEPARATOR);
 		appendValue(builder, entry.getValue());
 	}
