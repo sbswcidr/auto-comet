@@ -45,6 +45,7 @@
 			url : "/cometChat/chatRoom.comet",
 			async : true,
 			accept : function(data) {
+				data = eval("(" + data + ")");
 				var command = data[COMMAND_KEY];
 				if (command == COMMAND_LOGIN) {//用户上线
 					var friend = data.userId;
