@@ -6,13 +6,24 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.AbstractSequentialList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.auto.json.JsonArray;
+import org.auto.json.JsonDeserializer;
 import org.auto.json.JsonObject;
 import org.auto.json.JsonProtocol;
 import org.auto.json.JsonSerializer;
@@ -25,20 +36,36 @@ public class Test {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		String pair = "\"asdfasdf\"  :";
-		int endOfNameInext = pair.indexOf(JsonProtocol.STRING_END, 1);
-		int separatorInext = pair.indexOf(JsonProtocol.PAIR_SEPARATOR,
-				endOfNameInext);
-		String name = pair.substring(1, endOfNameInext);
-		String value = pair.substring(separatorInext + 1, pair.length());
 		Person p = new Person();
 
-		JSONArray arr = JSONArray.fromObject("[,,]");
-		// System.out.println(JSONObject.fromObject("{name: }"));
-		Class c = PropertyUtils.getPropertyEditorClass(p, "name");
-		System.out.println(c);
+		// getsdfdsf(p, "persons");
 		// testJavaBean();
-		// testJson();
+		testJson();
+	}
+
+	private static Class getsdfdsf(Object bean, String propertyName) {
+		PropertyDescriptor ptor;
+		try {
+			ptor = PropertyUtils.getPropertyDescriptor(bean, propertyName);
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+		Method method = ptor.getWriteMethod();
+		Type[] gptypes = method.getGenericParameterTypes();
+		if (null != gptypes && gptypes.length == 1) {
+			Type type = method.getGenericParameterTypes()[0];// 方法的第一个参数
+			if (type instanceof ParameterizedType) {
+				ParameterizedType parameterizedType = (ParameterizedType) type;
+				Type[] types = parameterizedType.getActualTypeArguments();
+				System.out.println("  TypeArgument: ");
+				for (Type t : types) {
+					System.out.println("   " + t);
+				}
+
+			}
+
+		}
+		return null;
 	}
 
 	public static void testJavaBean() throws NoSuchMethodException,
@@ -106,6 +133,13 @@ public class Test {
 		array.add(jsonObject);
 		array.add(new JsonObject());
 
-		System.out.println(jsonSerializer.toJsonString(person));
+		String jsonString = jsonSerializer.toJsonString(person);
+
+		JsonDeserializer deserializer = new JsonDeserializer();
+		Person dperson = (Person) deserializer.toObject(jsonString,
+				Person.class);
+
+		System.out.println(jsonString);
+		System.out.println(jsonSerializer.toJsonString(dperson));
 	}
 }

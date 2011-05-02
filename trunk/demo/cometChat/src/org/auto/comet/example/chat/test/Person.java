@@ -1,11 +1,14 @@
 package org.auto.comet.example.chat.test;
 
+import java.util.List;
+
 public class Person {
 
 	private String name;
 	private Integer age;
 	private int testInt;
-	private Person person;
+	public Person person;
+	public List<Person> persons;
 
 	public String getName() {
 		return name;
@@ -39,6 +42,12 @@ public class Person {
 		this.testInt = testInt;
 	}
 
+	public List<Person> getPersons() {
+		return persons;
+	}
 
+	public void setPersons(List<Person> persons) {
+		this.persons = persons;
+	}
 
 }
