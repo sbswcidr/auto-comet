@@ -131,8 +131,7 @@ public class JsonSerializer {
 	 * */
 	private void appendValue(StringBuilder builder, String value) {
 		builder.append(JsonProtocol.STRING_BEGIN);
-		value = value.replace("\"", "\\\"");
-		builder.append(value);
+		JsonStringUtils.escape(value, builder);
 		builder.append(JsonProtocol.STRING_END);
 	}
 
