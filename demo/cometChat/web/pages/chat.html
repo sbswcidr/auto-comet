@@ -58,6 +58,7 @@
 		var comet = new Un.Comet({
 			url : "/cometChat/chat.comet",
 			accept : function(data) {
+				data = eval("(" + data + ")");
 				var command = data[COMMAND_KEY];
 				if (command == COMMAND_LOGIN) {
 					var friend = data.userId;
@@ -72,7 +73,7 @@
 					var content = new Un.Element();
 					content.appendChild(new Un.Element("div", null, friend
 							+ ": " + time));
-					content.appendChild(new Un.Element("div", null, "&emsp;"
+					content.appendChild(new Un.Element("div", null, "   "
 							+ text));
 
 					menuWindow.receiveMessage(friend, content);

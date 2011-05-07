@@ -65,3 +65,59 @@ html {
 	_height: 100%;
 	_background: yellow;
 }
+
+.chat_reader_layout {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 160px;
+	bottom: 145px;
+	padding: 5px;
+	background: #fff;
+	border: solid 1px #dedede;
+	margin: 0 0 10px 0;
+	overflow-y: auto;
+}
+
+.chat_editor_layout {
+	position: absolute;
+	left: 0;
+	right: 160px;
+	bottom: 0;
+}
+
+.chat_users_layout {
+	background: #fff;
+	position: absolute;
+	border: solid 1px #dedede;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width:145px;
+}
+
+.chat_btn_send {
+	float: right;
+	font-size: 16px;
+	margin: 3px 0 0 0;
+	padding: 5px 7px 5px 7px !important;
+	padding: 3px 2px 0 2px;
+	border: solid 1px #ddd;
+	background-color: #bd3939;
+	color: #fff;
+}
+
+.chat_btn_send_over {
+	background-color: #e51717;
+}
+
+.menu_btn_user {
+	font-size: 16px;
+	padding: 5px 7px 5px 7px !important;
+	padding: 3px 2px 0 2px;
+	border-bottom: solid 1px #ddd;
+}
+
+.menu_btn_user_over {
+	background-color: #afd8da;
+}
