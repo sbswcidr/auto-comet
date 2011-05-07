@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.auto.comet.ErrorHandler;
 import org.auto.comet.PushException;
 import org.auto.comet.Socket;
@@ -96,7 +97,8 @@ public class ChatService implements IChatService, SocketHandler {
 		result.put(COMMAND_KEY, COMMAND_RECEIVE);
 		result.put("userId", userId);
 		result.put("text", message);
-		result.put("time", new Date().toString());
+		String now = DateFormatUtils.format(new Date(), "HH:mm:ss");
+		result.put("time", now);
 		socket.send(result.toString());
 	}
 
