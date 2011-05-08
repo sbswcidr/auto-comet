@@ -87,12 +87,16 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	private void romveSocket(Socket socket) {
 		writeLock.lock();
 		try {
+			Serializable key = null;
 			for (Entry<Serializable, Socket> entry : socketMapping.entrySet()) {
 				Socket value = entry.getValue();
 				if (value.equals(socket)) {
-					Serializable key = entry.getKey();
-					socketMapping.remove(key);
+					key = entry.getKey();
+					break;
 				}
+			}
+			if (key != null) {
+				socketMapping.remove(key);
 			}
 		} finally {
 			writeLock.unlock();
