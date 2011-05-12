@@ -169,3 +169,5 @@ public class ChatRoomSocketHandler implements SocketHandler {
  [AutoCometSpringConcurrent 提升并发性能]
 
  [AutoCometPushProtocol 推送协议]
+
+ [CometDemo 演示工程]
