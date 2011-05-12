@@ -2,7 +2,7 @@
 
 = Comet聊天室示例 =
 
-...正在整理war包
+war包下载：[http://auto-comet.googlecode.com/files/cometChat.war cometChat.war]
 
 示例截图：
 
