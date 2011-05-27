@@ -5,7 +5,7 @@
 <title>chat room</title>
 <script type="text/javascript" src="../unJs/core.js"></script>
 <script type="text/javascript" src="../unJs/window.js"></script>
-<script type="text/javascript" src="../unJs/comet.js"></script>
+<script type="text/javascript" src="../comet.js"></script>
 <script type="text/javascript" src="../unJs/spinner.js"></script>
 <script type="text/javascript" src="../unJs/editor.js"></script>
 <script type="text/javascript" src="chatRoom.js"></script>
@@ -40,7 +40,7 @@
 			}
 		}
 
-		var comet = new Un.Comet({
+		var comet = new Auto.Comet({
 			url : "/cometChat/chatRoom.comet",
 			async : true,
 			accept : function(data) {

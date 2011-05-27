@@ -5,7 +5,7 @@
 <title>comet example</title>
 <script type="text/javascript" src="../unJs/core.js"></script>
 <script type="text/javascript" src="../unJs/window.js"></script>
-<script type="text/javascript" src="../unJs/comet.js"></script>
+<script type="text/javascript" src="../comet.js"></script>
 <script type="text/javascript" src="../unJs/spinner.js"></script>
 <script type="text/javascript" src="../unJs/editor.js"></script>
 <script type="text/javascript" src="chat.js"></script>
@@ -55,7 +55,7 @@
 
 		//menuWindow.removeUser("huhang1986@126.com");
 
-		var comet = new Un.Comet({
+		var comet = new Auto.Comet({
 			url : "/cometChat/chat.comet",
 			accept : function(data) {
 				data = eval("(" + data + ")");
