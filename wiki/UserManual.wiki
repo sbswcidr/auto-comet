@@ -4,7 +4,7 @@
 !AtutoComet1.0
 
  * *需要的资源*
-  # 在你的web工程中需要包含 [auto-comet.jar http://code.google.com/p/auto-comet/downloads/list]。如果你想与Spring整合，还需要包含auto-comet-spring.jar。
+  # 在你的web工程中需要包含 [auto-comet.jar | http://code.google.com/p/auto-comet/downloads/list]。如果你想与Spring整合，还需要包含auto-comet-spring.jar。
   # 第三方依赖：commons-logging-1.1.1.jar,commons-io-1.4.jar,commons-lang-2.4.jar,asm-1.5.3.jar,commons-beanutils-commons-beanutils.jar
   # web页面中需要引入comet.js
 
