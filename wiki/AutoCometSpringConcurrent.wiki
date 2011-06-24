@@ -2,7 +2,7 @@
 
 = 提升并发性能 =
 
-强烈建议使用java.util.concurrent里的工具来处理并发问题。
+建议使用java.util.concurrent里的工具来处理并发问题。
 
 特别是针对大量只读操作的优化，可以用[http://download.oracle.com/javase/6/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html ReentrantReadWriteLock]来对代码块加锁。
 
