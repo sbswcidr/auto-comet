@@ -165,7 +165,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
  * *客户端编码*
  页面需要引入javascript文件：comet.js。
  comet.js提供了面向对象风格的API。
- *创建一个comet连接：
+ * 创建一个comet连接：
 {{{
 	var comet = new Auto.Comet({
 		url : "/cometChat/chatRoom.comet",  //连接地址
@@ -176,7 +176,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	});
 }}}
 
- *打开一个comet连接：
+ * 打开一个comet连接：
 {{{
 
 	comet.connection({
@@ -188,6 +188,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	});
 }}}
 connection方法可以接收4个参数，参数可选：
+
 {{{
 	/**
 	* 开始链接
@@ -205,7 +206,7 @@ connection方法可以接收4个参数，参数可选：
 	}
 }}}
 
- *断开一个comet连接，断开连接的时候也可以传递http参数:
+ * 断开一个comet连接，断开连接的时候也可以传递http参数:
 {{{
 	comet.disconnect({
 		userId : id
