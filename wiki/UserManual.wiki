@@ -189,10 +189,6 @@ public class ChatRoomSocketHandler implements SocketHandler {
 }}}
  connection方法可以接收4个参数，参数可选：
 
-{{{
-
-}}}
-
  * 断开一个comet连接，断开连接的时候也可以传递http参数:
 {{{
 	comet.disconnect({
