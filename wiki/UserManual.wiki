@@ -188,7 +188,22 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	});
 }}}
  connection方法可以接收4个参数，参数可选：
-
+{{{
+	/**
+	* 开始链接
+	*
+	* @param userParam
+	*            连接时传递给服务器端的参数
+	* @param success
+	*            连接成功处理方法
+	* @param failure
+	*            连接失败处理方法
+	*
+	*/
+	connection : function(userParam, success, failure, caller) {
+		//...
+	}
+}}}
  * 断开一个comet连接，断开连接的时候也可以传递http参数:
 {{{
 	comet.disconnect({
