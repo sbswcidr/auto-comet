@@ -163,29 +163,29 @@ public class ChatRoomSocketHandler implements SocketHandler {
 }}}
 
  * *客户端编码*
-
- comet的js客户端支持，提供了面向对象风格的API， 页面需要引入js文件：comet.js。
- 创建一个comet连接：
+ 页面需要引入javascript文件：comet.js。
+ comet.js提供了面向对象风格的API。
+ *创建一个comet连接：
 {{{
-var comet = new Auto.Comet({
-			url : "/cometChat/chatRoom.comet",  //连接地址
-			async : true,                                        //是否异步接收数据
-			accept : function(data) {                      //接收到数据的操作
-                               //...
-			}
-		});
+	var comet = new Auto.Comet({
+		url : "/cometChat/chatRoom.comet",  //连接地址
+		async : true,                                        //是否异步接收数据
+		accept : function(data) {                      //接收到数据的操作
+			//...
+		}
+	});
 }}}
 
- 打开一个comet连接：
+ *打开一个comet连接：
 {{{
 
-    comet.connection({
-	userId : id
-    }, function() {
-	alert("连接成功！");
-    }, function() {
-	alert("连接失败！");
-    });
+	comet.connection({
+		userId : id
+	}, function() {
+		alert("连接成功！");
+	}, function() {
+		alert("连接失败！");
+	});
 }}}
 connection方法可以接收4个参数，参数可选：
 {{{
@@ -200,12 +200,12 @@ connection方法可以接收4个参数，参数可选：
 	*            连接失败处理方法
 	*
 	*/
-        connection : function(userParam, success, failure, caller) {
-          //...
-        }
+	connection : function(userParam, success, failure, caller) {
+		//...
+	}
 }}}
 
- 断开一个comet连接，断开连接的时候也可以传递http参数:
+ *断开一个comet连接，断开连接的时候也可以传递http参数:
 {{{
 	comet.disconnect({
 		userId : id
