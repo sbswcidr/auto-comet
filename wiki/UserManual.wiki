@@ -162,6 +162,10 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	List<String> getCachedData();
 }}}
 
+ * *客户端编码*
+ 页面需要引入js文件：comet.js。
+ 
+
  * *其他*
 
  [AutoCometSpring 与Spring整合]
