@@ -187,7 +187,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 		alert("连接失败！");
 	});
 }}}
-connection方法可以接收4个参数，参数可选：
+ connection方法可以接收4个参数，参数可选：
 
 {{{
 	/**
