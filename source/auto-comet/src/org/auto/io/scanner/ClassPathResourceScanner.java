@@ -20,7 +20,7 @@ import org.auto.util.ClassUtils;
 
 /**
  * 资源扫描器
- *
+ * 
  * @author XiaohangHu
  * */
 public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
@@ -31,6 +31,14 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 	public void scan(String rootDirPath, String subPattern,
 			final ResourceHandler handler) {
 		Enumeration<URL> urlEnumeration = gerClassPathResources(rootDirPath);
+		DefaultFilePatternScanner fileScanner = new DefaultFilePatternScanner();
+		FileHandler fileHandler = new FileHandler() {
+			@Override
+			public void handle(File file) {
+				Resource resource = new FileResource(file);
+				handler.handle(resource);
+			}
+		};
 		while (urlEnumeration.hasMoreElements()) {
 			URL url = (URL) urlEnumeration.nextElement();
 			if (ResourceUtils.isJarURL(url)) {
@@ -43,14 +51,7 @@ public class ClassPathResourceScanner extends AbstractPatternResourceScanner {
 			} else {
 				try {
 					File file = new File(url.toURI());
-					DefaultFilePatternScanner fileScanner = new DefaultFilePatternScanner();
-					fileScanner.scan(file, subPattern, new FileHandler() {
-						@Override
-						public void handle(File file) {
-							Resource resource = new FileResource(file);
-							handler.handle(resource);
-						}
-					});
+					fileScanner.scan(file, subPattern, fileHandler);
 				} catch (URISyntaxException e) {
 					throw new ScannerException("URISyntaxException [" + url
 							+ "]", e);
