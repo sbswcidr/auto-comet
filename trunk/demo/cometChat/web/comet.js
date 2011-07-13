@@ -346,6 +346,7 @@ Auto.Comet = {
 		 * 开始链接
 		 *
 		 * @param userParam
+		 *            连接时传递给服务器端的参数
 		 * @param success
 		 *            连接成功处理方法
 		 * @param failure
