@@ -58,7 +58,11 @@ public class ClassUtils {
 		classReader.accept(visitor, true);
 		String className = visitor.getClassName();
 		try {
-			return Class.forName(className);
+			try {
+				return getDefaultClassLoader().loadClass(className);
+			} catch (Throwable e) {
+				return Class.forName(className);
+			}
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("没有找到类 [" + className + "]", e);
 		}
