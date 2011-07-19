@@ -32,11 +32,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.auto</groupId>
 			<artifactId>auto-comet</artifactId>
 			<version>1.0</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
