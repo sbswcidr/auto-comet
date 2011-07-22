@@ -20,9 +20,11 @@ public class JsonView extends AbstractView {
 		if (null == model) {
 			return;
 		}
+		response.setContentType("text/json");
 		JSONObject obj = JSONObject.fromObject(model);
 		Writer writer = response.getWriter();
-		writer.write(obj.toString());
+		String jsonString = obj.toString();
+		writer.write(jsonString);
 		writer.flush();
 	}
 
