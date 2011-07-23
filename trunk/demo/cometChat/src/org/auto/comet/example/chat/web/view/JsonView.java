@@ -8,24 +8,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
-import org.springframework.web.servlet.view.AbstractView;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.validation.support.BindingAwareModelMap;
+import org.springframework.web.servlet.View;
 
-public class JsonView extends AbstractView {
+public class JsonView implements View {
+	private String contentType = "text/json";
 
-	@Override
-	protected void renderMergedOutputModel(
-			@SuppressWarnings("rawtypes") Map model,
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void render(@SuppressWarnings("rawtypes") Map model,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		response.setContentType(contentType);
 		if (null == model) {
 			return;
 		}
-		response.setContentType("text/json");
 		JSONObject obj = JSONObject.fromObject(model);
 		Writer writer = response.getWriter();
-		String jsonString = obj.toString();
-		writer.write(jsonString);
+		writer.write(obj.toString());
 		writer.flush();
 	}
-
 }
