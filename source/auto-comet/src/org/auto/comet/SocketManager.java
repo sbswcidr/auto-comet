@@ -21,7 +21,7 @@ import org.auto.comet.web.DispatchException;
 
 /**
  * 该类用于处理各种通信请求，并管理socket
- *
+ * 
  * @author XiaohangHu
  * */
 public class SocketManager {
@@ -155,7 +155,12 @@ public class SocketManager {
 	};
 
 	private boolean hasSocket(Serializable id) {
-		return socketStore.hasSocket(id);
+		readLock.lock();
+		try {
+			return socketStore.hasSocket(id);
+		} finally {
+			readLock.unlock();
+		}
 	}
 
 	private void processPushTimeOut(PushSocket socket) {
