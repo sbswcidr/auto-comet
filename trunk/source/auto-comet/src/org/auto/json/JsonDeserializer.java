@@ -18,9 +18,9 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * JsontDerializer
- *
+ * 
  * jsongString to Object
- *
+ * 
  * @author XiaohangHu
  * */
 public class JsonDeserializer {
@@ -34,13 +34,13 @@ public class JsonDeserializer {
 
 	/**
 	 * jsonString to javaBean
-	 *
+	 * 
 	 * @param jsonString
 	 *            not be null. must begins with "{", and extends with "}"
 	 * @param beanClass
-	 *
+	 * 
 	 * @return javaBean
-	 *
+	 * 
 	 * */
 	private Object toJavaBean(String jsonString, Class<?> beanType) {
 		jsonString = JsonStringUtils.removeBeginAndEnd(jsonString);
@@ -101,13 +101,13 @@ public class JsonDeserializer {
 		return collection;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
 	private void putPairs(String pairsString, Object object) {
 		// TODO something wrong like "{age:8,father:{age:34,high:'170cm'}}"
 		String[] pairs = pairsString
 				.split(JsonProtocol.OBJECT_MEMBERS_SEPARATOR);
 		if (object instanceof Map) {
-			Map map = (Map) object;
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = ((Map<String, Object>) object);
 			for (String pairString : pairs) {
 				Pair pair = toPair(pairString);
 				putPari(pair, map);
@@ -199,8 +199,7 @@ public class JsonDeserializer {
 	 * @param pair
 	 *            pair's name pair's value not be bull.
 	 * */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void putPari(Pair pair, Map map) {
+	private void putPari(Pair pair, Map<String, Object> map) {
 		String name = pair.getName();
 		String valueString = pair.getValue();
 
@@ -232,7 +231,7 @@ public class JsonDeserializer {
 	/**
 	 * @param valueString
 	 *            special array value: "" == null
-	 *
+	 * 
 	 * */
 	@SuppressWarnings("rawtypes")
 	private Object getArrayValue(String valueString, Class type) {
@@ -246,7 +245,7 @@ public class JsonDeserializer {
 	/**
 	 * @param valueString
 	 *            special array value: "" == null
-	 *
+	 * 
 	 * */
 	private Object getArrayValue(String valueString) {
 		valueString = valueString.trim();
@@ -258,12 +257,11 @@ public class JsonDeserializer {
 
 	/**
 	 * get value by class type
-	 *
+	 * 
 	 * @param valueString
 	 *            value must not be null
 	 * */
-	@SuppressWarnings({ "rawtypes", })
-	private Object getValue(String valueString, Class type) {
+	private Object getValue(String valueString, Class<?> type) {
 		valueString = valueString.trim();
 
 		if (JsonStringUtils.isNullValue(valueString)) {
@@ -286,7 +284,7 @@ public class JsonDeserializer {
 
 	/**
 	 * value ::= string | number | object | array | true | false | null
-	 *
+	 * 
 	 * @param valueString
 	 *            value must not be null
 	 * */
