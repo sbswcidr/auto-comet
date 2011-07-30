@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.auto.comet.example.chat.service.UserIdRepeatException;
 import org.auto.comet.example.chat.service.impl.ChatRoomService;
+import org.auto.comet.example.chat.web.view.ResourceModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,7 +27,7 @@ public class ChatRoomController {
 		this.chatRoomService.sendMessage(userId, message);
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("success", "true");
-		return new ModelAndView("jsonView", modelMap);
+		return new ResourceModelAndView(modelMap);
 	}
 
 	@RequestMapping(params = "method=login")
@@ -39,7 +40,7 @@ public class ChatRoomController {
 			return new ModelAndView("jsonView", modelMap);
 		}
 		modelMap.addAttribute("success", true);
-		return new ModelAndView("jsonView", modelMap);
+		return new ResourceModelAndView(modelMap);
 	}
 
 	@RequestMapping(params = "method=getUserList")
@@ -47,7 +48,7 @@ public class ChatRoomController {
 		ModelMap modelMap = new ModelMap();
 		Set<Serializable> users = this.chatRoomService.getUserList();
 		modelMap.addAttribute("users", users);
-		return new ModelAndView("jsonView", modelMap);
+		return new ResourceModelAndView(modelMap);
 	}
 
 }
