@@ -1,6 +1,7 @@
 package org.auto.comet.example.chat.web.controller;
 
 import org.auto.comet.example.chat.service.TestConcurrentHandler;
+import org.auto.comet.example.chat.web.view.ResourceModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +23,7 @@ public class TestConcurrentController {
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("success", "true");
 		this.testConcurrentHandler.sendToAll(message);
-		return new ModelAndView("jsonView", modelMap);
+		return new ResourceModelAndView(modelMap);
 	}
 
 }

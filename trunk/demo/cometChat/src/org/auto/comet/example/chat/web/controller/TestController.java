@@ -1,5 +1,6 @@
 package org.auto.comet.example.chat.web.controller;
 
+import org.auto.comet.example.chat.web.view.ResourceModelAndView;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ public class TestController {
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("hello", "hello " + id);
 		System.out.println("sayHelloJson req");
-		return new ModelAndView("jsonView", modelMap);
+		return new ResourceModelAndView(modelMap);
 	}
 
 	@RequestMapping(params = "method=listBoardTopic")

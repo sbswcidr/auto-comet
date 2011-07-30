@@ -1,6 +1,7 @@
 package org.auto.comet.example.chat.web.controller;
 
 import org.auto.comet.example.chat.service.IChatService;
+import org.auto.comet.example.chat.web.view.ResourceModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,7 +24,7 @@ public class ChatController {
 		this.chatService.sendMessage(userId, targetUserId, message);
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("success", "true");
-		return new ModelAndView("jsonView", modelMap);
+		return new ResourceModelAndView(modelMap);
 	}
 
 }
