@@ -5,7 +5,7 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	default-lazy-init="true">
 
-	<!--jsonView -->
-	<bean name="jsonView" class="org.auto.comet.example.chat.web.view.JsonView" />
+	<!--resourceView -->
+	<bean name="resourceView" class="org.auto.comet.example.chat.web.view.ResourceView" />
 
 </beans>
