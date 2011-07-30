@@ -1,7 +1,7 @@
 = 联系开发者 =
 
-_胡晓航_
-* mail : huhang1986@126.com
+胡晓航
 ----
-* QQ : 284098861
-* blog : http://hi.baidu.com/huxiaohang 
+ * mail : huhang1986@126.com
+ * QQ : 284098861
+ * blog : http://hi.baidu.com/huxiaohang 
