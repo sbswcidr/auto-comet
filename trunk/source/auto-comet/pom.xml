@@ -33,10 +33,6 @@
 		</plugins>
 	</build>
 
-	<properties>
-		<spring.version>2.5.6</spring.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>commons-logging</groupId>
