@@ -15,7 +15,8 @@
 
 = 联系开发者 =
 
- * *单向推送*
+ * *胡晓航*
+----
  * mail : huhang1986@126.com
  * QQ : 284098861
  * blog : http://hi.baidu.com/huxiaohang 
