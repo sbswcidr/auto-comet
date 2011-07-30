@@ -1,7 +1,6 @@
-! 联系开发者
+= 联系开发者 =
 
 === 胡晓航 ===
-----
  * mail : huhang1986@126.com
  * QQ : 284098861
  * blog : http://hi.baidu.com/huxiaohang 
