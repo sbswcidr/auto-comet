@@ -6,26 +6,15 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.AbstractSequentialList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.auto.json.JsonArray;
 import org.auto.json.JsonDeserializer;
 import org.auto.json.JsonObject;
-import org.auto.json.JsonProtocol;
 import org.auto.json.JsonSerializer;
 
 public class Test {
@@ -36,7 +25,6 @@ public class Test {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		Person p = new Person();
 
 		// getsdfdsf(p, "persons");
 		// testJavaBean();
