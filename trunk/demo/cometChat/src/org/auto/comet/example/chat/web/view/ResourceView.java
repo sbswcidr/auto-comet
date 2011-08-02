@@ -26,6 +26,9 @@ public class ResourceView implements View {
 		return "application";
 	}
 
+	/**
+	 * 请求头的Accept解析
+	 */
 	private static List<String> getAccepts(HttpServletRequest request) {
 		String acceptString = request.getHeader("Accept");
 		if (StringUtils.isBlank(acceptString)) {
@@ -42,6 +45,9 @@ public class ResourceView implements View {
 		return result;
 	}
 
+	/**
+	 * 返回第一种识别的数据类型，没有匹配则返回默认类型
+	 */
 	private String getContentTyp(List<String> accepts) {
 		for (String accept : accepts) {
 			ResourceSerializer serializer = resourceSerializerMap.get(accept);
@@ -52,12 +58,14 @@ public class ResourceView implements View {
 		return DEFAULT_CONTENT_TYPE;
 	}
 
+	/**
+	 * 获得请求的数据类型
+	 */
 	private String getContentTyp(HttpServletRequest request) {
 		List<String> accepts = getAccepts(request);
 		return getContentTyp(accepts);
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void render(Map model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String contentTyp = getContentTyp(request);
@@ -67,11 +75,11 @@ public class ResourceView implements View {
 		if (null == model) {
 			return;
 		}
-		Serializable jsonData = (Serializable) model
+		Object resource = model
 				.get(ResourceModelAndView.RESOURCE_DATA_ATTRIBUTE_NAME);
-		if (null == jsonData)
+		if (null == resource)
 			return;
-		Object data = serializer.serialization(jsonData);
+		Object data = serializer.serialization(resource);
 		if (null == data) {
 			return;
 		}
