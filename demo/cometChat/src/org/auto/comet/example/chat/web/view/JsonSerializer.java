@@ -2,8 +2,6 @@ package org.auto.comet.example.chat.web.view;
 
 import java.text.DateFormat;
 
-import org.auto.comet.example.chat.web.util.NumberDateFormat;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -15,9 +13,9 @@ public class JsonSerializer implements ResourceSerializer {
 
 	{
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		DateFormat dateFormat = new NumberDateFormat();
-		gsonBuilder.registerTypeAdapter(java.util.Date.class, dateFormat);
-		gsonBuilder.registerTypeAdapter(java.sql.Date.class, dateFormat);
+		com.google.gson.JsonSerializer dateSerializer = new NumberDateSerializer();
+		gsonBuilder.registerTypeAdapter(java.util.Date.class, dateSerializer);
+		gsonBuilder.registerTypeAdapter(java.sql.Date.class, dateSerializer);
 		gsonBuilder.setDateFormat(DateFormat.LONG);
 		gson = gsonBuilder.create();
 	}
