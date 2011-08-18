@@ -6,8 +6,6 @@ import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 
 /**
- * comet容器加载
- *
  * @author XiaohangHu
  * */
 public abstract class AsyncAdapter implements AsyncListener {
