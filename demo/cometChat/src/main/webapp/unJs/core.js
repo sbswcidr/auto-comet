@@ -1180,7 +1180,7 @@ Un.AjaxUtils = {
 			req.onreadystatechange = back;
 		req.open(o.method, o.url, o.async);
 		o.header = o.header || {
-			"Content-Type" : "application/x-www-form-urlencoded;charset=GBK",
+			"Content-Type" : "application/x-www-form-urlencoded;",
 			"X-Requested-With" : "XMLHttpRequest",
 			"If-Modified-Since" : "Thu, 01 Jan 1970 00:00:00 GMT"
 		};
