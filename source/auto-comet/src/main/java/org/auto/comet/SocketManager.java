@@ -31,18 +31,18 @@ public class SocketManager {
 	/** Logger available to subclasses */
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/** 默认为1分钟 */
+	private long pushTimeout = 60000l;
+
+	/** 异步超时时间，默认一小时 */
+	private long asyncTimeout = 3600000;
+
 	private SocketStore socketStore;
 
 	/** rwLock为SocketManager的锁 */
 	private ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
 	private Lock readLock = rwLock.readLock();
 	private Lock writeLock = rwLock.writeLock();
-
-	/** 默认为1分钟 */
-	private long pushTimeout = 60000l;
-
-	/** 异步超时时间，默认一小时 */
-	private long asyncTimeout = 3600000;
 
 	private SocketListener socketListener = new SocketListener() {
 		@Override
@@ -57,8 +57,8 @@ public class SocketManager {
 		try {
 			random = SecureRandom.getInstance(RANDOM_ALGORITHM);
 		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException("创建随机数生成器出错,没有找到[" + RANDOM_ALGORITHM
-					+ "]算法", e);
+			throw new IllegalStateException("Can't find secure random["
+					+ RANDOM_ALGORITHM + "]", e);
 		}
 	}
 
@@ -85,23 +85,6 @@ public class SocketManager {
 		}, pushTimeout, period);
 	}
 
-	private String getRandom() {
-		long l = random.nextLong();
-		l = l >= 0L ? l : -l;
-		return Long.toString(l, 36);
-	}
-
-	/**
-	 * 返回一个不重复的安全随机id
-	 * */
-	private String getConnectionId() {
-		String id = getRandom();
-		while (hasSocket(id)) {
-			id = getRandom();
-		}
-		return id;
-	}
-
 	public long getPushTimeout() {
 		return pushTimeout;
 	}
@@ -116,51 +99,6 @@ public class SocketManager {
 
 	public void setAsyncTimeout(long asyncTimeout) {
 		this.asyncTimeout = asyncTimeout;
-	}
-
-	/**
-	 * 读操作
-	 * */
-	private PushSocket getSocket(Serializable id) {
-		return socketStore.getSocket(id);
-	}
-
-	/**
-	 * 写操作
-	 * */
-	private PushSocket removeSocket(PushSocket socket) {
-		Serializable id = socket.getId();
-		return removeSocket(id);
-	}
-
-	/**
-	 * 写操作
-	 * */
-	private PushSocket removeSocket(Serializable id) {
-		writeLock.lock();
-		try {
-			return socketStore.removeSocket(id);
-		} finally {
-			writeLock.unlock();
-		}
-	}
-
-	private void addSocket(PushSocket socket) {
-		writeLock.lock();
-		try {
-			socketStore.addSocket(socket);
-		} finally {
-			writeLock.unlock();
-		}
-	};
-
-	private boolean hasSocket(Serializable id) {
-		readLock.lock();
-		try {
-			return socketStore.hasSocket(id);
-		} finally {
-			readLock.unlock();
-		}
 	}
 
 	private void processPushTimeOut(PushSocket socket) {
@@ -201,14 +139,19 @@ public class SocketManager {
 	 * 创建新链接
 	 * */
 	public void creatConnection(PushSocket socket) {
-		String id = this.getConnectionId();
-		socket.setId(id);
-		socket.addListener(socketListener);
-		socket.setTimeout(this.asyncTimeout);
-		if (this.logger.isDebugEnabled()) {
-			this.logger.debug("creatConnection [" + id + "]");
+		writeLock.lock();
+		try {
+			String id = this.getConnectionId();
+			socket.setId(id);
+			socket.addListener(socketListener);
+			socket.setTimeout(this.asyncTimeout);
+			if (this.logger.isDebugEnabled()) {
+				this.logger.debug("creatConnection [" + id + "]");
+			}
+			this.addSocket(socket);
+		} finally {
+			writeLock.unlock();
 		}
-		this.addSocket(socket);
 	}
 
 	/**
@@ -237,5 +180,43 @@ public class SocketManager {
 		if (this.logger.isDebugEnabled()) {
 			this.logger.debug("disconnect [" + connectionId + "]");
 		}
+	}
+
+	private String getRandom() {
+		long l = random.nextLong();
+		l = l >= 0L ? l : -l;
+		return Long.toString(l, 36);
+	}
+
+	/**
+	 * 返回一个不重复的安全随机id
+	 * */
+	private String getConnectionId() {
+		String id = getRandom();
+		while (hasSocket(id)) {
+			id = getRandom();
+		}
+		return id;
+	}
+
+	private PushSocket getSocket(Serializable id) {
+		return socketStore.getSocket(id);
+	}
+
+	private PushSocket removeSocket(PushSocket socket) {
+		Serializable id = socket.getId();
+		return removeSocket(id);
+	}
+
+	private PushSocket removeSocket(Serializable id) {
+		return socketStore.removeSocket(id);
+	}
+
+	private void addSocket(PushSocket socket) {
+		socketStore.addSocket(socket);
+	};
+
+	private boolean hasSocket(Serializable id) {
+		return socketStore.hasSocket(id);
 	}
 }

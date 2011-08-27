@@ -1,9 +1,9 @@
 package org.auto.comet.xml;
 
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.auto.io.Resource;
 import org.auto.util.PropertiesLoaderUtils;
@@ -32,7 +32,17 @@ public class DocumentResourceReader {
 		documentLoader.setNamespaceAware(true);
 
 		XmlDefinitionResolver delegatingResolver = new XmlDefinitionResolver();
+		XmlDefinitionManager xmlDefinitionManager = getXmlDefinitionManager();
+		delegatingResolver.setXmlDefinitionManager(xmlDefinitionManager);
 
+		documentLoader.setEntityResolver(delegatingResolver);
+		this.documentLoader = documentLoader;
+	}
+
+	private XmlDefinitionManager getXmlDefinitionManager() {
+		/**
+		 * get XML definition from properties file.
+		 * */
 		XmlDefinitionManager xmlDefinitionManager = new XmlDefinitionManager();
 		Properties properties = PropertiesLoaderUtils.loadClassPathProperties(
 				xmlDefinitionMappingsLocation, null);
@@ -40,11 +50,7 @@ public class DocumentResourceReader {
 		xmlDefinitionManager
 				.addDefinitionMappings(propertiesXmlDefinitionParser
 						.parser(properties));
-
-		delegatingResolver.setXmlDefinitionManager(xmlDefinitionManager);
-
-		documentLoader.setEntityResolver(delegatingResolver);
-		this.documentLoader = documentLoader;
+		return xmlDefinitionManager;
 	}
 
 	public Document read(Resource resource) {
@@ -55,7 +61,7 @@ public class DocumentResourceReader {
 	}
 
 	public Set<Document> read(Set<Resource> resources) {
-		Set<Document> documents = new TreeSet<Document>();
+		Set<Document> documents = new HashSet<Document>();
 		for (Resource resource : resources) {
 			Document d = read(resource);
 			if (null != d) {
