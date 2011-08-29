@@ -73,10 +73,6 @@ public class ConcurrentConnectionManager extends AbstractConnectionManager {
 		}
 	}
 
-	public PushSocket removeSocket(PushSocket socket) {
-		return super.removeSocket(socket);
-	}
-
 	@Override
 	public PushSocket removeSocket(Serializable id) {
 		writeLock.lock();

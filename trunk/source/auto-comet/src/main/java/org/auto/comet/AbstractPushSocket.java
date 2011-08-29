@@ -67,6 +67,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 	}
 
 	public AbstractPushSocket() {
+		super();
 	}
 
 	public AbstractPushSocket(Serializable id) {
@@ -268,11 +269,10 @@ public class AbstractPushSocket implements Socket, PushSocket {
 	/**
 	 * 是否已经关闭
 	 * */
-	public boolean isClosed() {
+	private boolean isClosed() {
 		return close;
 	}
 
-	/** ~~~~~~~~~~~~~~~~~~~~~~~对外线程安全的接口~~~~~~~~~~~~~~~~~~~~~~~ */
 	/**
 	 * 接待取消息请求
 	 * 
