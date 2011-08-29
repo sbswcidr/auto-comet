@@ -28,11 +28,9 @@ import org.auto.web.resource.WebResourceScanMachine;
 import org.auto.web.util.RequestUtils;
 
 /**
- * <p>
  * 连接转发servlet
- * </p>
- * 该类用于处理所有的连接请求
  * 
+ * 该类用于处理所有的连接请求
  * 
  * @author XiaohangHu
  * */
@@ -51,8 +49,9 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	private long pushTimeout = 60000l;
 
 	private UrlHandlerMapping urlHandlerMapping;
-	private ConnectionManager socketManager;
+	private ConnectionManager connectionManager;
 
+	@Override
 	public final void init() throws ServletException {
 		getServletContext().log(
 				"Initializing " + getClass().getSimpleName() + " '"
@@ -60,7 +59,8 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		super.init();
 		CometConfigMetadata cometConfig = readCometConfig();
 		initHandlerMapping(cometConfig);
-		initSocketManager(cometConfig);
+		initConnectionManager(cometConfig);
+		startTimer(connectionManager);
 		if (this.logger.isInfoEnabled()) {
 			this.logger.info("SocketDispatcherServlet '" + getServletName()
 					+ "': initialization started");
@@ -106,35 +106,35 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	}
 
-	protected void initSocketManager(CometConfigMetadata cometConfig)
+	protected void initConnectionManager(CometConfigMetadata cometConfig)
 			throws ServletException {
-		ConcurrentConnectionManager socketManager = new ConcurrentConnectionManager(
+		ConcurrentConnectionManager connectionManager = new ConcurrentConnectionManager(
 				pushTimeout);
-		startTimer(socketManager);
 		Integer timeout = cometConfig.getTimeout();
 		if (null != timeout) {
+			// 将分钟转化为毫秒
 			long asyncTimeout = (long) (60000l * timeout);
-			socketManager.setAsyncTimeout(asyncTimeout);
+			connectionManager.setAsyncTimeout(asyncTimeout);
 		}
-		this.socketManager = socketManager;
+		this.connectionManager = connectionManager;
 	}
 
 	public String getDefaultDispatcherConfigLocation() {
 		return "/WEB-INF/dispatcher-servlet.xml";
 	}
 
+	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		ConnectionManager socketManager = getSocketManager();
-
 		String synchronizValue = getSynchronizValue(request);
+
 		if (null == synchronizValue) {// 同步值为空则为接收消息
-			receiveMessage(socketManager, request, response);
-		} else if (Protocol.CONNECTION_VALUE.equals(synchronizValue)) {// 创建链接请求
-			creatConnection(socketManager, request, response);
-		} else if (Protocol.DISCONNECT_VALUE.equals(synchronizValue)) {// 断开链接请求
-			disconnect(socketManager, request);
+			receiveMessage(connectionManager, request, response);
+		} else if (Protocol.CONNECTION_VALUE.equals(synchronizValue)) {// 创建连接请求
+			creatConnection(connectionManager, request, response);
+		} else if (Protocol.DISCONNECT_VALUE.equals(synchronizValue)) {// 断开连接请求
+			disconnect(connectionManager, request, response);
 		}
 	}
 
@@ -147,56 +147,75 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		socketManager.receiveMessage(connectionId, request, response);
 	}
 
-	private void creatConnection(ConnectionManager socketManager,
+	/**
+	 * 创建连接
+	 * */
+	private void creatConnection(ConnectionManager connectionManager,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		SocketHandler service = getSocketHandler(request);
 		if (null == service) {
-			String uri = RequestUtils.getServletPath(request);
-			throw new DispatchException("Cant find comet handler by [" + uri
-					+ "]. Did you register it?");
+			noHandlerFound(request, response);
+			return;
 		}
 
 		PushSocket socket = new ConcurrentPushSocket();
 		boolean accept = service.accept(socket, request);
 		String commend = null;
 		if (accept) {// 如果接受连接请求则创建连接
-			socketManager.creatConnection(socket);
+			connectionManager.creatConnection(socket);
 			commend = JsonProtocolUtils.getConnectionCommend(socket.getId());
 		} else {// 如果拒绝连接请求
 			commend = JsonProtocolUtils.getConnectionCommend(null);
 		}
 		PrintWriter write = response.getWriter();
-		// 返回生成的链接id
+		// 返回生成的连接id
 		write.write(commend);
 		write.flush();
 	}
 
 	/**
-	 * 断开链接
+	 * 断开连接
 	 * */
 	private void disconnect(ConnectionManager socketManager,
-			HttpServletRequest request) {
+			HttpServletRequest request, HttpServletResponse response) {
 		SocketHandler handler = getSocketHandler(request);
 		if (null == handler) {
-			String uri = RequestUtils.getServletPath(request);
-			throw new DispatchException("Cant find comet handler by [" + uri
-					+ "]. Did you registered it?");
-		}
-		String connectionId = getConnectionId(request);
-		if (StringUtils.isBlank(connectionId)) {
-			if (logger.isWarnEnabled()) {
-				logger.warn("Null connectionId from[ip:"
-						+ request.getRemoteAddr() + "]");
-			}
+			noHandlerFound(request, response);
 			return;
 		}
+		String connectionId = getConnectionId(request);
 		socketManager.disconnect(connectionId, handler, request);
 	}
 
 	protected SocketHandler getSocketHandler(HttpServletRequest request) {
 		String uri = RequestUtils.getServletPath(request);
 		return urlHandlerMapping.getHandler(uri);
+	}
+
+	/**
+	 * No handler found -> set appropriate HTTP response status.
+	 * 
+	 * @param request
+	 *            current HTTP request
+	 * @param response
+	 *            current HTTP response
+	 */
+	protected void noHandlerFound(HttpServletRequest request,
+			HttpServletResponse response) {
+		String uri = RequestUtils.getServletPath(request);
+		if (logger.isWarnEnabled()) {
+			String message = "No mapping handler found for HTTP request with URI ["
+					+ uri
+					+ "] in DispatcherServlet with name '"
+					+ getServletName() + "'";
+			logger.warn(message);
+		}
+		try {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		} catch (IOException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	private static String getSynchronizValue(HttpServletRequest request) {
@@ -206,13 +225,6 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	private static String getConnectionId(HttpServletRequest request) {
 		return request.getParameter(Protocol.CONNECTIONID_KEY);
-	}
-
-	private ConnectionManager getSocketManager() {
-		if (null == socketManager) {
-			throw new DispatchException("Cant find socketManager!");
-		}
-		return socketManager;
 	}
 
 }
