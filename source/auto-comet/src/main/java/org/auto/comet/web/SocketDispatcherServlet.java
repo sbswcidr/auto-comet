@@ -2,6 +2,8 @@ package org.auto.comet.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -11,16 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.auto.comet.ConcurrentConnectionManager;
+import org.auto.comet.ConcurrentPushSocket;
 import org.auto.comet.ObjectFactory;
 import org.auto.comet.Protocol;
 import org.auto.comet.PushSocket;
 import org.auto.comet.SocketHandler;
-import org.auto.comet.SocketManager;
+import org.auto.comet.ConnectionManager;
 import org.auto.comet.config.CometConfigMetadata;
 import org.auto.comet.support.JsonProtocolUtils;
-import org.auto.comet.support.LocalSocketStore;
 import org.auto.comet.support.ObjectFactoryBuilder;
-import org.auto.comet.support.SocketStore;
 import org.auto.comet.xml.XmlConfigResourceHandler;
 import org.auto.web.resource.WebResourceScanMachine;
 import org.auto.web.util.RequestUtils;
@@ -30,8 +32,8 @@ import org.auto.web.util.RequestUtils;
  * 连接转发servlet
  * </p>
  * 该类用于处理所有的连接请求
- *
- *
+ * 
+ * 
  * @author XiaohangHu
  * */
 public class SocketDispatcherServlet extends AbstractDispatcherServlet {
@@ -45,8 +47,11 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	public static final String INIT_PARAMETER_CONFIG_LOCATION = "dispatcherConfigLocation";
 
+	/** 默认为1分钟 */
+	private long pushTimeout = 60000l;
+
 	private UrlHandlerMapping urlHandlerMapping;
-	private SocketManager socketManager;
+	private ConnectionManager socketManager;
 
 	public final void init() throws ServletException {
 		getServletContext().log(
@@ -60,6 +65,16 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 			this.logger.info("SocketDispatcherServlet '" + getServletName()
 					+ "': initialization started");
 		}
+	}
+
+	/**
+	 * 开始定时任务
+	 * */
+	public void startTimer(ConnectionManager socketManager) {
+		Timer timer = new Timer(true);
+		long period = pushTimeout / 2l;
+		timer.schedule(new CheckPushTimeoutTimerTask(socketManager),
+				pushTimeout, period);
 	}
 
 	protected CometConfigMetadata readCometConfig() {
@@ -93,8 +108,9 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 
 	protected void initSocketManager(CometConfigMetadata cometConfig)
 			throws ServletException {
-		SocketManager socketManager = creatSocketManager();
-		socketManager.startTimer();
+		ConcurrentConnectionManager socketManager = new ConcurrentConnectionManager(
+				pushTimeout);
+		startTimer(socketManager);
 		Integer timeout = cometConfig.getTimeout();
 		if (null != timeout) {
 			long asyncTimeout = (long) (60000l * timeout);
@@ -110,7 +126,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	public void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		SocketManager socketManager = getSocketManager();
+		ConnectionManager socketManager = getSocketManager();
 
 		String synchronizValue = getSynchronizValue(request);
 		if (null == synchronizValue) {// 同步值为空则为接收消息
@@ -125,25 +141,24 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	/**
 	 * 接收消息
 	 * */
-	private static void receiveMessage(SocketManager socketManager,
+	private static void receiveMessage(ConnectionManager socketManager,
 			HttpServletRequest request, HttpServletResponse response) {
 		String connectionId = getConnectionId(request);
 		socketManager.receiveMessage(connectionId, request, response);
 	}
 
-	private void creatConnection(SocketManager socketManager,
+	private void creatConnection(ConnectionManager socketManager,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		SocketHandler service = getSocketHandler(request);
 		if (null == service) {
 			String uri = RequestUtils.getServletPath(request);
 			throw new DispatchException("Cant find comet handler by [" + uri
-					+ "]. Did you registered it?");
+					+ "]. Did you register it?");
 		}
 
-		PushSocket socket = new PushSocket();
+		PushSocket socket = new ConcurrentPushSocket();
 		boolean accept = service.accept(socket, request);
-		PrintWriter write = response.getWriter();
 		String commend = null;
 		if (accept) {// 如果接受连接请求则创建连接
 			socketManager.creatConnection(socket);
@@ -151,6 +166,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		} else {// 如果拒绝连接请求
 			commend = JsonProtocolUtils.getConnectionCommend(null);
 		}
+		PrintWriter write = response.getWriter();
 		// 返回生成的链接id
 		write.write(commend);
 		write.flush();
@@ -159,7 +175,7 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 	/**
 	 * 断开链接
 	 * */
-	private void disconnect(SocketManager socketManager,
+	private void disconnect(ConnectionManager socketManager,
 			HttpServletRequest request) {
 		SocketHandler handler = getSocketHandler(request);
 		if (null == handler) {
@@ -192,17 +208,33 @@ public class SocketDispatcherServlet extends AbstractDispatcherServlet {
 		return request.getParameter(Protocol.CONNECTIONID_KEY);
 	}
 
-	protected static SocketManager creatSocketManager() {
-		SocketStore socketStore = new LocalSocketStore();
-		SocketManager socketManager = new SocketManager(socketStore);
-		return socketManager;
-	}
-
-	private SocketManager getSocketManager() {
+	private ConnectionManager getSocketManager() {
 		if (null == socketManager) {
 			throw new DispatchException("Cant find socketManager!");
 		}
 		return socketManager;
 	}
 
+}
+
+class CheckPushTimeoutTimerTask extends TimerTask {
+
+	/** Logger available to subclasses */
+	protected final Log logger = LogFactory.getLog(getClass());
+
+	private ConnectionManager socketManager;
+
+	CheckPushTimeoutTimerTask(ConnectionManager socketManager) {
+		this.socketManager = socketManager;
+	}
+
+	@Override
+	public void run() {
+		// 异常处理，防止守护线程死亡！
+		try {
+			socketManager.checkPushTimeout();
+		} catch (Throwable e) {
+			logger.error("Push timeout Exception!", e);
+		}
+	}
 }
