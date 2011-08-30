@@ -80,7 +80,7 @@ public abstract class AbstractConnectionManager implements ConnectionManager,
 	 * */
 	public void checkPushTimeout() {
 		if (this.logger.isDebugEnabled()) {
-			this.logger.debug("Check push timeout. Socket count:"
+			this.logger.debug("Check push timeout, Socket count:"
 					+ socketStore.size());
 		}
 		Collection<PushSocket> sockets = this.socketStore.values();
@@ -96,7 +96,7 @@ public abstract class AbstractConnectionManager implements ConnectionManager,
 			HttpServletResponse response) {
 		PushSocket socket = this.getSocket(connectionId);
 		if (null == socket) {
-			throw new PushException("Cant't find socket！");
+			throw new PushException("Cant't find socket!");
 		}
 		socket.receiveRequest(request, response);
 	}
