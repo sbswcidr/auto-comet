@@ -134,7 +134,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 				@Override
 				public void onError(AsyncEvent asyncevent) throws IOException {
 					close();
-					PushException e = new PushException("async context error!");
+					PushException e = new PushException("Async context error!");
 					fireError(e);
 				}
 
