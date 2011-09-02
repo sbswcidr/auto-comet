@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +39,7 @@ public class ChatRoomSocketHandler implements SocketHandler {
 	private Map<Serializable, Socket> socketMapping = new HashMap<Serializable, Socket>();
 
 	/** rwLock为ChatRoomSocketHandler的锁 */
-	private ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
+	private ReadWriteLock rwLock = new ReentrantReadWriteLock();
 	private Lock readLock = rwLock.readLock();
 	private Lock writeLock = rwLock.writeLock();
 
