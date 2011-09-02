@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ConcurrentPushSocket extends AbstractPushSocket {
-	
+
 	public synchronized void receiveRequest(HttpServletRequest request,
 			HttpServletResponse response) {
 		super.receiveRequest(request, response);
@@ -21,7 +21,7 @@ public class ConcurrentPushSocket extends AbstractPushSocket {
 		super.close();
 	}
 
-	public synchronized boolean processPushTimeOut(long pushTimeout) {
-		return super.processPushTimeOut(pushTimeout);
+	public synchronized boolean checkPushTimeOut(long pushTimeout) {
+		return super.checkPushTimeOut(pushTimeout);
 	}
 }

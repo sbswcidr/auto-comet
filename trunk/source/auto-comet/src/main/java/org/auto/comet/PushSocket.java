@@ -38,5 +38,5 @@ public interface PushSocket extends Socket {
 	 *            超时时间
 	 * @return 是否超时
 	 */
-	boolean processPushTimeOut(long pushTimeout);
+	boolean checkPushTimeOut(long pushTimeout);
 }
