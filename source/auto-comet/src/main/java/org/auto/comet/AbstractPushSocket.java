@@ -333,7 +333,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 	 *            超时时间
 	 * @return 是否超时
 	 */
-	public boolean processPushTimeOut(long pushTimeout) {
+	public boolean checkPushTimeOut(long pushTimeout) {
 		if (this.isWaiting()) {
 			return false;
 		}
