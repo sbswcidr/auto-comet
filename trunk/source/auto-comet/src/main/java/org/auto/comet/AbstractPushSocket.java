@@ -345,6 +345,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 			PushException e = new PushTimeoutException(
 					"Push timeout! The client has no connection more than["
 							+ pushTimeout + "]ms");
+			this.socketManager.removeSocket(id);
 			fireError(e);
 			return true;
 		}

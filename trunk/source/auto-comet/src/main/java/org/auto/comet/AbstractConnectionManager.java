@@ -69,10 +69,7 @@ public abstract class AbstractConnectionManager implements ConnectionManager,
 	}
 
 	private void processPushTimeOut(PushSocket socket) {
-		boolean timetOut = socket.checkPushTimeOut(this.pushTimeout);
-		if (timetOut) {// 超时将socket移除
-			this.removeSocket(socket);
-		}
+		socket.checkPushTimeOut(this.pushTimeout);
 	}
 
 	/**
