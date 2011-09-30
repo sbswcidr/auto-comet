@@ -1,1 +1,0 @@
-cometChat is a example for auto-comet.
