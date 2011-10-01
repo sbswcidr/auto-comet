@@ -1,0 +1,1 @@
+auto-comet-demo is a example for auto-comet.
