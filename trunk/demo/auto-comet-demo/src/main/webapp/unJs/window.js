@@ -309,7 +309,7 @@ Un.Window = {
 		initManager : function() {
 			var manager = Un.Window.Manager.getManager(this.renderTo);
 			if (null == manager)
-				var manager = new Un.Window.Manager(this.renderTo);
+				manager = new Un.Window.Manager(this.renderTo);
 			this.manager = manager;
 		},
 		initPosition : function() {
