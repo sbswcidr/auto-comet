@@ -26,9 +26,12 @@
 		var userId = null;
 
 		//loginWindow.show();
+		var contextPath = "/auto-comet-demo";
+		var sendMessageUrl = contextPath + "/chat.do?method=sendMessage";
+		var cometUrl = contextPath + "/chat.comet";
 
 		var sender = {
-			url : "/cometChat/chat.do?method=sendMessage",
+			url : sendMessageUrl,
 			send : function(o) {
 				Un.AjaxUtils.request({
 					url : this.url,
@@ -56,7 +59,7 @@
 		//menuWindow.removeUser("huhang1986@126.com");
 
 		var comet = new Auto.Comet({
-			url : "/cometChat/chat.comet",
+			url : cometUrl,
 			accept : function(data) {
 				data = eval("(" + data + ")");
 				var command = data[COMMAND_KEY];
