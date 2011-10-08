@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>auto-comet-demo</name>
-	<groupId>com.auto</groupId>
+	<groupId>org.auto</groupId>
 	<artifactId>auto-comet-demo</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
