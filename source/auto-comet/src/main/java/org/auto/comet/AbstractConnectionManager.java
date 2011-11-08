@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,7 @@ public abstract class AbstractConnectionManager implements ConnectionManager,
 	/** 异步超时时间，默认一小时 */
 	private long asyncTimeout = 3600000;
 
-	protected Map<Serializable, PushSocket> socketStore = new HashMap<Serializable, PushSocket>();
+	protected Map<Serializable, PushSocket> socketStore = new ConcurrentHashMap<Serializable, PushSocket>();
 
 	private SecureRandom random;
 	{
@@ -173,5 +174,9 @@ public abstract class AbstractConnectionManager implements ConnectionManager,
 	protected boolean hasSocket(Serializable id) {
 		Socket socket = this.getSocket(id);
 		return null != socket;
+	}
+
+	public PushSocket removeSocket(Serializable id) {
+		return socketStore.remove(id);
 	}
 }
