@@ -64,7 +64,7 @@ public class ClassUtils {
 				return Class.forName(className);
 			}
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("没有找到类 [" + className + "]", e);
+			throw new IllegalStateException(e);
 		}
 	}
 
