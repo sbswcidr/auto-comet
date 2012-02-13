@@ -15,7 +15,7 @@ Auto.toString = function(obj) {
 };
 /**
  * 贪婪的拷贝
- *
+ * 
  * @param source目标
  * @param target来源
  */
@@ -26,11 +26,11 @@ Auto.copy = function(source, target) {
 };
 /**
  * 仅拷贝某种类型
- *
+ * 
  * @param source目标
  * @param target来源
  * @param type[string]("string","function",...)类型
- *
+ * 
  */
 Auto.copyByType = function(source, target, type) {
 	for ( var f in target) {
@@ -40,9 +40,9 @@ Auto.copyByType = function(source, target, type) {
 	}
 };
 /**
- *
+ * 
  * 迭代深度拷贝，不迭代数组类型。
- *
+ * 
  */
 Auto.deepCopy = function(source, target) {
 	for ( var f in target) {
@@ -58,7 +58,7 @@ Auto.deepCopy = function(source, target) {
 };
 /**
  * 知足的拷贝
- *
+ * 
  * @param source目标
  * @param target来源
  */
@@ -72,7 +72,7 @@ Auto.contentCopy = function(source, target) {
 /**
  * @method Auto.newClass
  * @see http://hi.baidu.com/huxiaohang/blog/item/2962a8c2254718110ff4773e.html
- *
+ * 
  * @param o.extend[class]父类
  * @param o.public[object]共有属性，方法
  * @param o.constructor[function]构造器
@@ -241,6 +241,9 @@ Auto.AjaxUtils = {
 	 * @param o.async[boolean]异步请求？默认true
 	 */
 	sendRequest : function(o) {
+		if (o.async == null) {
+			o.async = true;
+		}
 		switch (o.method) {
 		case "get":
 		case "GET":
@@ -260,10 +263,11 @@ Auto.AjaxUtils = {
 			req.onreadystatechange = back;
 		req.open(o.method, o.url, o.async);
 		o.header = o.header || {
-			"Content-Type" : "application/x-www-form-urlencoded",
+			"Content-Type" : "application/x-www-form-urlencoded;",
 			"X-Requested-With" : "XMLHttpRequest",
 			"If-Modified-Since" : "Thu, 01 Jan 1970 00:00:00 GMT"
 		};
+
 		for ( var i in o.header) {
 			req.setRequestHeader(i, o.header[i]);
 		}
@@ -272,13 +276,13 @@ Auto.AjaxUtils = {
 			if (o.callback)
 				o.callback.call(o.caller, req);
 		}
-		if (o.sync == false)
+		if (o.async == false)
 			back();
 	},
 	/**
 	 * 无参数时自动调用GET方式
-	 *
-	 * @method Auto.AjaxUtils.request
+	 * 
+	 * @method Un.AjaxUtils.request
 	 * @param o.url[string]
 	 * @param o.method[string]("GET","get","POST","post"..)
 	 * @param o.param[object]
@@ -297,7 +301,7 @@ Auto.AjaxUtils = {
 		function back(req) {
 			if (req.readyState == 4) {
 				var s = req.status;
-				if (Auto.AjaxUtils.isSuccess(s)) {
+				if (Un.AjaxUtils.isSuccess(s)) {
 					if (o.success)
 						o.success.call(this, req.responseText);
 				} else {
@@ -344,14 +348,14 @@ Auto.Comet = {
 		async : false,
 		/**
 		 * 开始链接
-		 *
+		 * 
 		 * @param userParam
 		 *            连接时传递给服务器端的参数
 		 * @param success
 		 *            连接成功处理方法
 		 * @param failure
 		 *            连接失败处理方法
-		 *
+		 * 
 		 */
 		connection : function(userParam, success, failure, caller) {
 			if (!userParam) {
@@ -379,7 +383,7 @@ Auto.Comet = {
 					}
 				}
 			};
-			Auto.AjaxUtils.request(req);
+			Un.AjaxUtils.request(req);
 		},
 		isDisconnectObj : function(o) {
 			return o[Auto.Comet.SYNCHRONIZE_KEY] == Auto.Comet.DISCONNECT_VALUE;
@@ -428,7 +432,7 @@ Auto.Comet = {
 					this.acceptDatas(datas);
 				}
 			};
-			Auto.AjaxUtils.request(req);
+			Un.AjaxUtils.request(req);
 		},
 		/** 断开连接 */
 		disconnect : function(userParam, callback, caller) {
@@ -447,7 +451,7 @@ Auto.Comet = {
 					}
 				}
 			};
-			Auto.AjaxUtils.request(req);
+			Un.AjaxUtils.request(req);
 		}
 	},
 	constructor : function() {

@@ -111,12 +111,13 @@
 			width : 430,
 			height : 210,
 			modal : true,
+			closeMethod : "destroy",
 			//hasShadow : false,
 			maximizable : false
 		});
 		loginWindow.background.addClass("login_window_bg");
 
-		loginWindow.closeAction = loginWindow.hide;
+		//loginWindow.closeAction = loginWindow.hide;
 		loginWindow.emailInput = Un.Input.Text.get("userEmail");
 		loginWindow.erroeMsgSpan = Un.Element.get("erroeMsg");
 		loginWindow.submitBtn = Un.Element.get("loginButton");
@@ -132,10 +133,11 @@
 			this.erroeMsgSpan.hide();
 		}
 		loginWindow.hideWindow = function() {
-			loginWindow.hideShadow();
-			loginWindow.fadeOut(500, function() {
-				this.close();
-			});
+			//loginWindow.hideShadow();
+			//loginWindow.fadeOut(500, function() {
+			//	this.close();
+			//});
+			loginWindow.close();
 		}
 		loginWindow.submit = function() {
 			var email = this.emailInput.getValue();
