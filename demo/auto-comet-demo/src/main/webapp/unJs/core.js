@@ -53,7 +53,7 @@ if (Un.AGENT.is("ie", "6.0")) {
 
 /**
  * 贪婪的拷贝
- *
+ * 
  * @param source目标
  * @param target来源
  */
@@ -64,7 +64,7 @@ Un.copy = function(source, target) {
 };
 /**
  * 知足的拷贝
- *
+ * 
  * @param source目标
  * @param target来源
  */
@@ -77,11 +77,11 @@ Un.contentCopy = function(source, target) {
 };
 /**
  * 仅拷贝某种类型
- *
+ * 
  * @param source目标
  * @param target来源
  * @param type[string]("string","function",...)类型
- *
+ * 
  */
 Un.copyByType = function(source, target, type) {
 	for ( var f in target) {
@@ -92,9 +92,9 @@ Un.copyByType = function(source, target, type) {
 };
 
 /**
- *
+ * 
  * 迭代深度拷贝，不迭代数组类型。
- *
+ * 
  */
 Un.deepCopy = function(source, target) {
 	for ( var f in target) {
@@ -236,7 +236,7 @@ Un.WindowUtils = {
 /**
  * @method Un.newClass
  * @see http://hi.baidu.com/huxiaohang/blog/item/2962a8c2254718110ff4773e.html
- *
+ * 
  * @param o.extend[class]父类
  * @param o.public[object]共有属性，方法
  * @param o.constructor[function]构造器
@@ -523,7 +523,7 @@ Un.Element = {
 		},
 		/**
 		 * 设置透明度
-		 *
+		 * 
 		 * @param f(0-100)
 		 */
 		setOpacity : function(f) {
@@ -1060,7 +1060,7 @@ Un.Animate = Un.newClass({
 	static : {
 		/**
 		 * 获得动画算法
-		 *
+		 * 
 		 * @param sa起始值
 		 * @param so最终值
 		 * @param time时间
@@ -1161,6 +1161,9 @@ Un.AjaxUtils = {
 	 * @param o.async[boolean]异步请求？默认true
 	 */
 	sendRequest : function(o) {
+		if (o.async == null) {
+			o.async = true;
+		}
 		switch (o.method) {
 		case "get":
 		case "GET":
@@ -1193,12 +1196,12 @@ Un.AjaxUtils = {
 			if (o.callback)
 				o.callback.call(o.caller, req);
 		}
-		if (o.sync == false)
+		if (o.async == false)
 			back();
 	},
 	/**
 	 * 无参数时自动调用GET方式
-	 *
+	 * 
 	 * @method Un.AjaxUtils.request
 	 * @param o.url[string]
 	 * @param o.method[string]("GET","get","POST","post"..)
