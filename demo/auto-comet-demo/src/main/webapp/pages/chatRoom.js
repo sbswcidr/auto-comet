@@ -76,9 +76,7 @@ var ChatRoomWindow = {
 			var param = {
 				userId : this.userId,
 				message : text
-			}
-			var result = Un.AjaxUtils.parseParam(param)
-			alert(result)
+			};
 			this.sender.send({
 				param : param,
 				caller : this,
