@@ -350,6 +350,8 @@ Auto.Comet = {
 		cid : null,
 		accept : Auto.emptyFunciton,
 		async : false,
+		/** 是否在连接状态 */
+		isConnect : false,
 		/**
 		 * 开始链接
 		 * 
@@ -383,7 +385,7 @@ Auto.Comet = {
 							success.call(caller);
 						}
 						this.cid = cid;
-						this.polling(cid);
+						this.isConnect = true, this.polling(cid);
 					}
 				}
 			};
@@ -424,6 +426,9 @@ Auto.Comet = {
 		},
 		/** 轮询 */
 		polling : function(cid) {
+			if (!this.isConnect) {
+				return;
+			}
 			var param = {};
 			param[Auto.Comet.CONNECTIONID_KEY] = cid;
 			var req = {
@@ -455,6 +460,7 @@ Auto.Comet = {
 					}
 				}
 			};
+			this.isConnect = false;
 			Un.AjaxUtils.request(req);
 		}
 	},
