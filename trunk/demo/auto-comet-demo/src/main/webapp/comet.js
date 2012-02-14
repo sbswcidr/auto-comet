@@ -202,8 +202,12 @@ Auto.AjaxUtils = {
 	parseParam : function(o) {
 		var paramStr = "";
 		for ( var p in o) {
-			if (o[p])
-				paramStr += p + "=" + o[p] + "&";
+			var value = o[p];
+			if (value) {
+				value = value.replace(/\+/g, "%2B");
+				value = value.replace(/\&/g, "%26");
+				paramStr += p + "=" + value + "&";
+			}
 		}
 		return (paramStr == "") ? null : paramStr;
 	},
