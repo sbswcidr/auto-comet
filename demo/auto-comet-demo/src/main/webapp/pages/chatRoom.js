@@ -73,11 +73,14 @@ var ChatRoomWindow = {
 		},
 		send : function() {
 			var text = this.editor.getValue();
+			var param = {
+				userId : this.userId,
+				message : text
+			}
+			var result = Un.AjaxUtils.parseParam(param)
+			alert(result)
 			this.sender.send({
-				param : {
-					userId : this.userId,
-					message : text
-				},
+				param : param,
 				caller : this,
 				success : function(result) {
 					var data = eval("(" + result + ")");
