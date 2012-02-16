@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.auto.comet.example.chat.service.ChatRoomSocketHandler;
 import org.auto.comet.example.chat.service.IChatRoomService;
@@ -13,12 +11,14 @@ import org.auto.comet.example.chat.service.UserIdRepeatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonObject;
+
 /**
  * ChatService
  * <p>
  * CreateTime: 2010-6-26
  * </p>
- *
+ * 
  * @author XiaohangHu
  */
 @Service
@@ -37,19 +37,19 @@ public class ChatRoomService implements IChatRoomService {
 			throw new UserIdRepeatException();
 		}
 		// 登录了给所有在线的人发广播
-		JSONObject message = new JSONObject();
-		message.put(COMMAND_KEY, COMMAND_LOGIN);
-		message.put("userId", userId);
+		JsonObject message = new JsonObject();
+		message.addProperty(COMMAND_KEY, COMMAND_LOGIN);
+		message.addProperty("userId", userId.toString());
 		this.socketHandler.sendExcept(userId, message.toString());
 	}
 
 	public void sendMessage(Serializable userId, String message) {
-		JSONObject result = new JSONObject();
-		result.put(COMMAND_KEY, COMMAND_RECEIVE);
-		result.put("userId", userId);
-		result.put("text", message);
+		JsonObject result = new JsonObject();
+		result.addProperty(COMMAND_KEY, COMMAND_RECEIVE);
+		result.addProperty("userId", userId.toString());
+		result.addProperty("text", message);
 		String now = DateFormatUtils.format(new Date(), "HH:mm:ss");
-		result.put("time", now);
+		result.addProperty("time", now);
 		socketHandler.sendToAll(result.toString());
 	}
 
@@ -59,9 +59,9 @@ public class ChatRoomService implements IChatRoomService {
 
 	public void loginOut(Serializable userId) {
 		// 登录了给所有在线的人发广播
-		JSONObject message = new JSONObject();
-		message.put(COMMAND_KEY, COMMAND_LOGINOUT);
-		message.put("userId", userId);
+		JsonObject message = new JsonObject();
+		message.addProperty(COMMAND_KEY, COMMAND_LOGINOUT);
+		message.addProperty("userId", userId.toString());
 		this.socketHandler.sendExcept(userId, message.toString());
 	}
 

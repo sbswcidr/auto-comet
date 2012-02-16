@@ -1,12 +1,13 @@
 package org.auto.comet.example.chat.web.controller;
 
+import javax.servlet.ServletResponse;
+
 import org.auto.comet.example.chat.service.TestConcurrentHandler;
-import org.auto.comet.example.chat.web.view.ResourceModelAndView;
+import org.auto.comet.example.chat.web.util.JsonResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author XiaohangHu
@@ -19,11 +20,11 @@ public class TestConcurrentController {
 	private TestConcurrentHandler testConcurrentHandler;
 
 	@RequestMapping(params = "method=sendMessageToAll")
-	public ModelAndView sendMessageToAll(String message) {
+	public void sendMessageToAll(String message, ServletResponse response) {
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("success", "true");
 		this.testConcurrentHandler.sendToAll(message);
-		return new ResourceModelAndView(modelMap);
+		JsonResultUtils.outJson(modelMap, response);
 	}
 
 }
