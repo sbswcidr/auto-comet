@@ -14,11 +14,11 @@
 	<context:component-scan base-package="org.auto.comet.example.chat.web" />
 	<mvc:annotation-driven/>
 
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	<!-- <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="webBindingInitializer">
 			<bean class="org.auto.comet.example.chat.web.CustomerBinding"/>
 		</property>
-	</bean>
+	</bean> -->
 
 	<bean name="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
 		<property name="location" value="/WEB-INF/views.xml"></property>

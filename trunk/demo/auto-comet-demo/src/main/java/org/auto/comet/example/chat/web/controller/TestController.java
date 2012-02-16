@@ -3,15 +3,15 @@ package org.auto.comet.example.chat.web.controller;
 import java.io.IOException;
 import java.io.Writer;
 
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.auto.comet.example.chat.web.view.ResourceModelAndView;
+import org.auto.comet.example.chat.web.util.JsonResultUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author XiaohangHu
@@ -21,11 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class TestController {
 
 	@RequestMapping(params = "method=sayHelloJson")
-	public ModelAndView sayHelloJson(@RequestParam("id") Integer id) {
+	public void sayHelloJson(@RequestParam("id") Integer id,
+			ServletResponse response) {
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("hello", "hello " + id);
 		System.out.println("sayHelloJson req");
-		return new ResourceModelAndView(modelMap);
+		JsonResultUtils.outJson(modelMap, response);
 	}
 
 	@RequestMapping(params = "method=listBoardTopic")
@@ -41,7 +42,7 @@ public class TestController {
 		response.setContentType("test/json");
 		// response.setCharacterEncoding("UTF-8");
 		System.out.println(response.getCharacterEncoding());
-//		request.setCharacterEncoding("UTF-8");
+		// request.setCharacterEncoding("UTF-8");
 		System.out.println(request.getCharacterEncoding());
 		System.out.println("request before setCharacterEncoding:"
 				+ request.getParameter("name"));

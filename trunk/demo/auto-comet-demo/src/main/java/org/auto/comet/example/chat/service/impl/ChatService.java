@@ -8,8 +8,6 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.auto.comet.ErrorHandler;
 import org.auto.comet.PushException;
@@ -18,12 +16,14 @@ import org.auto.comet.SocketHandler;
 import org.auto.comet.example.chat.service.IChatService;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonObject;
+
 /**
  * ChatService
  * <p>
  * CreateTime: 2010-6-26
  * </p>
- *
+ * 
  * @author XiaohangHu
  */
 @Service
@@ -77,14 +77,14 @@ public class ChatService implements IChatService, SocketHandler {
 			if (id.equals(userId)) {
 				continue;
 			}
-			JSONObject message = new JSONObject();
-			message.put(COMMAND_KEY, COMMAND_LOGIN);
-			message.put("userId", userId);
+			JsonObject message = new JsonObject();
+			message.addProperty(COMMAND_KEY, COMMAND_LOGIN);
+			message.addProperty("userId", userId.toString());
 			socket.send(message.toString());
 
-			JSONObject message2 = new JSONObject();
-			message2.put(COMMAND_KEY, COMMAND_LOGIN);
-			message2.put("userId", id);
+			JsonObject message2 = new JsonObject();
+			message2.addProperty(COMMAND_KEY, COMMAND_LOGIN);
+			message2.addProperty("userId", id.toString());
 			userSocket.send(message2.toString());
 		}
 
@@ -93,12 +93,12 @@ public class ChatService implements IChatService, SocketHandler {
 	@Override
 	public void sendMessage(String userId, String targetUserId, String message) {
 		Socket socket = socketMapping.get(targetUserId);
-		JSONObject result = new JSONObject();
-		result.put(COMMAND_KEY, COMMAND_RECEIVE);
-		result.put("userId", userId);
-		result.put("text", message);
+		JsonObject result = new JsonObject();
+		result.addProperty(COMMAND_KEY, COMMAND_RECEIVE);
+		result.addProperty("userId", userId);
+		result.addProperty("text", message);
 		String now = DateFormatUtils.format(new Date(), "HH:mm:ss");
-		result.put("time", now);
+		result.addProperty("time", now);
 		socket.send(result.toString());
 	}
 

@@ -1,12 +1,13 @@
 package org.auto.comet.example.chat.web.controller;
 
+import javax.servlet.ServletResponse;
+
 import org.auto.comet.example.chat.service.IChatService;
-import org.auto.comet.example.chat.web.view.ResourceModelAndView;
+import org.auto.comet.example.chat.web.util.JsonResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author XiaohangHu
@@ -19,12 +20,14 @@ public class ChatController {
 	private IChatService chatService;
 
 	@RequestMapping(params = "method=sendMessage")
-	public ModelAndView sendMessage(String userId, String targetUserId,
-			String message) {
+	public void sendMessage(String userId, String targetUserId, String message,
+			ServletResponse response)  {
 		this.chatService.sendMessage(userId, targetUserId, message);
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("success", "true");
-		return new ResourceModelAndView(modelMap);
+
+		JsonResultUtils.outJson(modelMap, response);
+		// return new ResourceModelAndView(modelMap);
 	}
 
 }
