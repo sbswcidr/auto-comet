@@ -1,12 +1,12 @@
 package org.auto.util;
 
-import java.io.IOException;
-import java.io.InputStream;
+//import java.io.IOException;
+//import java.io.InputStream;
 
-import org.objectweb.asm.Attribute;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.CodeVisitor;
+//import org.objectweb.asm.Attribute;
+//import org.objectweb.asm.ClassReader;
+//import org.objectweb.asm.ClassVisitor;
+//import org.objectweb.asm.CodeVisitor;
 
 /**
  * Class工具类
@@ -50,8 +50,7 @@ public class ClassUtils {
 
 	/**
 	 * 从流中读取类
-	 * */
-	public static Class<?> getClassFromInputStream(InputStream inputStream)
+	 public static Class<?> getClassFromInputStream(InputStream inputStream)
 			throws IOException {
 		ClassReader classReader = new ClassReader(inputStream);
 		SampleClassVisitor visitor = new SampleClassVisitor();
@@ -67,9 +66,12 @@ public class ClassUtils {
 			throw new IllegalStateException(e);
 		}
 	}
+	 * */
+	
 
 }
 
+/***
 class SampleClassVisitor implements ClassVisitor {
 
 	private String className;
@@ -115,3 +117,4 @@ class SampleClassVisitor implements ClassVisitor {
 	}
 
 }
+*/
