@@ -74,9 +74,9 @@ Auto.contentCopy = function(source, target) {
  * @see http://hi.baidu.com/huxiaohang/blog/item/2962a8c2254718110ff4773e.html
  * 
  * @param o.extend[class]父类
- * @param o.public[object]共有属性，方法
+ * @param o.public_[object]共有属性，方法
  * @param o.constructor[function]构造器
- * @param o.static[object]类属性，方法
+ * @param o.static_[object]类属性，方法
  */
 Auto.newClass = function(classAccessory) {
 
@@ -117,15 +117,15 @@ Auto.newClass = function(classAccessory) {
 		};
 	}
 
-	Auto.copy(newClass, classAccessory.static);
+	Auto.copy(newClass, classAccessory.static_);
 
-	Auto.deepCopy(newClass.prototype, classAccessory.public);
+	Auto.deepCopy(newClass.prototype, classAccessory.public_);
 	classAccessory = null;
 	return newClass;
 };
 
 Auto.Object = Auto.newClass({
-	public : {
+	public_ : {
 		userData : null,
 		toString : function() {
 			return Auto.toString(this);
@@ -138,7 +138,7 @@ Auto.Object = Auto.newClass({
 		var o = arguments[arguments.length - 1];
 		Auto.contentCopy(this, o);
 	},
-	static : {
+	static_ : {
 		$ : function(o) {
 			if (o instanceof this)
 				return o;
@@ -150,7 +150,7 @@ Auto.Object = Auto.newClass({
 
 Auto.Observable = Auto.newClass({
 	extend : Auto.Object,
-	public : {
+	public_ : {
 		customListeners : null,
 		addCustomListener : function(eventType, fun, caller) {
 			if (!fun)
@@ -335,7 +335,7 @@ Auto.AjaxUtils = {
  */
 Auto.Comet = {
 	extend : Auto.Observable,
-	static : {
+	static_ : {
 		/** 请求参数名：同步 */
 		SYNCHRONIZE_KEY : "_S_COMET",
 		/** 同步值：创建连接 */
@@ -345,7 +345,7 @@ Auto.Comet = {
 		/** 返回参数名：连接ID */
 		CONNECTIONID_KEY : "_C_COMET"
 	},
-	public : {
+	public_ : {
 		url : null,
 		cid : null,
 		accept : Auto.emptyFunciton,

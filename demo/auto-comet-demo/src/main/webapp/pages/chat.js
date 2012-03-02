@@ -1,6 +1,6 @@
 var ChatWindow = {
 	extend : Un.Window,
-	public : {
+	public_ : {
 		reader : null,
 		editor : null,
 		sendButton : null,
@@ -55,7 +55,7 @@ ChatWindow = Un.newClass(ChatWindow);
 
 var MenuWindow = {
 	extend : Un.Window,
-	public : {
+	public_ : {
 		userId : null,
 		users : null,
 		sender : null,

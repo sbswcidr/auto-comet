@@ -5,7 +5,7 @@
  */
 Un.Input = Un.newClass({
 	extend : Un.Element,
-	public : {
+	public_ : {
 		tagName : "input",
 		defaultValue : "",
 		tip : null,
@@ -87,7 +87,7 @@ Un.Input = Un.newClass({
  */
 Un.Input.Text = {
 	extend : Un.Input,
-	public : {
+	public_ : {
 		type : null,
 		$ : {
 			type : "text"
@@ -120,7 +120,7 @@ Un.Input.Text = {
 Un.Input.Text = Un.newClass(Un.Input.Text);
 Un.Spinner = Un.newClass({
 	extend : Un.Component,
-	public : {
+	public_ : {
 		tip : "",
 		defaultValue : "",
 		minValue : -Number.MAX_VALUE,

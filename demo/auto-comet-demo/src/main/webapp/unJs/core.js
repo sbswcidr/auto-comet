@@ -238,7 +238,7 @@ Un.WindowUtils = {
  * @see http://hi.baidu.com/huxiaohang/blog/item/2962a8c2254718110ff4773e.html
  * 
  * @param o.extend[class]父类
- * @param o.public[object]共有属性，方法
+ * @param o.public_[object]共有属性，方法
  * @param o.constructor[function]构造器
  * @param o.static[object]类属性，方法
  */
@@ -281,15 +281,15 @@ Un.newClass = function(classAccessory) {
 		};
 	}
 
-	Un.copy(newClass, classAccessory.static);
+	Un.copy(newClass, classAccessory.static_);
 
-	Un.deepCopy(newClass.prototype, classAccessory.public);
+	Un.deepCopy(newClass.prototype, classAccessory.public_);
 	classAccessory = null;
 	return newClass;
 };
 
 Un.Object = Un.newClass({
-	public : {
+	public_ : {
 		userData : null,
 		toString : function() {
 			return Un.toString(this);
@@ -302,7 +302,7 @@ Un.Object = Un.newClass({
 		var o = arguments[arguments.length - 1];
 		Un.contentCopy(this, o);
 	},
-	static : {
+	static_ : {
 		$ : function(o) {
 			if (o instanceof this)
 				return o;
@@ -314,7 +314,7 @@ Un.Object = Un.newClass({
 
 Un.Observable = Un.newClass({
 	extend : Un.Object,
-	public : {
+	public_ : {
 		customListeners : null,
 		addCustomListener : function(eventType, fun, caller) {
 			if (!fun)
@@ -384,7 +384,7 @@ Un.Observable = Un.newClass({
  */
 Un.Element = {
 	extend : Un.Observable,
-	public : {
+	public_ : {
 		e : null,
 		tagName : "div",
 		className : "",
@@ -705,7 +705,7 @@ Un.Element = {
 		}
 		delete this.tagName;
 	},
-	static : {
+	static_ : {
 		get : function(p) {
 			switch (typeof p) {
 			case "string":
@@ -858,7 +858,7 @@ Un.ready(function() {
 /** Component *************************************************************** */
 Un.Component = Un.newClass({
 	extend : Un.Element,
-	public : {
+	public_ : {
 		mask : null,
 		renderTo : null,
 		applyTo : null,
@@ -901,7 +901,7 @@ Un.Component = Un.newClass({
 /** Button *************************************************************** */
 Un.Button = Un.newClass({
 	extend : Un.Element,
-	public : {
+	public_ : {
 		className : "u_btn",
 		up : function() {
 			this.removeClass(this.className + "_over");
@@ -929,7 +929,7 @@ Un.Button = Un.newClass({
 /** Box *************************************************************** */
 Un.Box = Un.newClass({
 	extend : Un.Component,
-	public : {
+	public_ : {
 		width : 180,
 		height : 110,
 		getWidth : function() {
@@ -993,7 +993,7 @@ Un.Date = {
 /** Timer ******************************************************************** */
 Un.Timer = Un.newClass({
 	extend : Un.Observable,
-	public : {
+	public_ : {
 		start : function(fun, i, c) {
 			if (this.intervalId)
 				return false;
@@ -1033,7 +1033,7 @@ Un.Timer = Un.newClass({
  */
 Un.Animate = Un.newClass({
 	extend : Un.Observable,
-	public : {
+	public_ : {
 		interval : 10,
 		setter : null,
 		formula : null,
@@ -1057,7 +1057,7 @@ Un.Animate = Un.newClass({
 	constructor : function() {
 		this.timer = new Un.Timer();
 	},
-	static : {
+	static_ : {
 		/**
 		 * 获得动画算法
 		 * 
@@ -1088,7 +1088,7 @@ Un.Animate = Un.newClass({
 });
 Un.AnimateGroup = Un.newClass({
 	extend : Un.Observable,
-	public : {
+	public_ : {
 		animates : null,
 		addAnimate : function(a) {
 			this.animates.push(a);

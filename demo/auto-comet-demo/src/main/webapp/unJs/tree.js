@@ -2,7 +2,7 @@
 Un.Tree = Un
 		.newClass( {
 			extend : Un.Component,
-			public : {
+			public_ : {
 				tagName : "ul",
 				className : "u_tree",
 				root : null,
@@ -99,7 +99,7 @@ Un.Tree = Un
 
 Un.CheckTree = Un.newClass( {
 	extend : Un.Tree,
-	public : {
+	public_ : {
 		mode : null,
 		addRoot : function(r) {
 			r.addCheckbox();
@@ -115,7 +115,7 @@ Un.CheckTree = Un.newClass( {
 
 Un.RadioTree = Un.newClass( {
 	extend : Un.Tree,
-	public : {
+	public_ : {
 		mode : null,
 		radioNode : null,
 		defaultRadioNode : null,
@@ -145,7 +145,7 @@ Un.RadioTree = Un.newClass( {
 
 Un.Tree.Node = Un.newClass( {
 	extend : Un.Element,
-	public : {
+	public_ : {
 		tagName : "li",
 		className : "u_tree_node",
 		id : null,
@@ -540,7 +540,7 @@ Un.Tree.Node = Un.newClass( {
 
 Un.Checkbox = Un.newClass( {
 	extend : Un.Component,
-	public : {
+	public_ : {
 		className : "u_checkbox",
 		defaultChecked : false,
 		active : function() {
@@ -571,7 +571,7 @@ Un.Checkbox = Un.newClass( {
 
 Un.Radio = Un.newClass( {
 	extend : Un.Checkbox,
-	public : {
+	public_ : {
 		className : "u_radio"
 	},
 	constructor : function() {
