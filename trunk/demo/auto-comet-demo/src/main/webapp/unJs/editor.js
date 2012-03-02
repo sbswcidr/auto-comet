@@ -1,6 +1,6 @@
 Un.Editor = {
 	extend : Un.Box,
-	public : {
+	public_ : {
 		editArea : null,
 		getValue : function() {
 			return this.editArea.getInnerHtml();

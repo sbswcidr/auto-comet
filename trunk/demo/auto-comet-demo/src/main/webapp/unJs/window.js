@@ -1,7 +1,7 @@
 ﻿/** Window *************************************************************** */
 Un.Window = {
 	extend : Un.Box,
-	public : {
+	public_ : {
 		title : "",
 		x : null,
 		y : null,
@@ -491,14 +491,14 @@ Un.Window = {
 		this.reset();
 
 	},
-	static : {}
+	static_ : {}
 };
 Un.Window = Un.newClass(Un.Window);
 /** *************************************************************** Window */
 
 Un.Window.Manager = Un.newClass({
 	extend : Un.Object,
-	public : {
+	public_ : {
 		e : null,
 		hotWin : null,
 		lastWin : null,
@@ -519,7 +519,7 @@ Un.Window.Manager = Un.newClass({
 		this.e = e;
 		Un.Window.Manager.addManager(this);
 	},
-	static : {
+	static_ : {
 		managers : [],
 		getManager : function(e) {
 			for ( var i = 0, len = this.managers.length; i < len; i++) {
@@ -539,7 +539,7 @@ Un.Window.Manager = Un.newClass({
 
 Un.ApplyPanel = Un.newClass({
 	extend : Un.Window,
-	public : {
+	public_ : {
 		headHeight : 28,
 		width : 320,
 		height : 280,

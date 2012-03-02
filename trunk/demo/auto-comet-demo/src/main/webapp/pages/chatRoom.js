@@ -1,6 +1,6 @@
 var UserList = {
 	extend : Un.Element,
-	public : {
+	public_ : {
 		users : null,
 		sender : null,
 		setFirstUser : function(userId) {
@@ -51,7 +51,7 @@ UserList = Un.newClass(UserList);
 
 var ChatRoomWindow = {
 	extend : Un.Window,
-	public : {
+	public_ : {
 		reader : null,
 		editor : null,
 		sendButton : null,

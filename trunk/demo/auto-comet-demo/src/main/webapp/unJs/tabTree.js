@@ -1,7 +1,7 @@
 Un.CONTEXT_PATH = "";
 Un.Reader = Un
 		.newClass( {
-			public : {
+			public_ : {
 				url : null,
 				read : function(param, callBack, caller) {
 					var obj = {
@@ -24,7 +24,7 @@ Un.Reader = Un
 
 Un.Table = Un.newClass( {
 	extend : Un.Component,
-	public : {
+	public_ : {
 		tagName : "table",
 		tbody : null,
 		columnCount : 0,
@@ -42,7 +42,7 @@ Un.Table = Un.newClass( {
 
 Un.Table.Tr = Un.newClass( {
 	extend : Un.Element,
-	public : {
+	public_ : {
 		tagName : "tr",
 		$ : {
 			className : "u_tabTree_tr"
@@ -52,7 +52,7 @@ Un.Table.Tr = Un.newClass( {
 
 Un.Table.Th = Un.newClass( {
 	extend : Un.Element,
-	public : {
+	public_ : {
 		tagName : "th",
 		$ : {
 			className : "u_tabTree_th"
@@ -62,7 +62,7 @@ Un.Table.Th = Un.newClass( {
 
 Un.Table.Td = Un.newClass( {
 	extend : Un.Element,
-	public : {
+	public_ : {
 		tagName : "td",
 		text : null,
 		$ : {
@@ -76,7 +76,7 @@ Un.Table.Td = Un.newClass( {
 			this.appendChild(span);
 		}
 	},
-	static : {
+	static_ : {
 		addTitle : function(te, ti) {
 			if (typeof te == "string")
 				te = new Un.Element("span", null, te);
@@ -89,7 +89,7 @@ Un.Table.Td = Un.newClass( {
 
 Un.TabTree = Un.newClass( {
 	extend : Un.Table,
-	public : {
+	public_ : {
 		tagName : "table",
 		$ : {
 			className : "u_tabTree"
@@ -148,7 +148,7 @@ Un.TabTree = Un.newClass( {
 
 Un.TabTree.Head = Un.newClass( {
 	extend : Un.Table.Tr,
-	public : {
+	public_ : {
 		columnCount : 0,
 		model : null,
 		renderers : null
@@ -170,7 +170,7 @@ Un.TabTree.Head = Un.newClass( {
 
 Un.TabTree.Tr = Un.newClass( {
 	extend : Un.Table.Tr,
-	public : {
+	public_ : {
 		id : null,
 		leaf : false,
 		texts : null,
@@ -451,14 +451,14 @@ Un.TabTree.Tr = Un.newClass( {
 			this.addListener("click", this.onOff);
 		}
 	},
-	static : {
+	static_ : {
 		C_HOT : "u_tabTree_tr_hot"
 	}
 });
 
 Un.TabTree.Icon = Un.newClass( {
 	extend : Un.Element,
-	public : {
+	public_ : {
 		tagName : "img",
 		$ : {
 			className : "u_tabTree_td_icon_s",
@@ -474,7 +474,7 @@ Un.TabTree.Icon = Un.newClass( {
 			this.e.className = Un.TabTree.Icon.C_S;
 		}
 	},
-	static : {
+	static_ : {
 		C_E : "u_tabTree_td_icon_e",
 		C_S : "u_tabTree_td_icon_s"
 	}
