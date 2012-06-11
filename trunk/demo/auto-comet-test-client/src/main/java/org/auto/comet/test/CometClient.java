@@ -12,13 +12,13 @@ import net.sf.json.JSONObject;
  * @author xiaohanghu
  * */
 public class CometClient {
-	/** ÇëÇó²ÎÊıÃû£ºÍ¬²½ */
+	/** è¯·æ±‚å‚æ•°åï¼šåŒæ­¥ */
 	public static String SYNCHRONIZE_KEY = "_S_COMET";
-	/** Í¬²½Öµ£º´´½¨Á¬½Ó */
+	/** åŒæ­¥å€¼ï¼šåˆ›å»ºè¿æ¥ */
 	public static String CONNECTION_VALUE = "C";
-	/** Í¬²½Öµ£º¶Ï¿ªÁ¬½Ó */
+	/** åŒæ­¥å€¼ï¼šæ–­å¼€è¿æ¥ */
 	public static String DISCONNECT_VALUE = "D";
-	/** ·µ»Ø²ÎÊıÃû£ºÁ¬½ÓID */
+	/** è¿”å›å‚æ•°åï¼šè¿æ¥ID */
 	public static String CONNECTIONID_KEY = "_C_COMET";
 
 	private String url;
@@ -29,14 +29,14 @@ public class CometClient {
 	}
 
 	/**
-	 * ¿ªÊ¼Á´½Ó
+	 * å¼€å§‹é“¾æ¥
 	 * 
 	 * @param userParam
-	 *            Á¬½ÓÊ±´«µİ¸ø·şÎñÆ÷¶ËµÄ²ÎÊı
+	 *            è¿æ¥æ—¶ä¼ é€’ç»™æœåŠ¡å™¨ç«¯çš„å‚æ•°
 	 * @param success
-	 *            Á¬½Ó³É¹¦´¦Àí·½·¨
+	 *            è¿æ¥æˆåŠŸå¤„ç†æ–¹æ³•
 	 * @param failure
-	 *            Á¬½ÓÊ§°Ü´¦Àí·½·¨
+	 *            è¿æ¥å¤±è´¥å¤„ç†æ–¹æ³•
 	 * 
 	 */
 	public void connection(Map<String, String> userParam) {
@@ -50,13 +50,13 @@ public class CometClient {
 		JSONObject jsonReslult = JSONObject.fromObject(result);
 		String cid = jsonReslult.getString(CONNECTIONID_KEY);
 		if (StringUtils.isBlank(cid)) {
-			throw new IllegalStateException("¾Ü¾øÁ¬½Ó");
+			throw new IllegalStateException("æ‹’ç»è¿æ¥");
 		}
 		this.cid = cid;
 		this.polling(cid);
 	}
 
-	/** ÂÖÑ¯ */
+	/** è½®è¯¢ */
 	public void polling(String cid) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(CONNECTIONID_KEY, cid);
@@ -64,7 +64,7 @@ public class CometClient {
 		acceptDatas(dataString);
 	}
 
-	/** ¶Ï¿ªÁ¬½Ó */
+	/** æ–­å¼€è¿æ¥ */
 	public void disconnect(Map<String, String> userParam) {
 		if (null == userParam) {
 			userParam = new HashMap<String, String>();
@@ -78,15 +78,15 @@ public class CometClient {
 	public void acceptDatas(String dataString) {
 		System.out.println(dataString);
 		JSONArray datas = JSONArray.fromObject(dataString);
-		// ½ÓÊÜµÄ×îºóÒ»¸öÏûÏ¢
+		// æ¥å—çš„æœ€åä¸€ä¸ªæ¶ˆæ¯
 		Object lastData = datas.get(datas.size() - 1);
-		// Èç¹ûÊÇ¶Ï¿ªÁ¬½Ó
+		// å¦‚æœæ˜¯æ–­å¼€è¿æ¥
 		boolean disconnect = this.isDisconnectObj(lastData);
 		int len = datas.size();
 		if (disconnect) {
 			len--;
 		}
-		if (!disconnect) {// Èç¹û²»ÊÇ¶Ï¿ªÁ¬½Ó£¬¼ÌĞøÂÖÑ¯
+		if (!disconnect) {// å¦‚æœä¸æ˜¯æ–­å¼€è¿æ¥ï¼Œç»§ç»­è½®è¯¢
 			this.acceptDatasByLength(datas, len);
 			this.polling(cid);
 		} else {

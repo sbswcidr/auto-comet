@@ -15,7 +15,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * @author georgecao
+ * @author xiaohanghu
  */
 public class HttpClientUtils {
 	static MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
