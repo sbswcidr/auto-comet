@@ -80,6 +80,12 @@
 			<artifactId>netty</artifactId>
 			<version>3.2.5.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>com.ning</groupId>
+			<artifactId>async-http-client</artifactId>
+			<version>1.7.4</version>
+		</dependency>
+
 	</dependencies>
 
 </project>
