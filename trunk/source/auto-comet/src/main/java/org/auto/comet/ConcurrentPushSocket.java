@@ -3,6 +3,9 @@ package org.auto.comet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author xiaohanghu
+ */
 public class ConcurrentPushSocket extends AbstractPushSocket {
 
 	public synchronized void receiveRequest(HttpServletRequest request,
