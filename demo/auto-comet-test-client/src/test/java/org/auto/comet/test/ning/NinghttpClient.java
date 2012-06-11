@@ -27,7 +27,7 @@ public class NinghttpClient {
 			@Override
 			public Response onCompleted(Response response) throws Exception {
 				System.out.println(response.getHeaders());
-				// System.out.println(response.getResponseBody("GBK"));
+				System.out.println(response.getResponseBody("GBK"));
 				System.out.println(Thread.currentThread());
 				return response;
 			}
