@@ -30,7 +30,7 @@ public class HttpClientUtils {
 	}
 
 	private static void setHead(HttpMethodBase method, String encoding) {
-		// 设置header
+		// 璁剧疆header
 		method.setRequestHeader("Content-Encoding", "text/html");
 		method.setRequestHeader("Content-Type",
 				"application/x-www-form-urlencoded;charset=" + encoding);
@@ -70,7 +70,7 @@ public class HttpClientUtils {
 
 	public static String doGetMethod(String url, Map<String, String> params,
 			String encoding) {
-		// 设置参数
+		// 璁剧疆鍙傛暟
 		HttpClient httpClient = createHttpClient();
 		String paramsString = getParams(params);
 		if (StringUtils.isNotBlank(paramsString)) {
@@ -91,7 +91,7 @@ public class HttpClientUtils {
 			return doMethod(httpClient, postMethod);
 		}
 
-		// 设置参数
+		// 璁剧疆鍙傛暟
 		List<NameValuePair> nvList = new ArrayList<NameValuePair>();
 
 		for (Map.Entry<String, String> entry : params.entrySet()) {

@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.auto.comet.test.HttpClientUtils;
 
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
@@ -36,9 +37,9 @@ public class CometClient {
 	private String cid;
 	private AsyncHttpClient asyncHttpClient;
 
-	public CometClient(String url) {
+	public CometClient(String url, AsyncHttpClient asyncHttpClient) {
 		this.url = url;
-		this.asyncHttpClient = new AsyncHttpClient();
+		this.asyncHttpClient = asyncHttpClient;
 	}
 
 	/**
@@ -53,7 +54,8 @@ public class CometClient {
 	 * @throws IOException
 	 * 
 	 */
-	public void connection(Map<String, String> userParam) throws IOException {
+	public void connection(Map<String, String> userParam,
+			final ConnectionListener connectionListener) throws IOException {
 		if (null == userParam) {
 			userParam = new HashMap<String, String>();
 		}
@@ -64,27 +66,34 @@ public class CometClient {
 		for (Entry<String, String> entry : userParam.entrySet()) {
 			boundRequestBuilder.addParameter(entry.getKey(), entry.getValue());
 		}
+		final ConnectionEvent connectionEvent = new ConnectionEvent();
+		connectionEvent.setParams(userParam);
 
 		boundRequestBuilder.execute(new AsyncCompletionHandler<Response>() {
 
 			@Override
 			public Response onCompleted(Response response) throws Exception {
-				String responseBody = response.getResponseBody("GBK");
+				String responseBody = response.getResponseBody("UTF-8");
+				System.out.println(responseBody);
 				// System.out.println(response.getHeaders());
 				// System.out.println(Thread.currentThread());
 				JSONObject jsonReslult = JSONObject.fromObject(responseBody);
 				String cid = jsonReslult.getString(CONNECTIONID_KEY);
-				if (StringUtils.isBlank(cid)) {
-					throw new IllegalStateException("拒绝连接");
+				if (StringUtils.isBlank(cid) || "null".equals(cid)) {
+					connectionListener.onConnectionFailed(connectionEvent);
+					// throw new IllegalStateException("拒绝连接");
+				} else {
+					connectionListener.onConnectioned(connectionEvent);
+					setCid(cid);
+					polling(cid);
 				}
-				setCid(cid);
-				polling(cid);
 				return response;
 			}
 
 			@Override
 			public void onThrowable(Throwable t) {
 				log.error("AsyncCompletionHandler throws exception!", t);
+				System.exit(1);
 			}
 		});
 
@@ -103,17 +112,20 @@ public class CometClient {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(CONNECTIONID_KEY, cid);
 
+		String paramsStr = HttpClientUtils.getParams(params);
+		String url = this.url + "?" + paramsStr;
+
 		BoundRequestBuilder boundRequestBuilder = asyncHttpClient
 				.prepareGet(url);
-		for (Entry<String, String> entry : params.entrySet()) {
-			boundRequestBuilder.addParameter(entry.getKey(), entry.getValue());
-		}
+		// for (Entry<String, String> entry : params.entrySet()) {
+		// boundRequestBuilder.addParameter(entry.getKey(), entry.getValue());
+		// }
 
 		boundRequestBuilder.execute(new AsyncCompletionHandler<Response>() {
 
 			@Override
 			public Response onCompleted(Response response) throws Exception {
-				String responseBody = response.getResponseBody("GBK");
+				String responseBody = response.getResponseBody("UTF-8");
 				acceptDatas(responseBody);
 				return response;
 			}
@@ -121,6 +133,7 @@ public class CometClient {
 			@Override
 			public void onThrowable(Throwable t) {
 				log.error("AsyncCompletionHandler throws exception!", t);
+				System.exit(1);
 			}
 		});
 
@@ -138,17 +151,17 @@ public class CometClient {
 		userParam.put(SYNCHRONIZE_KEY, DISCONNECT_VALUE);
 		userParam.put(CONNECTIONID_KEY, cid);
 
+		String paramsStr = HttpClientUtils.getParams(userParam);
+		String url = this.url + "?" + paramsStr;
+
 		BoundRequestBuilder boundRequestBuilder = asyncHttpClient
 				.prepareGet(url);
-		for (Entry<String, String> entry : userParam.entrySet()) {
-			boundRequestBuilder.addParameter(entry.getKey(), entry.getValue());
-		}
 
 		boundRequestBuilder.execute(new AsyncCompletionHandler<Response>() {
 
 			@Override
 			public Response onCompleted(Response response) throws Exception {
-				// String responseBody = response.getResponseBody("GBK");
+				// String responseBody = response.getResponseBody("UTF-8");
 				// ignore
 				return response;
 			}
@@ -156,13 +169,14 @@ public class CometClient {
 			@Override
 			public void onThrowable(Throwable t) {
 				log.error("AsyncCompletionHandler throws exception!", t);
+				System.exit(1);
 			}
 		});
 
 	}
 
 	public void acceptDatas(String dataString) throws IOException {
-		System.out.println(dataString);
+		// System.out.println(dataString);
 		JSONArray datas = JSONArray.fromObject(dataString);
 		// 接受的最后一个消息
 		Object lastData = datas.get(datas.size() - 1);

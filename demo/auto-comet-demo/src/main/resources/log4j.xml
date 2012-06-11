@@ -79,7 +79,7 @@
 	</logger>
 
 	<logger name="org.auto.comet" additivity="true">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<!-- the root category -->

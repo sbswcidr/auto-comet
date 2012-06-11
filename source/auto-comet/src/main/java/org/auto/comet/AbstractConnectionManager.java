@@ -76,8 +76,8 @@ public abstract class AbstractConnectionManager implements ConnectionManager,
 	 * 推送超时处理
 	 * */
 	public void checkPushTimeout() {
-		if (this.logger.isDebugEnabled()) {
-			this.logger.debug("Check push timeout, Socket count:"
+		if (this.logger.isInfoEnabled()) {
+			this.logger.info("Check push timeout, Socket count:"
 					+ socketStore.size());
 		}
 		Collection<PushSocket> sockets = this.socketStore.values();
@@ -93,7 +93,8 @@ public abstract class AbstractConnectionManager implements ConnectionManager,
 			HttpServletResponse response) {
 		PushSocket socket = this.getSocket(connectionId);
 		if (null == socket) {
-			throw new PushException("Cant't find socket!");
+			throw new PushException("Cant't find socket by connectionId:"
+					+ connectionId);
 		}
 		socket.receiveRequest(request, response);
 	}
