@@ -1,5 +1,7 @@
 package org.auto.comet.test.netty;
 
+import java.nio.charset.Charset;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -19,6 +21,9 @@ public class HttpResponseHandler extends SimpleChannelUpstreamHandler {
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
+
+		System.out.println(Thread.currentThread());
+		
 		HttpResponse response = (HttpResponse) e.getMessage();
 		System.out.println("STATUS: " + response.getStatus());
 		System.out.println("VERSION: " + response.getProtocolVersion());
@@ -37,6 +42,8 @@ public class HttpResponseHandler extends SimpleChannelUpstreamHandler {
 			System.out.println("len : " + response.getContentLength());
 			// System.out.println(content.toString("GBK"));
 			System.out.println("} END OF CONTENT");
+			//System.out.println(content.toString(content.readerIndex(),
+			//		content.readableBytes(), Charset.forName("GBK")));
 		}
 	}
 }
