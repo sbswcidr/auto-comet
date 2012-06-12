@@ -49,18 +49,7 @@
 			<version>2.4</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-catalina</artifactId>
-			<version>7.0.27</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-coyote</artifactId>
-			<version>7.0.20</version>
-			<scope>provided</scope>
-		</dependency>
+
 
 		<!-- <dependency> <groupId>asm</groupId> <artifactId>asm</artifactId> <version>1.5.3</version> 
 			</dependency> -->
@@ -75,6 +64,20 @@
 			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-catalina</artifactId>
+			<version>7.0.27</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-coyote</artifactId>
+			<version>7.0.27</version>
+			<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 
 </project>
