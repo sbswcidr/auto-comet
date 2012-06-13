@@ -179,18 +179,18 @@ public class CometClient {
 		// System.out.println(dataString);
 		JSONArray datas = JSONArray.fromObject(dataString);
 		// 接受的最后一个消息
-		Object lastData = datas.get(datas.size() - 1);
+		int length = datas.size();
+		Object lastData = datas.get(length - 1);
 		// 如果是断开连接
 		boolean disconnect = this.isDisconnectObj(lastData);
-		int len = datas.size();
 		if (disconnect) {
-			len--;
+			length--;
 		}
 		if (!disconnect) {// 如果不是断开连接，继续轮询
-			this.acceptDatasByLength(datas, len);
+			this.acceptDatasByLength(datas, length);
 			this.polling(cid);
 		} else {
-			this.acceptDatasByLength(datas, len);
+			this.acceptDatasByLength(datas, length);
 		}
 	}
 
