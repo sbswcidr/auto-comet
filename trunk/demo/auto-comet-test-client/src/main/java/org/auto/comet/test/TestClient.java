@@ -26,7 +26,7 @@ public class TestClient {
 	// "http://192.168.12.164:8080/auto-comet-demo/testConcurrentHandler.comet";
 
 	public static void main(String[] args) throws Exception {
-		createComet(10000);
+		createComet(1);
 	}
 
 	public static void createComet(int count) throws IOException,
