@@ -392,9 +392,6 @@ Auto.Comet = {
 			Un.AjaxUtils.request(req);
 		},
 		isDisconnectObj : function(data) {
-			if (data == "{\"_S_COMET\":\"D\"}") {
-				return true;
-			}
 			if (data[Auto.Comet.SYNCHRONIZE_KEY] == Auto.Comet.DISCONNECT_VALUE) {
 				return true;
 			}
