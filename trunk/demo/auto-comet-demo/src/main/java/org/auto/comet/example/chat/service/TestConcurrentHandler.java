@@ -23,7 +23,7 @@ import org.springframework.stereotype.Controller;
 
 /**
  * 并发测试
- *
+ * 
  * @author XiaohangHu
  * */
 @Controller
@@ -157,6 +157,16 @@ public class TestConcurrentHandler implements SocketHandler {
 			return null != this.socketMapping.get(id);
 		} finally {
 			readLock.unlock();
+		}
+	}
+
+	public synchronized void close(Serializable id) {
+		writeLock.lock();
+		try {
+			Socket socket = socketMapping.remove(id);
+			socket.close();
+		} finally {
+			writeLock.unlock();
 		}
 	}
 }

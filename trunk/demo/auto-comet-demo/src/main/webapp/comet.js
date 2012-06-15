@@ -391,8 +391,14 @@ Auto.Comet = {
 			};
 			Un.AjaxUtils.request(req);
 		},
-		isDisconnectObj : function(o) {
-			return o[Auto.Comet.SYNCHRONIZE_KEY] == Auto.Comet.DISCONNECT_VALUE;
+		isDisconnectObj : function(data) {
+			if (data == "{\"_S_COMET\":\"D\"}") {
+				return true;
+			}
+			if (data[Auto.Comet.SYNCHRONIZE_KEY] == Auto.Comet.DISCONNECT_VALUE) {
+				return true;
+			}
+			return false;
 		},
 		/**
 		 * 处理数组中指定长度的数据
