@@ -10,13 +10,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auto.comet.test.HttpClientUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * @author xiaohanghu
@@ -77,7 +77,7 @@ public class CometClient {
 				System.out.println(responseBody);
 				// System.out.println(response.getHeaders());
 				// System.out.println(Thread.currentThread());
-				JSONObject jsonReslult = JSONObject.fromObject(responseBody);
+				JSONObject jsonReslult = JSON.parseObject(responseBody);
 				String cid = jsonReslult.getString(CONNECTIONID_KEY);
 				if (StringUtils.isBlank(cid) || "null".equals(cid)) {
 					connectionListener.onConnectionFailed(connectionEvent);
@@ -176,8 +176,8 @@ public class CometClient {
 	}
 
 	public void acceptDatas(String dataString) throws IOException {
-		// System.out.println(dataString);
-		JSONArray datas = JSONArray.fromObject(dataString);
+		System.out.println("dataString:" + dataString);
+		JSONArray datas = JSON.parseArray(dataString);
 		// 接受的最后一个消息
 		int length = datas.size();
 		Object lastData = datas.get(length - 1);

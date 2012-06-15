@@ -7,6 +7,18 @@
 	<groupId>org.auto</groupId>
 	<artifactId>auto-comet-test-client</artifactId>
 	<version>1.0</version>
+	
+	<repositories>
+		<repository>
+			<id>opensesame</id>
+			<name>Alibaba OpenSource Repsoitory</name>
+			<url>http://code.alibabatech.com/mvn/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -85,7 +97,12 @@
 			<artifactId>async-http-client</artifactId>
 			<version>1.7.4</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.1.8</version>
+<!-- 			<scope>test</scope> -->
+		</dependency>
 	</dependencies>
 
 </project>
