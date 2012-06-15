@@ -169,7 +169,7 @@ public abstract class AbstractConnectionManager implements ConnectionManager,
 
 	protected void addSocket(PushSocket socket) {
 		socketStore.put(socket.getId(), socket);
-	};
+	}
 
 	protected boolean hasSocket(Serializable id) {
 		Socket socket = this.getSocket(id);

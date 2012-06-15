@@ -16,5 +16,6 @@ public interface Protocol {
 	String CONNECTION_VALUE = "C";
 	/** 同步值：断开连接 */
 	String DISCONNECT_VALUE = "D";
+	
 
 }

@@ -6,15 +6,15 @@ import org.auto.comet.Protocol;
 import org.auto.json.JsonObject;
 
 /**
- *
+ * 
  * @author XiaohangHu
  */
 public class JsonProtocolUtils {
 
-	public static String getCloseCommend() {
+	public static JsonObject getCloseCommend() {
 		JsonObject commend = new JsonObject();
 		commend.put(Protocol.SYNCHRONIZE_KEY, Protocol.DISCONNECT_VALUE);
-		return commend.toString();
+		return commend;
 	}
 
 	public static String getConnectionCommend(Serializable socketId) {
