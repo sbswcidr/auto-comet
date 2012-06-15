@@ -169,11 +169,11 @@
 								chatRoomWindow.userList.setFirstUser(email);
 								loginWindow.hideWindow();
 							});
-							Un.window.addListener("beforeunload", function() {
-								comet.disconnect({
-									userId : email
-								});
-							});
+							//Un.window.addListener("beforeunload", function() {
+							//	comet.disconnect({
+							//		userId : email
+							//	});
+							//});
 						}, function() {
 							alert("连接失败！");
 						});
