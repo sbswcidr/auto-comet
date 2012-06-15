@@ -280,10 +280,10 @@ public class AbstractPushSocket implements Socket, PushSocket {
 	 * */
 	public void receiveRequest(HttpServletRequest request,
 			HttpServletResponse response) {
-		if (isClosed()) {
-			PushException e = new PushException("Use a closed pushSocked!");
-			this.fireError(e);
-		}
+		// if (isClosed()) {
+		// PushException e = new PushException("Use a closed pushSocked!");
+		// this.fireError(e);
+		// }
 		if (this.hasMessage()) {
 			// 如果有消息则直接将消息推送
 			pushMessage(this.messages, response);
@@ -299,6 +299,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		if (isClosed()) {
 			PushException e = new PushException("Use a closed pushSocked!");
 			this.fireError(e);
+			return;
 		}
 		// 如果不是等待状态，将消息缓存
 		if (!isWaiting()) {
@@ -312,6 +313,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		} catch (IOException e) {
 			PushException pe = new PushException("IOException push message", e);
 			this.fireError(pe);
+			return;
 		}
 		complete();
 	}
