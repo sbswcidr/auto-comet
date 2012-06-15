@@ -27,4 +27,13 @@ public class TestConcurrentController {
 		JsonResultUtils.outJson(modelMap, response);
 	}
 
+	@RequestMapping(params = "method=sendAndClose")
+	public void sendAndClose(String id, String message, ServletResponse response) {
+		ModelMap modelMap = new ModelMap();
+		modelMap.addAttribute("success", "true");
+		this.testConcurrentHandler.send(id, message);
+		this.testConcurrentHandler.close(id);
+		JsonResultUtils.outJson(modelMap, response);
+	}
+
 }
