@@ -2,6 +2,8 @@
 
 = Comet聊天室示例 =
 
+在线示例：[http://auto-comet.zzlkk.com/pages/chatRoom.html 聊天室]
+
 war包下载：[http://auto-comet.googlecode.com/files/auto-comet-demo-1.0.war auto-comet-demo-1.0.war]
 
 示例需要运行在实现了Servlet3.0规范的中间件中，比如[http://tomcat.apache.org/download-70.cgi tomcat7]。
