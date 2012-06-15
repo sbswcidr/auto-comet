@@ -17,6 +17,7 @@ import org.auto.comet.listener.SocketListener;
 import org.auto.comet.support.JsonProtocolUtils;
 import org.auto.comet.web.listener.AsyncAdapter;
 import org.auto.json.JsonArray;
+import org.auto.json.JsonObject;
 
 /**
  * PushSocket
@@ -35,10 +36,10 @@ public class AbstractPushSocket implements Socket, PushSocket {
 
 	private Serializable id;
 
-	private static final String CLOSE_MESSAGE;
+	private static final JsonObject CLOSE_MESSAGE;
 
 	/** 消息队列 */
-	private List<String> messages;
+	private List<Object> messages;
 
 	/** 是否已经预关闭 */
 	private boolean close = false;
@@ -63,7 +64,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		CLOSE_MESSAGE = JsonProtocolUtils.getCloseCommend();
 	}
 	{
-		messages = new LinkedList<String>();
+		messages = new LinkedList<Object>();
 	}
 
 	public AbstractPushSocket() {
@@ -160,7 +161,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		}
 	}
 
-	private boolean isCloseMessage(String msg) {
+	private boolean isCloseMessage(Object msg) {
 		// 用==提高比较效率
 		return CLOSE_MESSAGE == msg;
 	}
@@ -204,10 +205,10 @@ public class AbstractPushSocket implements Socket, PushSocket {
 	/**
 	 * 将消息用指定的writer发送
 	 * */
-	private void pushMessage(List<String> messages, PrintWriter writer) {
+	private void pushMessage(List<Object> messages, PrintWriter writer) {
 		JsonArray array = new JsonArray();
 		boolean isClose = false;
-		for (String message : messages) {
+		for (Object message : messages) {
 			if (isCloseMessage(message)) {
 				isClose = true;
 			}
@@ -223,7 +224,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		resetLastPushTime();
 	}
 
-	private void pushMessage(List<String> messages, ServletResponse response) {
+	private void pushMessage(List<Object> messages, ServletResponse response) {
 		try {
 			pushMessage(messages, response.getWriter());
 		} catch (IOException e) {
@@ -232,18 +233,18 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		}
 	}
 
-	private void pushMessage(String message, ServletResponse response)
+	private void pushMessage(Object message, ServletResponse response)
 			throws IOException {
-		List<String> msgs = new LinkedList<String>();
+		List<Object> msgs = new LinkedList<Object>();
 		msgs.add(message);
 		pushMessage(msgs, response);
 	}
 
 	public List<String> getCachedData() {
 		List<String> userMessages = new LinkedList<String>();
-		for (String message : messages) {
-			if (!this.isCloseMessage(message)) {
-				userMessages.add(message);
+		for (Object message : messages) {
+			if (message instanceof String && !this.isCloseMessage(message)) {
+				userMessages.add((String) message);
 			}
 		}
 		// 清空缓存
@@ -295,7 +296,7 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		}
 	}
 
-	public void send(String message) {
+	public void sendObjectMessage(Object message) {
 		if (isClosed()) {
 			PushException e = new PushException("Use a closed pushSocked!");
 			this.fireError(e);
@@ -318,11 +319,16 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		complete();
 	}
 
+	@Override
+	public void send(String message) {
+		sendObjectMessage(message);
+	}
+
 	/**
 	 * 关闭连接
 	 * */
 	public void close() {
-		this.send(CLOSE_MESSAGE);
+		this.sendObjectMessage(CLOSE_MESSAGE);
 		this.close = true;
 	}
 
@@ -353,4 +359,5 @@ public class AbstractPushSocket implements Socket, PushSocket {
 		}
 		return false;
 	}
+
 }
