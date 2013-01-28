@@ -286,7 +286,7 @@ Auto.AjaxUtils = {
 	/**
 	 * 无参数时自动调用GET方式
 	 * 
-	 * @method Un.AjaxUtils.request
+	 * @method Auto.AjaxUtils.request
 	 * @param o.url[string]
 	 * @param o.method[string]("GET","get","POST","post"..)
 	 * @param o.param[object]
@@ -305,7 +305,7 @@ Auto.AjaxUtils = {
 		function back(req) {
 			if (req.readyState == 4) {
 				var s = req.status;
-				if (Un.AjaxUtils.isSuccess(s)) {
+				if (Auto.AjaxUtils.isSuccess(s)) {
 					if (o.success)
 						o.success.call(this, req.responseText);
 				} else {
@@ -389,7 +389,7 @@ Auto.Comet = {
 					}
 				}
 			};
-			Un.AjaxUtils.request(req);
+			Auto.AjaxUtils.request(req);
 		},
 		isDisconnectObj : function(data) {
 			if (data[Auto.Comet.SYNCHRONIZE_KEY] == Auto.Comet.DISCONNECT_VALUE) {
@@ -444,7 +444,7 @@ Auto.Comet = {
 					this.acceptDatas(datas);
 				}
 			};
-			Un.AjaxUtils.request(req);
+			Auto.AjaxUtils.request(req);
 		},
 		/** 断开连接 */
 		disconnect : function(userParam, callback, caller) {
@@ -464,7 +464,7 @@ Auto.Comet = {
 				}
 			};
 			this.isConnect = false;
-			Un.AjaxUtils.request(req);
+			Auto.AjaxUtils.request(req);
 		}
 	},
 	constructor : function() {
