@@ -16,6 +16,10 @@ var ChatWindow = {
 		},
 		send : function() {
 			var text = this.editor.getValue();
+			if(text.length>1000){
+				alert("内容过长，需不多于1000字.");
+				return;
+			}
 			this.sender.send({
 				param : {
 					userId : this.userId,
@@ -27,6 +31,23 @@ var ChatWindow = {
 					var data = eval("(" + result + ")");
 					if (data.success == "true") {
 						this.editor.clear();
+						//@add
+						//时间
+						var now= new Date();
+						var hour=now.getHours();
+						var minute=now.getMinutes();
+						var second=now.getSeconds();
+						var time = hour+":"+":"+minute+":"+second;
+						
+						//自己发送的消息抬头
+						var nodeFrom = new Un.Element("div");
+						nodeFrom.setInnerHtml("<font color=\"green\">"+this.userId+ ": " + time+"</font>");
+						var nodeContent = new Un.Element("div");
+						nodeContent.setInnerHtml("&nbsp;&nbsp;&nbsp;"+ text+"</br>&nbsp;");
+						this.reader.appendChild(nodeFrom);
+						this.reader.appendChild(nodeContent);
+						//调用父级Un.Window
+						this.reader.setScrollTop(this.reader.getScrollHeight());
 					} else {
 						alert("发送失败");
 					}
@@ -60,6 +81,9 @@ var MenuWindow = {
 		users : null,
 		sender : null,
 		openChatWindow : function(targetUserId) {
+			if(this.users[targetUserId].window!=null){
+				return;
+			}
 			var chatWindow = new ChatWindow({
 				title : targetUserId,
 				resizable : false,
