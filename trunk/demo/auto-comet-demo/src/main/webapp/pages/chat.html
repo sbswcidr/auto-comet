@@ -73,12 +73,16 @@
 					}
 					var text = data.text;
 					var friend = data.userId;
+					
 					var content = new Un.Element();
-					content.appendChild(new Un.Element("div", null, friend
-							+ ": " + time));
-					content.appendChild(new Un.Element("div", null, "   "
-							+ text));
-
+					var nodeFrom = new Un.Element("div");
+					nodeFrom.setInnerHtml("<font color=\"blue\">"+friend+ ": " + time+"</font>");
+					var nodeContent = new Un.Element("div");
+					nodeContent.setInnerHtml("&nbsp;&nbsp;&nbsp;"+ text+"<br>&nbsp;");
+					content.appendChild(nodeFrom);
+					content.appendChild(nodeContent);
+					//打开窗口，然后再接收消息
+					menuWindow.openChatWindow(friend);
 					menuWindow.receiveMessage(friend, content);
 				}
 			}
